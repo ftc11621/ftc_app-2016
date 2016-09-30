@@ -52,15 +52,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Joystick Example Java", group="Iterative Opmode")  // @Autonomous(...) is the other common choice
+@TeleOp(name="Joystick Example Java", group="Examples")  // @Autonomous(...) is the other common choice
 @Disabled
 public class Joystick_example extends OpMode
 {
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
 
-     private DcMotor leftMotor = null;
-     private DcMotor rightMotor = null;
+    private DcMotor leftMotor = null;
+    private DcMotor rightMotor = null;
 
     /*
      * Code to run ONCE when the driver hits INIT
