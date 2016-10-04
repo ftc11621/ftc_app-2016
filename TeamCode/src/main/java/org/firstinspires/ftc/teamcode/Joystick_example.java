@@ -53,7 +53,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @TeleOp(name="Joystick Example Java", group="Examples")  // @Autonomous(...) is the other common choice
-@Disabled
+//@Disabled
 public class Joystick_example extends OpMode
 {
     /* Declare OpMode members. */
@@ -114,7 +114,7 @@ public class Joystick_example extends OpMode
         } else if(gamepad1.dpad_up) {
             MaxDcPower = 0.10;
         } else if(gamepad1.dpad_right) {
-            MaxDcPower = 0.20;
+            MaxDcPower = 1.0;
         }
 
         // below for joystick
