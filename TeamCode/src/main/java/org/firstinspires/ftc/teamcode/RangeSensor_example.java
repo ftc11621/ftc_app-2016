@@ -32,55 +32,37 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 
-/**
- * This file contains an example of an iterative (Non-Linear) "OpMode".
- * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
- * The names of OpModes appear on the menu of the FTC Driver Station.
- * When an selection is made from the menu, the corresponding OpMode
- * class is instantiated on the Robot Controller and executed.
- *
- * This particular OpMode just executes a basic Tank Drive Teleop for a PushBot
- * It includes all the skeletal structure that all iterative OpModes contain.
- *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp(name="Joystick Example", group="Examples")  // @Autonomous(...) is the other common choice
+@TeleOp(name="Range Sensor Example", group="Examples")  // @Autonomous(...) is the other common choice
 //@Disabled
-public class Joystick_example extends OpMode
+public class RangeSensor_example extends OpMode
 {
-    /* Declare OpMode members. */
-    private ElapsedTime runtime = new ElapsedTime();
+    ModernRoboticsI2cRangeSensor rangeSensor;
 
-    private DcMotor leftMotor = null;
-    private DcMotor rightMotor = null;
 
     /*
      * Code to run ONCE when the driver hits INIT
      */
     @Override
     public void init() {
-        telemetry.addData("Status", "Joy Stick Initialized");
+
+        // get a reference to our compass
+        rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "range_sensor_1");
+
+
+        telemetry.addData("Status", "Range Sensor Initialized");
 
         /* eg: Initialize the hardware variables. Note that the strings used here as parameters
          * to 'get' must correspond to the names assigned during the robot configuration
          * step (using the FTC Robot Controller app on the phone).
          */
-         leftMotor  = hardwareMap.dcMotor.get("motor_2");
-         rightMotor = hardwareMap.dcMotor.get("motor_1");
 
-        // eg: Set the drive motor directions:
-        // Reverse the motor that runs backwards when connected directly to the battery
-         rightMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-         leftMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-        // telemetry.addData("Status", "Initialized");
     }
 
     /*
@@ -96,8 +78,6 @@ public class Joystick_example extends OpMode
     @Override
     public void start() {
 
-        runtime.reset();
-
     }
 
     /*
@@ -105,24 +85,13 @@ public class Joystick_example extends OpMode
      */
     @Override
     public void loop() {
-        telemetry.addData("Status", "Running: " + runtime.toString());
 
-        double MaxDcPower = 0.05;
-        if(gamepad1.dpad_down) {
-            MaxDcPower = 0.05;
-        } else if(gamepad1.dpad_left) {
-            MaxDcPower = 0.075;
-        } else if(gamepad1.dpad_up) {
-            MaxDcPower = 0.10;
-        } else if(gamepad1.dpad_right) {
-            MaxDcPower = 1.0;
-        }
+        telemetry.addData("raw ultrasonic", rangeSensor.rawUltrasonic());
+        telemetry.addData("raw optical", rangeSensor.rawOptical());
+        telemetry.addData("cm optical", "%.2f cm", rangeSensor.cmOptical());
+        telemetry.addData("cm", "%.2f cm", rangeSensor.getDistance(DistanceUnit.CM));
 
-        // below for joystick
-        double max_norm = Math.max(Math.abs(-gamepad1.left_stick_y + gamepad1.left_stick_x), Math.abs(-gamepad1.left_stick_y - gamepad1.left_stick_x));
-        max_norm = Math.max(1.0, max_norm);
-        rightMotor.setPower((-gamepad1.left_stick_y-gamepad1.left_stick_x)*MaxDcPower/max_norm);
-        leftMotor.setPower((-gamepad1.left_stick_y+gamepad1.left_stick_x)*MaxDcPower/max_norm);
+        telemetry.update();
     }
 
     /*
