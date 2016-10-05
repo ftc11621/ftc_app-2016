@@ -51,7 +51,7 @@ public class OpticalSensor_example extends OpMode
     @Override
     public void init() {
 
-        odsSensor = hardwareMap.opticalDistanceSensor.get("ods");
+        odsSensor = hardwareMap.opticalDistanceSensor.get("opticalSensor_1");
 
         telemetry.addData("Status", "Optical Sensor Initialized");
 

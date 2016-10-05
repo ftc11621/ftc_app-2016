@@ -53,7 +53,7 @@ public class RangeSensor_example extends OpMode
     public void init() {
 
         // get a reference to our compass
-        rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "range_sensor_1");
+        rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensor_1");
 
 
         telemetry.addData("Status", "Range Sensor Initialized");
