@@ -95,8 +95,7 @@ import java.io.File;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class
-FtcRobotControllerActivity extends Activity {
+public class FtcRobotControllerActivity extends Activity {
 
   public static final String TAG = "RCActivity";
 
@@ -195,6 +194,7 @@ FtcRobotControllerActivity extends Activity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    RobotLog.writeLogcatToDisk();
     RobotLog.vv(TAG, "onCreate()");
 
     receivedUsbAttachmentNotifications = new ConcurrentLinkedQueue<UsbDevice>();
@@ -253,8 +253,6 @@ FtcRobotControllerActivity extends Activity {
 
     if (USE_DEVICE_EMULATION) { HardwareFactory.enableDeviceEmulation(); }
 
-    // save 4MB of logcat to the SD card
-    RobotLog.writeLogcatToDisk(this, 4 * 1024);
     wifiLock.acquire();
     callback.networkConnectionUpdate(WifiDirectAssistant.Event.DISCONNECTED);
     bindToService();
@@ -327,7 +325,7 @@ FtcRobotControllerActivity extends Activity {
 
     unbindFromService();
     wifiLock.release();
-    RobotLog.cancelWriteLogcatToDisk(this);
+    RobotLog.cancelWriteLogcatToDisk();
   }
 
   protected void bindToService() {
