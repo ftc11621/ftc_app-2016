@@ -33,27 +33,25 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
-Example of autonomous moving by the number of revolutions each wheel
+ Autonomous example move each wheel by distance
  */
 
-@Autonomous(name="Autonomous Ex 1", group="Examples")  // @Autonomous(...) is the other common choice
+@Autonomous(name="Autonomous Ex 2", group="Examples")  // @Autonomous(...) is the other common choice
 //@Disabled
-public class Autonomous_example extends LinearOpMode {
+public class Autonomous_example2 extends LinearOpMode {
 
     static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
-    //static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
-    //static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-    //        (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 0.1;
-    static final double     TURN_SPEED              = 0.08;
+    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
+    static final double     WHEEL_DIAMETER_CM       = 9.2 ;     // For figuring circumference
+    static final double     COUNTS_PER_CM           = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+            (WHEEL_DIAMETER_CM * 3.1415);
+    static final double     DRIVE_SPEED             = 0.09;
+    static final double     TURN_SPEED              = 0.075;
 
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
@@ -95,11 +93,12 @@ public class Autonomous_example extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        // Write a sequence of autonomous tasks
+        // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED,  4.0,  4.0, 5.0);  // S1: Forward 4 revolutions with 5 Sec timeout
-        encoderDrive(TURN_SPEED,   4.0,  1.0, 4.0);  // S2: Turn Right with 4 Sec timeout
-        encoderDrive(DRIVE_SPEED, -2.0, -2.0, 4.0);  // S3: Reverse 2 revolutions with 4 Sec timeout
+        encoderDrive(DRIVE_SPEED,  48,  48, 5.0);  // S1: Forward 48cm with 5 Sec timeout
+        encoderDrive(TURN_SPEED,   12, -12, 4.0);  // S2: Turn Right 12cm with 4 Sec timeout
+        encoderDrive(DRIVE_SPEED, -24, -24, 4.0);  // S3: Reverse 24cm with 4 Sec timeout
+
 
         // End of Autonomous
 
@@ -116,9 +115,18 @@ public class Autonomous_example extends LinearOpMode {
         }
     }
 
+    /*
+       *  Method to perfmorm a relative move, based on encoder counts.
+       *  Encoders are not reset as the move is based on the current position.
+       *  Move will stop if any of three conditions occur:
+       *  1) Move gets to the desired position
+       *  2) Move runs out of time
+       *  3) Driver stops the opmode running.
+       */
     public void encoderDrive(double speed,
-                             double leftRev, double rightRev,
-                             double timeoutS) throws InterruptedException {
+                             double leftCM, double rightCM,
+                             double timeoutS) {
+
         int newLeftTarget;
         int newRightTarget;
 
@@ -126,8 +134,8 @@ public class Autonomous_example extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newLeftTarget = leftMotor.getCurrentPosition() + (int)(leftRev * COUNTS_PER_MOTOR_REV);
-            newRightTarget = rightMotor.getCurrentPosition() + (int)(rightRev*COUNTS_PER_MOTOR_REV);
+            newLeftTarget = leftMotor.getCurrentPosition() + (int)(leftCM * COUNTS_PER_CM);
+            newRightTarget = rightMotor.getCurrentPosition() + (int)(rightCM * COUNTS_PER_CM);
             leftMotor.setTargetPosition(newLeftTarget);
             rightMotor.setTargetPosition(newRightTarget);
 
@@ -151,9 +159,6 @@ public class Autonomous_example extends LinearOpMode {
                         leftMotor.getCurrentPosition(),
                         rightMotor.getCurrentPosition());
                 telemetry.update();
-
-                // Allow time for other processes to run.
-                idle();
             }
 
             // Stop all motion;
