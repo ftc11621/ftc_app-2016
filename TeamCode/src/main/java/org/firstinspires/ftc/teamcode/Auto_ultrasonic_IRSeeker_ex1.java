@@ -32,28 +32,34 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.IrSeekerSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 /**
-Example of autonomous moving by the number of revolutions each wheel
+ Autonomous example move each wheel by distance
  */
 
-@Autonomous(name="Autonomous Ex 1", group="Examples")  // @Autonomous(...) is the other common choice
+@Autonomous(name="Auto USonic 2", group="Examples")  // @Autonomous(...) is the other common choice
 //@Disabled
-public class Autonomous_example extends LinearOpMode {
+public class Auto_ultrasonic_IRSeeker_ex1 extends LinearOpMode {
 
     static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
-    //static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
-    //static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-    //        (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 0.1;
-    static final double     TURN_SPEED              = 0.08;
+    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
+    static final double     WHEEL_DIAMETER_CM       = 9.15 ;     // For figuring circumference
+    static final double     COUNTS_PER_CM           = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+            (WHEEL_DIAMETER_CM * 3.1415);
+    static final double     DRIVE_SPEED             = 0.5;
+    static final double     TURN_SPEED              = 0.1;
+
+    ModernRoboticsI2cRangeSensor rangeSensor;
+    IrSeekerSensor irSeeker;    // Hardware Device Object
+
 
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
@@ -68,11 +74,15 @@ public class Autonomous_example extends LinearOpMode {
         leftMotor  = hardwareMap.dcMotor.get("motor_2");
         rightMotor = hardwareMap.dcMotor.get("motor_1");
 
+        rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensor_1");
+        irSeeker = hardwareMap.irSeekerSensor.get("sensor_ir");
+
+
+
         // eg: Set the drive motor directions:
         // Reverse the motor that runs backwards when connected directly to the battery
         rightMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         leftMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-
 
         leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -85,40 +95,74 @@ public class Autonomous_example extends LinearOpMode {
         telemetry.addData("Path0",  "Starting at %7d :%7d",
                 leftMotor.getCurrentPosition(),
                 rightMotor.getCurrentPosition());
+        telemetry.addData("Range: ", "%.2f cm", rangeSensor.getDistance(DistanceUnit.CM));
         telemetry.update();
-
-
-
-
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
 
-        // Write a sequence of autonomous tasks
-        // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED,  4.0,  4.0, 5.0);  // S1: Forward 4 revolutions with 5 Sec timeout
-        encoderDrive(TURN_SPEED,   4.0,  1.0, 4.0);  // S2: Turn Right with 4 Sec timeout
-        encoderDrive(DRIVE_SPEED, -2.0, -2.0, 4.0);  // S3: Reverse 2 revolutions with 4 Sec timeout
 
-        // End of Autonomous
+
+        /////////////////////////////////////////////////////////////////////
+        // WRITE AUTONOMOUS sequence below ===========================================
+
+        // Note: Reverse movement is obtained by setting a negative distance (not speed)
+        double target_distance = 10.0;   // 10 cm target distance
+        double motor_need_to_go_distance = rangeSensor.getDistance(DistanceUnit.CM) - target_distance;
+
+        while (motor_need_to_go_distance > 0) {
+
+            if (irSeeker.signalDetected()) {
+                // Display angle and strength
+                while (Math.abs( irSeeker.getAngle()) > 2) {
+                    encoderDrive(TURN_SPEED, Math.signum(irSeeker.getAngle()) , -Math.signum(irSeeker.getAngle()) , 30.0);
+
+                    telemetry.addData("Angle", irSeeker.getAngle());
+                    telemetry.addData("Strength", irSeeker.getStrength());
+                    telemetry.update();
+                }
+            } else {
+                // Display loss of signal
+                telemetry.addData("Seeker", "Signal Lost");
+            }
+
+            encoderDrive(DRIVE_SPEED, motor_need_to_go_distance , motor_need_to_go_distance, 15.0);  // S1: Forward 48cm with 5 Sec timeout
+            motor_need_to_go_distance = rangeSensor.getDistance(DistanceUnit.CM) - target_distance;
+
+            telemetry.addData("Range: ", "%.2f cm", rangeSensor.getDistance(DistanceUnit.CM));
+            telemetry.update();
+        }
+
+
+        ///////////// End of AUTONOMOUS sequence ================================================
+
 
         // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.update();
+        //while (opModeIsActive()) {
+        //    telemetry.addData("Status", "Run Time: " + runtime.toString());
+        //    telemetry.update();
 
             // eg: Run wheels in tank mode (note: The joystick goes negative when pushed forwards)
             // leftMotor.setPower(-gamepad1.left_stick_y);
             // rightMotor.setPower(-gamepad1.right_stick_y);
 
-            idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
-        }
+        //    idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
+        //}
     }
 
+    /*
+       *  Method to perfmorm a relative move, based on encoder counts.
+       *  Encoders are not reset as the move is based on the current position.
+       *  Move will stop if any of three conditions occur:
+       *  1) Move gets to the desired position
+       *  2) Move runs out of time
+       *  3) Driver stops the opmode running.
+       */
     public void encoderDrive(double speed,
-                             double leftRev, double rightRev,
-                             double timeoutS) throws InterruptedException {
+                             double leftCM, double rightCM,
+                             double timeoutS) {
+
         int newLeftTarget;
         int newRightTarget;
 
@@ -126,8 +170,8 @@ public class Autonomous_example extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newLeftTarget = leftMotor.getCurrentPosition() + (int)(leftRev * COUNTS_PER_MOTOR_REV);
-            newRightTarget = rightMotor.getCurrentPosition() + (int)(rightRev*COUNTS_PER_MOTOR_REV);
+            newLeftTarget = leftMotor.getCurrentPosition() + (int)(leftCM * COUNTS_PER_CM);
+            newRightTarget = rightMotor.getCurrentPosition() + (int)(rightCM * COUNTS_PER_CM);
             leftMotor.setTargetPosition(newLeftTarget);
             rightMotor.setTargetPosition(newRightTarget);
 
@@ -151,9 +195,6 @@ public class Autonomous_example extends LinearOpMode {
                         leftMotor.getCurrentPosition(),
                         rightMotor.getCurrentPosition());
                 telemetry.update();
-
-                // Allow time for other processes to run.
-                idle();
             }
 
             // Stop all motion;
@@ -164,7 +205,7 @@ public class Autonomous_example extends LinearOpMode {
             leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            //  sleep(250);   // optional pause after each move
+            // sleep(250);
         }
     }
 }
