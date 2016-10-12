@@ -44,21 +44,19 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  Autonomous example move each wheel by distance
  */
 
-@Autonomous(name="Autonomous USonic1", group="Examples")  // @Autonomous(...) is the other common choice
+@Autonomous(name="Auto USonic 2", group="Examples")  // @Autonomous(...) is the other common choice
 //@Disabled
-public class Autonomous_ultrasonic_ex1 extends LinearOpMode {
+public class Auto_ultrasonic_ex2 extends LinearOpMode {
 
     static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_CM       = 9.2 ;     // For figuring circumference
+    static final double     WHEEL_DIAMETER_CM       = 9.15 ;     // For figuring circumference
     static final double     COUNTS_PER_CM           = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_CM * 3.1415);
     static final double     DRIVE_SPEED             = 0.5;
     static final double     TURN_SPEED              = 0.1;
 
     ModernRoboticsI2cRangeSensor rangeSensor;
-    // get a reference to our compass
-
 
 
     /* Declare OpMode members. */
@@ -83,7 +81,6 @@ public class Autonomous_ultrasonic_ex1 extends LinearOpMode {
         rightMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         leftMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
 
-
         leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         idle();
@@ -95,30 +92,30 @@ public class Autonomous_ultrasonic_ex1 extends LinearOpMode {
         telemetry.addData("Path0",  "Starting at %7d :%7d",
                 leftMotor.getCurrentPosition(),
                 rightMotor.getCurrentPosition());
+        telemetry.addData("Range: ", "%.2f cm", rangeSensor.getDistance(DistanceUnit.CM));
         telemetry.update();
-
-
-
 
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
 
-        // Step through each leg of the path,
+        // WRITE AUTONOMOUS sequence below ===========================================
+
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        telemetry.addData("Range: ", "%.2f cm", rangeSensor.getDistance(DistanceUnit.CM));
-        telemetry.update();
-        encoderDrive(DRIVE_SPEED,rangeSensor.getDistance(DistanceUnit.CM)-10 , rangeSensor.getDistance(DistanceUnit.CM)-10, 15.0);  // S1: Forward 48cm with 5 Sec timeout
-        while (rangeSensor.getDistance(DistanceUnit.CM) > 10.0) {
-            telemetry.addData("cm", "%.2f cm", rangeSensor.getDistance(DistanceUnit.CM));
+        double target_distance = 10.0;   // 10 cm target distance
+        double motor_need_to_go_distance = rangeSensor.getDistance(DistanceUnit.CM) - target_distance;
+
+        while (motor_need_to_go_distance > 0) {
+            encoderDrive(DRIVE_SPEED, motor_need_to_go_distance , motor_need_to_go_distance, 30.0);  // S1: Forward 48cm with 5 Sec timeout
+            motor_need_to_go_distance = rangeSensor.getDistance(DistanceUnit.CM) - target_distance;
+
+            telemetry.addData("Range: ", "%.2f cm", rangeSensor.getDistance(DistanceUnit.CM));
             telemetry.update();
-            encoderDrive(DRIVE_SPEED, 1, 1, 15.0);  // S1: Forward 48cm with 5 Sec timeout
         }
 
 
-
-        // End of Autonomous
+        // End of AUTONOMOUS sequence ================================================
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -187,7 +184,7 @@ public class Autonomous_ultrasonic_ex1 extends LinearOpMode {
             leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-
+            // sleep(250);
         }
     }
 }
