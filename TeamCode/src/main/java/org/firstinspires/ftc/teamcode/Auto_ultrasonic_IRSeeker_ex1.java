@@ -112,12 +112,15 @@ public class Auto_ultrasonic_IRSeeker_ex1 extends LinearOpMode {
         double motor_need_to_go_distance = rangeSensor.getDistance(DistanceUnit.CM) - target_distance;
 
         while (motor_need_to_go_distance > 0) {
-
+            double irSeeker_angle_before_adjustment = 0.0;
             if (irSeeker.signalDetected()) {
-                // Display angle and strength
-                while (Math.abs( irSeeker.getAngle()) > 2) {
-                    encoderDrive(TURN_SPEED, Math.signum(irSeeker.getAngle()) , -Math.signum(irSeeker.getAngle()) , 30.0);
+                irSeeker_angle_before_adjustment = irSeeker.getAngle();
+                // Turn toward the beacon
+                while (Math.abs( irSeeker.getAngle()) > 10) {
+                    // Turn 0.1*degree cm each wheel opposite direction to spin
+                    encoderDrive(TURN_SPEED, 0.1*irSeeker.getAngle() , -0.1*irSeeker.getAngle() , 30.0);
 
+                    // Display angle and strength
                     telemetry.addData("Angle", irSeeker.getAngle());
                     telemetry.addData("Strength", irSeeker.getStrength());
                     telemetry.update();
@@ -127,6 +130,12 @@ public class Auto_ultrasonic_IRSeeker_ex1 extends LinearOpMode {
                 telemetry.addData("Seeker", "Signal Lost");
             }
 
+            if (motor_need_to_go_distance > 50.0) {  // to prevent overshoot
+                motor_need_to_go_distance *= 0.5;    // cut the distance by half to allow angle adjustment
+                if (irSeeker.signalDetected()) {  // when it's far away, it needs extra 10 degree turn so it's facing perpendicular to the beacon as it gets closer
+                    encoderDrive(TURN_SPEED, 10*Math.signum(irSeeker_angle_before_adjustment) ,-10*Math.signum(irSeeker_angle_before_adjustment)  , 30.0);
+                }
+            }
             encoderDrive(DRIVE_SPEED, motor_need_to_go_distance , motor_need_to_go_distance, 15.0);  // S1: Forward 48cm with 5 Sec timeout
             motor_need_to_go_distance = rangeSensor.getDistance(DistanceUnit.CM) - target_distance;
 
