@@ -46,7 +46,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  Autonomous example move each wheel by distance
  */
 
-@Autonomous(name="Auto IRseeker ex", group="Examples")  // @Autonomous(...) is the other common choice
+@Autonomous(name="Auto IRseeker example", group="Examples")  // @Autonomous(...) is the other common choice
 @Disabled
 public class Auto_ultrasonic_IRSeeker_ex1 extends LinearOpMode {
 
