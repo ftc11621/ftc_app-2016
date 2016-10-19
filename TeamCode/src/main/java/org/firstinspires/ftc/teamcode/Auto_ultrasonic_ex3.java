@@ -56,7 +56,7 @@ public class Auto_ultrasonic_ex3 extends LinearOpMode {
             (WHEEL_DIAMETER_CM * 3.1415);
     static final double     DRIVE_SPEED             = 0.5;
     static final double     TURN_SPEED              = 0.2;
-    static final double     WHEELS_SPACING_CM       = 28.0;     // spacing between wheels
+    static final double     WHEELS_SPACING_CM       = 34.3;     // spacing between wheels
 
     ModernRoboticsI2cRangeSensor rangeSensor;
     OpticalDistanceSensor odsSensor;  // Hardware Device Object
@@ -111,7 +111,7 @@ public class Auto_ultrasonic_ex3 extends LinearOpMode {
         // WRITE AUTONOMOUS sequence below ===========================================
 
         // First move forward to 30 cm distance to a wall
-        double target_distance = 30.0;   // 10 cm target distance
+        double target_distance = 25.0;   // 10 cm target distance
         double motor_need_to_go_distance = rangeSensor.getDistance(DistanceUnit.CM) - target_distance;
 
         while (motor_need_to_go_distance > 0) {
