@@ -169,11 +169,11 @@ public class Auto_ultrasonic_ex2 extends LinearOpMode {
                     (leftMotor.isBusy() && rightMotor.isBusy())) {
 
                 // Display it for the driver.
-                telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
-                telemetry.addData("Path2",  "Running at %7d :%7d",
-                        leftMotor.getCurrentPosition(),
-                        rightMotor.getCurrentPosition());
-                telemetry.update();
+                //telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
+                //telemetry.addData("Path2",  "Running at %7d :%7d",
+                //        leftMotor.getCurrentPosition(),
+               //         rightMotor.getCurrentPosition());
+               // telemetry.update();
             }
 
             // Stop all motion;

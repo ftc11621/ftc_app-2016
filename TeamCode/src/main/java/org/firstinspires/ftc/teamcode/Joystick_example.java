@@ -53,7 +53,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @TeleOp(name="Joystick Example", group="Examples")  // @Autonomous(...) is the other common choice
-//@Disabled
+@Disabled
 public class Joystick_example extends OpMode
 {
     /* Declare OpMode members. */
