@@ -35,6 +35,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -70,16 +71,16 @@ public class Driver_Mode extends OpMode
     public void init() {
 
         //launcherMotor  = hardwareMap.dcMotor.get("motor_launcher");
-        //intakeMotor =hardwareMap.dcMotor.get("motor_intake");
-        leftMotor  = hardwareMap.dcMotor.get("motor_2");
-        rightMotor = hardwareMap.dcMotor.get("motor_1");
+        intakeMotor =hardwareMap.dcMotor.get("motor_intake");
+        leftMotor  = hardwareMap.dcMotor.get("motor_1");
+        rightMotor = hardwareMap.dcMotor.get("motor_2");
 
         // eg: Set the drive motor directions:
         // Reverse the motor that runs backwards when connected directly to the battery
         rightMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         leftMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
         //launcherMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-        //intakeMotor.setDirection(DcMotor.Direction.FORWARD);
+        intakeMotor.setDirection(DcMotor.Direction.FORWARD);
     }
 
     /*
@@ -113,7 +114,7 @@ public class Driver_Mode extends OpMode
         if (gamepad2.y) {                   // shoot launcher
             //launcherMotor.setPower(1.0);
         } else if(gamepad2.a) {             // spin Intake
-            //intakeMotor.setPower(1.0);
+            intakeMotor.setPower(1.0);
         } else if(gamepad2.b) {             // semi-autonomous beacon claiming
             // add code that works with autonomous beacon claiming here.
         } else if(gamepad1.dpad_down) {        // Chassis maximum motors power
@@ -126,7 +127,7 @@ public class Driver_Mode extends OpMode
             MaxDcPower = 1.0;
         } else {
             //launcherMotor.setPower(0);
-            //intakeMotor.setPower(0);
+            intakeMotor.setPower(0);
         }
         // add beacon claiming servo motor
 

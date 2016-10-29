@@ -88,7 +88,7 @@ public class Launcher_example extends OpMode
         // eg: Set the drive motor directions:
         // Reverse the motor that runs backwards when connected directly to the battery
 
-         launcherMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+         launcherMotor.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
         // telemetry.addData("Status", "Initialized");
          intakeMotor.setDirection(DcMotor.Direction.FORWARD);
     }

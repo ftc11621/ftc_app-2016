@@ -13,6 +13,8 @@ public class RobotDriver {
     private DcMotor leftMotor = null;
     private DcMotor rightMotor = null;
 
+    private double timeoutS = 30;
+
     private static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
     private static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
     private static final double     WHEEL_DIAMETER_CM       = 9.15 ;     // For figuring circumference
@@ -27,7 +29,14 @@ public class RobotDriver {
     public RobotDriver(LinearOpMode opMode, HardwareMap hardwareMap ) {
         this.leftMotor  = hardwareMap.dcMotor.get("motor_2");
         this.rightMotor = hardwareMap.dcMotor.get("motor_1");
+        rightMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        leftMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
         this.opMode = opMode;
+    }
+
+    public void setRunMode(DcMotor.RunMode runMode){
+        leftMotor.setMode(runMode);
+        rightMotor.setMode(runMode);
     }
 
     public static enum Direction { forward, back}
@@ -48,7 +57,10 @@ public class RobotDriver {
             return rightPower;
         }
     }
-    public static enum Speed {normal(0.5), slow(0.25), turn(0.2);
+
+    private Speed speed;
+
+    public static enum Speed {fast(1.0),normal(0.5), slow(0.25), turn(0.2);
 
         Speed(double speed) {
           this.speed = speed;
@@ -57,8 +69,17 @@ public class RobotDriver {
         public double getSpeed() {return this.speed;}
     }
 
+    public Speed getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(Speed speed) {
+        this.speed = speed;
+    }
+
     public void goStraight(Speed speed)
     {
+        this.speed = speed;
         leftMotor.setPower(speed.getSpeed());
         rightMotor.setPower(speed.getSpeed());
     }
@@ -71,7 +92,7 @@ public class RobotDriver {
             // Turn left 90 degree, check wheel diameter and spacing if it's not accurate
 
             double wheels_turn_cm = 3.14*WHEELS_SPACING_CM * angle_turn/360.0; // wheels distance to turn to the angle
-            moveMotors(Speed.turn, wheels_turn_cm, -wheels_turn_cm, 30.0);
+            moveMotors(Speed.turn, wheels_turn_cm, -wheels_turn_cm);
         }
         else {
             turn(turn.getLeftPower(), turn.getRightPower());
@@ -83,11 +104,15 @@ public class RobotDriver {
         rightMotor.setPower(rightPower);  // turn a litte to get away from the wall
     }
 
-    public void go(Direction direction, Speed speed, double distance, double timeoutS){
-        moveMotors(speed, distance, distance, timeoutS);
+    public void go(Direction direction, Speed speed, double distance){
+        moveMotors(speed, distance, distance);
     }
 
-    private void moveMotors(Speed speed, double leftDistance, double rightDistance, double timeoutS) {
+    public void goDistance(Speed speed, double distance){
+        moveMotors(speed, distance, distance);
+    }
+
+    private void moveMotors(Speed speed, double leftDistance, double rightDistance) {
         int newLeftTarget = leftMotor.getCurrentPosition() + (int)(leftDistance * COUNTS_PER_CM);
         int newRightTarget = rightMotor.getCurrentPosition() + (int)(rightDistance * COUNTS_PER_CM);
         leftMotor.setTargetPosition(newLeftTarget);

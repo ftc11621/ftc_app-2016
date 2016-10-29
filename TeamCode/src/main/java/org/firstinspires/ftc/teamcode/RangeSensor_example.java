@@ -84,9 +84,9 @@ public class RangeSensor_example extends OpMode {
         telemetry.addData("Right Rear optical", range_Cache[1]& 0xFF);
 
        // telemetry.addData("Front distance", rangeSensor1.getDistance(DistanceUnit.CM));
-        if(range_front_CM       < 255) telemetry.addData("Front distance",  range_front_CM );
-        if(range_front_right_CM < 255) telemetry.addData("Right Front distance",  range_front_right_CM );
-        if(range_rear_right_CM  < 255) telemetry.addData("Right Rear distance",  range_rear_right_CM );
+        telemetry.addData("Front distance",  range_front_CM );
+        telemetry.addData("Right Front distance",  range_front_right_CM );
+        telemetry.addData("Right Rear distance",  range_rear_right_CM );
 
         telemetry.update();
     }

@@ -160,7 +160,7 @@ public class Auto_find_beacon extends LinearOpMode {
 
 
         // First move forward to 25 cm distance to a wall
-        double target_distance = 25.0;   // 10 cm target distance
+        double target_distance = 40.0;   // 10 cm target distance
         get_Range_Sensor_front();
         //range_Cache = RANGE_front_Reader.read(RANGE_REG_START, RANGE_READ_LENGTH);
         //range_front_CM = range_Cache[0] & 0xFF;
@@ -193,6 +193,7 @@ public class Auto_find_beacon extends LinearOpMode {
            Move_along_the_wall(WALL_SIDE, 15.0, 20.0);  // right/left, lower limit, upper limit in CM
             //sleep(200);
         }
+
         leftMotor.setPower(0.0);    // stop motors
         rightMotor.setPower(0.0);
         get_Range_Sensor_front();
