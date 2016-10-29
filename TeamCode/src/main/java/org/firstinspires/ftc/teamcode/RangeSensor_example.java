@@ -1,68 +1,54 @@
-/*
-Copyright (c) 2016 Robert Atkinson
-
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification,
-are permitted (subject to the limitations in the disclaimer below) provided that
-the following conditions are met:
-
-Redistributions of source code must retain the above copyright notice, this list
-of conditions and the following disclaimer.
-
-Redistributions in binary form must reproduce the above copyright notice, this
-list of conditions and the following disclaimer in the documentation and/or
-other materials provided with the distribution.
-
-Neither the name of Robert Atkinson nor the names of his contributors may be used to
-endorse or promote products derived from this software without specific prior
-written permission.
-
-NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
-LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESSFOR A PARTICULAR PURPOSE
-ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
-TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
 package org.firstinspires.ftc.teamcode;
 
+import android.app.Activity;
+import android.graphics.Color;
+import android.view.View;
+
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.I2cAddr;
+import com.qualcomm.robotcore.hardware.I2cDevice;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynchImpl;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @TeleOp(name="Range Sensor Example", group="Examples")  // @Autonomous(...) is the other common choice
 //@Disabled
-public class RangeSensor_example extends OpMode
-{
-    ModernRoboticsI2cRangeSensor rangeSensor;
+public class RangeSensor_example extends OpMode {
+   // ModernRoboticsI2cRangeSensor rangeSensor1;  // default 0x28 address
+    byte[] range_Cache; //The read will return an array of bytes. They are stored in this variable
+    public static final int RANGE_REG_START = 0x04; //Register to start reading
+    public static final int RANGE_READ_LENGTH = 2; //Number of byte to read
+    public I2cDevice RANGE_front_right, RANGE_rear_right, RANGE_front;
+    public I2cDeviceSynchImpl RANGE_front_right_Reader, RANGE_rear_right_Reader, RANGE_front_Reader;
+    int range_front_right_CM, range_rear_right_CM, range_front_CM;
 
 
-    /*
-     * Code to run ONCE when the driver hits INIT
-     */
     @Override
     public void init() {
+        //rangeSensor1 = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensor_1"); // default 0x28
+        RANGE_front       = hardwareMap.i2cDevice.get("rangeSensor_1");
+        RANGE_front_right = hardwareMap.i2cDevice.get("rangeSensor_2");
+        RANGE_rear_right  = hardwareMap.i2cDevice.get("rangeSensor_3");
 
-        // get a reference to our compass
-        rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensor_1");
+        RANGE_front_Reader       = new I2cDeviceSynchImpl(RANGE_front      , I2cAddr.create8bit(0x28), false);
+        RANGE_front_right_Reader = new I2cDeviceSynchImpl(RANGE_front_right, I2cAddr.create8bit(0x26), false);
+        RANGE_rear_right_Reader  = new I2cDeviceSynchImpl(RANGE_rear_right , I2cAddr.create8bit(0x30), false);
+        RANGE_front_Reader.engage();
+        RANGE_front_right_Reader.engage();
+        RANGE_rear_right_Reader.engage();
 
-
-        telemetry.addData("Status", "Range Sensor Initialized");
-
-        /* eg: Initialize the hardware variables. Note that the strings used here as parameters
-         * to 'get' must correspond to the names assigned during the robot configuration
-         * step (using the FTC Robot Controller app on the phone).
-         */
-
+        telemetry.addData("rear name", RANGE_front.getDeviceName());
+        telemetry.addData("rear name", RANGE_front_right.getDeviceName());
+        telemetry.addData("rear name", RANGE_rear_right.getDeviceName());
     }
 
     /*
@@ -85,11 +71,22 @@ public class RangeSensor_example extends OpMode
      */
     @Override
     public void loop() {
+        range_Cache = RANGE_front_Reader.read(RANGE_REG_START, RANGE_READ_LENGTH);
+        range_front_CM = range_Cache[0] & 0xFF;
+        telemetry.addData("Front optical", range_Cache[1]& 0xFF);
 
-        telemetry.addData("raw ultrasonic", rangeSensor.rawUltrasonic());
-        telemetry.addData("raw optical", rangeSensor.rawOptical());
-        telemetry.addData("cm optical", "%.2f cm", rangeSensor.cmOptical());
-        telemetry.addData("cm", "%.2f cm", rangeSensor.getDistance(DistanceUnit.CM));
+        range_Cache = RANGE_front_right_Reader.read(RANGE_REG_START, RANGE_READ_LENGTH);
+        range_front_right_CM = range_Cache[0] & 0xFF;
+        telemetry.addData("Right Front optical", range_Cache[1]& 0xFF);
+
+        range_Cache = RANGE_rear_right_Reader.read(RANGE_REG_START, RANGE_READ_LENGTH);
+        range_rear_right_CM = range_Cache[0] & 0xFF;
+        telemetry.addData("Right Rear optical", range_Cache[1]& 0xFF);
+
+       // telemetry.addData("Front distance", rangeSensor1.getDistance(DistanceUnit.CM));
+        if(range_front_CM       < 255) telemetry.addData("Front distance",  range_front_CM );
+        if(range_front_right_CM < 255) telemetry.addData("Right Front distance",  range_front_right_CM );
+        if(range_rear_right_CM  < 255) telemetry.addData("Right Rear distance",  range_rear_right_CM );
 
         telemetry.update();
     }
