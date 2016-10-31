@@ -74,12 +74,14 @@ public class Auto_find_beacon extends LinearOpMode {
     static final boolean    WALL_SIDE               = true;     // true=right wall, false=left wall
 
     // Range ultrasonic sensors
-    byte[] range_Cache; //The read will return an array of bytes. They are stored in this variable
-    public static final int RANGE_REG_START = 0x04; //Register to start reading
-    public static final int RANGE_READ_LENGTH = 2; //Number of byte to read
-    public I2cDevice RANGE_front_right, RANGE_rear_right, RANGE_front;
-    public I2cDeviceSynchImpl RANGE_front_right_Reader, RANGE_rear_right_Reader, RANGE_front_Reader;
-    int range_front_right_CM, range_rear_right_CM, range_front_CM;
+    private RangeSensor rangeSensors = null;
+
+    //byte[] range_Cache; //The read will return an array of bytes. They are stored in this variable
+   // public static final int RANGE_REG_START = 0x04; //Register to start reading
+    //public static final int RANGE_READ_LENGTH = 2; //Number of byte to read
+    //public I2cDevice RANGE_front_right, RANGE_rear_right, RANGE_front;
+    //public I2cDeviceSynchImpl RANGE_front_right_Reader, RANGE_rear_right_Reader, RANGE_front_Reader;
+
 
     OpticalDistanceSensor odsSensor;
     ColorSensor colorSensor;
@@ -91,22 +93,12 @@ public class Auto_find_beacon extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
 
         // Robot Configuration names ========================================
         leftMotor  = hardwareMap.dcMotor.get("motor_2");
         rightMotor = hardwareMap.dcMotor.get("motor_1");
 
-        RANGE_front       = hardwareMap.i2cDevice.get("rangeSensor_1");
-        RANGE_front_right = hardwareMap.i2cDevice.get("rangeSensor_2");
-        RANGE_rear_right  = hardwareMap.i2cDevice.get("rangeSensor_3");
-        RANGE_front_Reader       = new I2cDeviceSynchImpl(RANGE_front      , I2cAddr.create8bit(0x28), false);
-        RANGE_front_right_Reader = new I2cDeviceSynchImpl(RANGE_front_right, I2cAddr.create8bit(0x26), false);
-        RANGE_rear_right_Reader  = new I2cDeviceSynchImpl(RANGE_rear_right , I2cAddr.create8bit(0x30), false);
-        RANGE_front_Reader.engage();
-        RANGE_front_right_Reader.engage();
-        RANGE_rear_right_Reader.engage();
+        rangeSensors = new RangeSensor(hardwareMap);
 
         odsSensor = hardwareMap.opticalDistanceSensor.get("opticalSensor_1");
         colorSensor = hardwareMap.colorSensor.get("sensor_color");
@@ -135,18 +127,9 @@ public class Auto_find_beacon extends LinearOpMode {
 
 
         // Initial Range Sensor readings
-        range_Cache = RANGE_front_Reader.read(RANGE_REG_START, RANGE_READ_LENGTH);
-        range_front_CM = range_Cache[0] & 0xFF;
-        telemetry.addData("Front optical", range_Cache[1]& 0xFF);
-        range_Cache = RANGE_front_right_Reader.read(RANGE_REG_START, RANGE_READ_LENGTH);
-        range_front_right_CM = range_Cache[0] & 0xFF;
-        telemetry.addData("Right Front optical", range_Cache[1]& 0xFF);
-        range_Cache = RANGE_rear_right_Reader.read(RANGE_REG_START, RANGE_READ_LENGTH);
-        range_rear_right_CM = range_Cache[0] & 0xFF;
-        telemetry.addData("Right Rear optical", range_Cache[1]& 0xFF);
-        telemetry.addData("Front distance",  range_front_CM );
-        telemetry.addData("Right Front distance",  range_front_right_CM );
-        telemetry.addData("Right Rear distance",  range_rear_right_CM );
+        telemetry.addData("Front distance",  rangeSensors.get_Front_distance(255));
+        telemetry.addData("Right Front distance",  rangeSensors.get_Front_Right_distance(255) );
+        telemetry.addData("Right Rear distance",  rangeSensors.get_Rear_Right_distance(255) );
 
         telemetry.update();
 
@@ -157,20 +140,22 @@ public class Auto_find_beacon extends LinearOpMode {
 
         ///////////////////////////////////////////////////////////
         // WRITE AUTONOMOUS sequence below ===========================================
+        ///////////////////////////////////////////////////////////
+
 
 
         // First move forward to 25 cm distance to a wall
-        double target_distance = 40.0;   // 10 cm target distance
-        get_Range_Sensor_front();
-        //range_Cache = RANGE_front_Reader.read(RANGE_REG_START, RANGE_READ_LENGTH);
-        //range_front_CM = range_Cache[0] & 0xFF;
+        runtime.reset();
+        double target_distance = 30.0;   // target distance
+        int range_front_CM = rangeSensors.get_Front_distance(255);
+        while (range_front_CM == 255 && runtime.seconds()<2) {
+            range_front_CM = rangeSensors.get_Front_distance(255);
+            sleep(50);
+        }
         double motor_need_to_go_distance = range_front_CM - target_distance;
-
         while (motor_need_to_go_distance > 0) {
             encoderDrive(DRIVE_SPEED, motor_need_to_go_distance , motor_need_to_go_distance, 30.0);  // S1: Forward 48cm with 5 Sec timeout
-
-            get_Range_Sensor_front();   // get the front distance
-
+            range_front_CM = rangeSensors.get_Front_distance(255);
             motor_need_to_go_distance = range_front_CM - target_distance;
 
             telemetry.addData("Front distance: " , range_front_CM);
@@ -178,10 +163,10 @@ public class Auto_find_beacon extends LinearOpMode {
         }
 
 
-        // Turn left 90 degree, check wheel diameter and spacing if it's not accurate
-        Turn_90degree(WALL_SIDE);
+        // Spin 90 degree, check wheel diameter and spacing if it's not accurate
+        Spin_degree(-90.0);      // negative angle to spin left
 
-
+/*
         // Then move along the wall to find a white line by a beacon
         leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -193,14 +178,15 @@ public class Auto_find_beacon extends LinearOpMode {
            Move_along_the_wall(WALL_SIDE, 15.0, 20.0);  // right/left, lower limit, upper limit in CM
             //sleep(200);
         }
+        */
 
         leftMotor.setPower(0.0);    // stop motors
         rightMotor.setPower(0.0);
-        get_Range_Sensor_front();
-        telemetry.addData("White line found, Range: ", range_front_CM);
+        range_front_CM = rangeSensors.get_Front_distance(1);
+        telemetry.addData("Front Range: ", range_front_CM);
         telemetry.update();
-/*
 
+/*
         // Looking for beacon color, red in this case
         // convert the RGB values to HSV values from the color sensor
         runtime.reset();
@@ -222,17 +208,15 @@ public class Auto_find_beacon extends LinearOpMode {
             Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);
 
         }
-*/
-
-
         leftMotor.setPower(0); // stop the motors
         rightMotor.setPower(0);
+*/
 
         // End of AUTONOMOUS sequence ================================================
         //////////////////////////////////////////////////////////////////////////
 
         // run until the end of the match (driver presses STOP)
-        //while (opModeIsActive()) {
+        while (opModeIsActive()) {
         //    telemetry.addData("Status", "Run Time: " + runtime.toString());
         //    telemetry.update();
 
@@ -240,25 +224,32 @@ public class Auto_find_beacon extends LinearOpMode {
             // leftMotor.setPower(-gamepad1.left_stick_y);
             // rightMotor.setPower(-gamepad1.right_stick_y);
 
-        //    idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
-       // }
+            idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
+        }
     }
 
     // ===========================================================
-    /* Method to turn 90-degree along the wall
+    /* Method to spin a degree along the wall
      */
 
-    private void Turn_90degree(boolean Side) {
+    private void Spin_degree(double angle_turn) {
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        double angle_turn = 90.0;     // positive to turn right
-        // Turn left 90 degree, check wheel diameter and spacing if it's not accurate
-        if (Side) {    // right wall
-            angle_turn = -90.0;     // turn left for the right wall
-        }
+
         double wheels_turn_cm = 3.14*WHEELS_SPACING_CM * angle_turn/360.0; // wheels distance to turn to the angle
-        encoderDrive(TURN_SPEED, wheels_turn_cm, -wheels_turn_cm, 30.0);
+        encoderDrive(TURN_SPEED, wheels_turn_cm, -wheels_turn_cm, 10.0);  // spin with 10 sec timeout
     }
+
+
+    // Method to make the chassis parallel to the wall
+    //
+
+    private void Align_to_wall(boolean Side, double distance_to_wall) {
+        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+    }
+
 
     // ===========================================================
     /* Method to move along the wall, either left or right side of the wall
@@ -267,13 +258,12 @@ public class Auto_find_beacon extends LinearOpMode {
      */
 
     private void Move_along_the_wall(boolean Side, double lower_limit, double upper_limit) {
+        int range_front_right_CM, range_rear_right_CM, range_front_CM;
         if(Side) {      // right side wall
 
-            range_Cache = RANGE_front_right_Reader.read(RANGE_REG_START, RANGE_READ_LENGTH);
-            range_front_right_CM = range_Cache[0] & 0xFF;
+            range_front_right_CM = rangeSensors.get_Front_Right_distance(254);
             telemetry.addData("Right Front: ", range_front_right_CM);
-            range_Cache = RANGE_rear_right_Reader.read(RANGE_REG_START, RANGE_READ_LENGTH);
-            range_rear_right_CM = range_Cache[0] & 0xFF;
+            range_rear_right_CM = rangeSensors.get_Rear_Right_distance(254);
             telemetry.addData("Right Rear: ", range_rear_right_CM);
 
 
@@ -334,15 +324,6 @@ public class Auto_find_beacon extends LinearOpMode {
 
         }
         telemetry.update();
-    }
-
-    // ====================================================
-    /* Reading Range sensor
-
-     */
-    private void get_Range_Sensor_front() {
-        range_Cache = RANGE_front_Reader.read(RANGE_REG_START, RANGE_READ_LENGTH);
-        range_front_CM = range_Cache[0] & 0xFF;
     }
 
 

@@ -21,7 +21,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @TeleOp(name="Range Sensor Example", group="Examples")  // @Autonomous(...) is the other common choice
-//@Disabled
+@Disabled
 public class RangeSensor_example extends OpMode {
    // ModernRoboticsI2cRangeSensor rangeSensor1;  // default 0x28 address
     byte[] range_Cache; //The read will return an array of bytes. They are stored in this variable
