@@ -154,7 +154,7 @@ public class Auto_find_beacon extends LinearOpMode {
         }
         double motor_need_to_go_distance = range_front_CM - target_distance;
         while (motor_need_to_go_distance > 0) {
-            encoderDrive(DRIVE_SPEED, motor_need_to_go_distance , motor_need_to_go_distance, 30.0);  // S1: Forward 48cm with 5 Sec timeout
+            encoderDrive(DRIVE_SPEED, motor_need_to_go_distance , motor_need_to_go_distance, 10.0);  // S1: Forward 48cm with 5 Sec timeout
             range_front_CM = rangeSensors.get_Front_distance(255);
             motor_need_to_go_distance = range_front_CM - target_distance;
 

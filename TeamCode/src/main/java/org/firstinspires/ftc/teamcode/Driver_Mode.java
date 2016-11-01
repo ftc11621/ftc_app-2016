@@ -118,11 +118,11 @@ public class Driver_Mode extends OpMode
         } else if(gamepad2.b) {             // semi-autonomous beacon claiming
             // add code that works with autonomous beacon claiming here.
         } else if(gamepad1.dpad_down) {        // Chassis maximum motors power
-            MaxDcPower = 0.07;
-        } else if(gamepad1.dpad_left) {
             MaxDcPower = 0.1;
+        } else if(gamepad1.dpad_left) {
+            MaxDcPower = 0.2;
         } else if(gamepad1.dpad_up) {
-            MaxDcPower = 0.20;
+            MaxDcPower = 0.3;
         } else if(gamepad1.dpad_right) {        // Last chassis maximum power setting
             MaxDcPower = 1.0;
         } else {

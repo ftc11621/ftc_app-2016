@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.util.Range;
 
 import java.sql.Time;
 
+import static android.os.SystemClock.sleep;
+
 /**
  * Created by Marie on 10/25/2016.
  */
@@ -46,6 +48,7 @@ public class RangeSensor {
         while(dist > max_distance) {
             range_Cache = RANGE_front_Reader.read(RANGE_REG_START, RANGE_READ_LENGTH);
             dist = range_Cache[0] & 0xFF;
+            sleep(20);
         }
         return dist;
     }
@@ -58,6 +61,7 @@ public class RangeSensor {
         while(dist > max_distance) {
             range_Cache = RANGE_front_right_Reader.read(RANGE_REG_START, RANGE_READ_LENGTH);
             dist = range_Cache[0] & 0xFF;
+            sleep(20);
         }
         return dist;
     }
@@ -70,10 +74,12 @@ public class RangeSensor {
         while(dist > max_distance) {
             range_Cache = RANGE_rear_right_Reader.read(RANGE_REG_START, RANGE_READ_LENGTH);
             dist = range_Cache[0] & 0xFF;
+            sleep(20);
         }
         return dist;
     }
 
+    // median method if needed
     private static int median_int(int[] m) {
         // sort the array first
         for(int nn=0; nn<m.length-1; nn++) {

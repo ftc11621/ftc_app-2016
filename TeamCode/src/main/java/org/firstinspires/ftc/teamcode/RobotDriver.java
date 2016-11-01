@@ -13,7 +13,7 @@ public class RobotDriver {
     private DcMotor leftMotor = null;
     private DcMotor rightMotor = null;
 
-    private double timeoutS = 30;
+    //private double timeoutS = 30;
 
     private static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
     private static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
@@ -92,7 +92,9 @@ public class RobotDriver {
             // Turn left 90 degree, check wheel diameter and spacing if it's not accurate
 
             double wheels_turn_cm = 3.14*WHEELS_SPACING_CM * angle_turn/360.0; // wheels distance to turn to the angle
-            moveMotors(Speed.turn, wheels_turn_cm, -wheels_turn_cm);
+            //opMode.telemetry.addData("Turn distance:", wheels_turn_cm);
+            //opMode.telemetry.update();
+            moveMotors(Speed.normal, wheels_turn_cm, -wheels_turn_cm, 10);
         }
         else {
             turn(turn.getLeftPower(), turn.getRightPower());
@@ -104,15 +106,15 @@ public class RobotDriver {
         rightMotor.setPower(rightPower);  // turn a litte to get away from the wall
     }
 
-    public void go(Direction direction, Speed speed, double distance){
-        moveMotors(speed, distance, distance);
+    public void go(Direction direction, Speed speed, double distance, double timeout){
+        moveMotors(speed, distance, distance, timeout);
     }
 
-    public void goDistance(Speed speed, double distance){
-        moveMotors(speed, distance, distance);
-    }
+    //public void goDistance(Speed speed, double distance, double timeout){
+    //    moveMotors(speed, distance, distance, timeout);
+    //}
 
-    private void moveMotors(Speed speed, double leftDistance, double rightDistance) {
+    private void moveMotors(Speed speed, double leftDistance, double rightDistance, double timeout) {
         int newLeftTarget = leftMotor.getCurrentPosition() + (int)(leftDistance * COUNTS_PER_CM);
         int newRightTarget = rightMotor.getCurrentPosition() + (int)(rightDistance * COUNTS_PER_CM);
         leftMotor.setTargetPosition(newLeftTarget);
@@ -129,15 +131,15 @@ public class RobotDriver {
 
         // keep looping while we are still active, and there is time left, and both motors are running.
         while (opMode.opModeIsActive() &&
-                (runtime.seconds() < timeoutS) &&
+                (runtime.seconds() < timeout) &&
                 (isMoving())) {
 
             // Display it for the driver.
-            opMode.telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
-            opMode.telemetry.addData("Path2",  "Running at %7d :%7d",
-                    leftMotor.getCurrentPosition(),
-                    rightMotor.getCurrentPosition());
-            opMode.telemetry.update();
+            //opMode.telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
+            //opMode.telemetry.addData("Path2",  "Running at %7d :%7d",
+            //        leftMotor.getCurrentPosition(),
+            //        rightMotor.getCurrentPosition());
+            //opMode.telemetry.update();
         }
 
         // Stop all motion;

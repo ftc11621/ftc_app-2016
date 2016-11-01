@@ -103,7 +103,7 @@ public class Auto_ultrasonic_ex3 extends LinearOpMode {
         telemetry.addData("Raw",  optical_floor);
         telemetry.addData("Normal", odsSensor.getLightDetected());
 
-
+    sleep(100);
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
