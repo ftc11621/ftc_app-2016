@@ -33,22 +33,14 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package org.firstinspires.ftc.teamcode;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.view.View;
 
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.I2cAddr;
-import com.qualcomm.robotcore.hardware.I2cDevice;
-import com.qualcomm.robotcore.hardware.I2cDeviceSynchImpl;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 /**
  Autonomous toward a wall, when it's close turn 90 degree left
@@ -127,9 +119,9 @@ public class Auto_find_beacon extends LinearOpMode {
 
 
         // Initial Range Sensor readings
-        telemetry.addData("Front distance",  rangeSensors.get_Front_distance(255));
-        telemetry.addData("Right Front distance",  rangeSensors.get_Front_Right_distance(255) );
-        telemetry.addData("Right Rear distance",  rangeSensors.get_Rear_Right_distance(255) );
+        telemetry.addData("Front distance",  rangeSensors.getFrontDistance(255));
+        telemetry.addData("Right Front distance",  rangeSensors.getRightDistance(255) );
+        telemetry.addData("Right Rear distance",  rangeSensors.getLeftDistance(255) );
 
         telemetry.update();
 
@@ -147,15 +139,15 @@ public class Auto_find_beacon extends LinearOpMode {
         // First move forward to 25 cm distance to a wall
         runtime.reset();
         double target_distance = 30.0;   // target distance
-        int range_front_CM = rangeSensors.get_Front_distance(255);
+        int range_front_CM = rangeSensors.getFrontDistance(255);
         while (range_front_CM == 255 && runtime.seconds()<2) {
-            range_front_CM = rangeSensors.get_Front_distance(255);
+            range_front_CM = rangeSensors.getFrontDistance(255);
             sleep(50);
         }
         double motor_need_to_go_distance = range_front_CM - target_distance;
         while (motor_need_to_go_distance > 0) {
             encoderDrive(DRIVE_SPEED, motor_need_to_go_distance , motor_need_to_go_distance, 10.0);  // S1: Forward 48cm with 5 Sec timeout
-            range_front_CM = rangeSensors.get_Front_distance(255);
+            range_front_CM = rangeSensors.getFrontDistance(255);
             motor_need_to_go_distance = range_front_CM - target_distance;
 
             telemetry.addData("Front distance: " , range_front_CM);
@@ -182,7 +174,7 @@ public class Auto_find_beacon extends LinearOpMode {
 
         leftMotor.setPower(0.0);    // stop motors
         rightMotor.setPower(0.0);
-        range_front_CM = rangeSensors.get_Front_distance(1);
+        range_front_CM = rangeSensors.getFrontDistance(1);
         telemetry.addData("Front Range: ", range_front_CM);
         telemetry.update();
 
@@ -261,9 +253,9 @@ public class Auto_find_beacon extends LinearOpMode {
         int range_front_right_CM, range_rear_right_CM, range_front_CM;
         if(Side) {      // right side wall
 
-            range_front_right_CM = rangeSensors.get_Front_Right_distance(254);
+            range_front_right_CM = rangeSensors.getRightDistance(254);
             telemetry.addData("Right Front: ", range_front_right_CM);
-            range_rear_right_CM = rangeSensors.get_Rear_Right_distance(254);
+            range_rear_right_CM = rangeSensors.getLeftDistance(254);
             telemetry.addData("Right Rear: ", range_rear_right_CM);
 
 

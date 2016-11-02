@@ -25,6 +25,7 @@ public class RobotDriver {
     static final double     WHEELS_SPACING_CM       = 34.3;     // spacing between wheels for turns
 
     private ElapsedTime runtime = new ElapsedTime();
+    private int MAX_TIMEOUT;
 
     public RobotDriver(LinearOpMode opMode, HardwareMap hardwareMap ) {
         this.leftMotor  = hardwareMap.dcMotor.get("motor_2");
@@ -108,6 +109,11 @@ public class RobotDriver {
 
     public void go(Direction direction, Speed speed, double distance, double timeout){
         moveMotors(speed, distance, distance, timeout);
+    }
+
+    public void go(Direction direction, Speed speed, double distance){
+        MAX_TIMEOUT = 30;
+        moveMotors(speed, distance, distance, MAX_TIMEOUT);
     }
 
     //public void goDistance(Speed speed, double distance, double timeout){
