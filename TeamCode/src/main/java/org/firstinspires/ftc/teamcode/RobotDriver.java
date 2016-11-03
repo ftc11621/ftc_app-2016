@@ -5,9 +5,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-/**
- * Created by Marie on 10/25/2016.
- */
 
 public class RobotDriver {
     private DcMotor leftMotor = null;
