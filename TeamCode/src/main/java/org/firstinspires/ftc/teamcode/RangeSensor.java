@@ -7,9 +7,6 @@ import com.qualcomm.robotcore.hardware.I2cDeviceSynchImpl;
 
 import static android.os.SystemClock.sleep;
 
-/**
- * Created by Marie on 10/25/2016.
- */
 
 public class RangeSensor {
 
