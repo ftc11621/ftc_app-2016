@@ -64,8 +64,8 @@
      * is explained below.
      */
 //new way to register opmodes, don't need ftcopmoderegister anymore
-    @Autonomous(name="Concept: Vuforia Navigation", group ="Concept")
-    @Disabled
+    @Autonomous(name="Concept:Vuforia Navigation", group ="Concept")
+
     public class VuforiaNavigation extends LinearOpMode {
 
 
@@ -122,7 +122,7 @@
              */
 
 
-            VuforiaTrackables FTC2016 = this.vuforia.loadTrackablesFromAsset("FTC_2016_17");
+            VuforiaTrackables FTC2016 = this.vuforia.loadTrackablesFromAsset("FTC_2016-17");
             VuforiaTrackable wheels = FTC2016.get(0);
             wheels.setName("Wheels");
 
@@ -211,19 +211,22 @@
 
 
 
-            wheels.setLocation(createMatrix(0, mmFTCFieldWidth / 2, 0, 90, 0, 90)); //On the middle tile
+            wheels.setLocation(createMatrix(12*mmPerInch, mmFTCFieldWidth / 2, 0, 90, 0, 0)); //On the middle tile
             RobotLog.ii(TAG, "Wheels=%s", format(wheels.getLocation()));
 
 
-            legos.setLocation(createMatrix(-40*mmPerInch, mmFTCFieldWidth / 2, 0, 90, 0, 90)); // Closer to corner
+
+
+
+            legos.setLocation(createMatrix(-36*mmPerInch, mmFTCFieldWidth / 2, 0, 90, 0, 0)); // Closer to corner
             RobotLog.ii(TAG, "Legos=%s", format(legos.getLocation()));
 
 
-            tools.setLocation(createMatrix(-mmFTCFieldWidth / 2, 40*mmPerInch, 0, 90, 0, 90)); //Closer to corner
+            tools.setLocation(createMatrix(-mmFTCFieldWidth / 2, 36*mmPerInch, 0, 90, 0, 0)); //Closer to corner
             RobotLog.ii(TAG, "Tools=%s", format(tools.getLocation()));
 
 
-            gears.setLocation(createMatrix(-mmFTCFieldWidth / 2, 0, 0, 90, 0, 90)); // On the middle tile
+            gears.setLocation(createMatrix(-mmFTCFieldWidth / 2, -12*mmPerInch, 0, 90, 0, 0)); // On the middle tile
             RobotLog.ii(TAG, "Gears=%s", format(gears.getLocation()));
 
 

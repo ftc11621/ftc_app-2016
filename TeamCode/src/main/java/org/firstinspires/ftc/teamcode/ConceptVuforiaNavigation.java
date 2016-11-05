@@ -123,7 +123,11 @@ public class ConceptVuforiaNavigation extends LinearOpMode {
          * {@link Parameters} instance with which you initialize Vuforia.
          */
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(R.id.cameraMonitorViewId);
-        parameters.vuforiaLicenseKey = "AQOWMXn/////AAAAGWYPWNBbCk0gtnLrpRXAzO9bS+VnD/Wd9Pign89BeWodWrRXamhMi5AX7ErlnOnYEHKwCEssFuJ2dlBqsKia/2Q1H6dFeQUHPeesNoCnzO7oeU6dnIMrH+EQuWDNTtPBVq+OhQDmHRt+0XpPr8MI74+hixoupz/GdJyIQANn8Y/qwF2j9rm9RaU2+aS14vdLcwLXhVotRKU3IZrQeYOdU2nuskzlOKG+/oPUZJMdOhJI+ONVXRAsB19vf00e/anLybmlMu0wWDg3x3eg2WpyrBnKSLLgYO6wpL70Lcb/OI4XmQJxq251/x6dqdHMjDZq8JdGOdiGw0umm1Y0cX6K56b7LgzWpWMMwBGCY3pTRdAg";
+        parameters.vuforiaLicenseKey = "AdksQ3j/////AAAAGVB9GUsSEE0BlMaVB7HcRZRM4Sv74bxusFbCpn3gwnUkr3GuOtSWhrTCHnTU/93+Im+JlrYI6///bytu1igZT48xQ6182nSTpVzJ2ZP+Q/sNzSg3qvIOMnjEptutngqB+e3mQ1+YTiDa9aZod1e8X7UvGsAJ3cfV+X/S3E4M/81d1IRSMPRPEaLpKFdMqN3AcbDpBHoqp82fAp7XWVN3qd/BRe0CAAoNsr26scPBAxvm9cizRG1WeRSFms3XkwFN6eGpH7VpNAdPPXep9RQ3lLZMTFQGOfiV/vRQXq/Tlaj/b7dkA12zBSW81MfBiXRxp06NGieFe7KvXNuu2aDyyXoaPFsI44FEGp1z/SVSEVR4"; // Insert your own key here
+
+
+
+
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
         this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
 
@@ -165,6 +169,9 @@ public class ConceptVuforiaNavigation extends LinearOpMode {
          * See <a href="https://en.wikipedia.org/wiki/Transformation_matrix">Transformation Matrix</a>
          * for detailed information. Commonly, you'll encounter transformation matrices as instances
          * of the {@link OpenGLMatrix} class.
+         *
+         *
+         *
          *
          * For the most part, you don't need to understand the details of the math of how transformation
          * matrices work inside (as fascinating as that is, truly). Just remember these key points:

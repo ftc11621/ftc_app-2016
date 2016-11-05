@@ -25,7 +25,7 @@ public class VuforiaOp extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(R.id.cameraMonitorViewId);
         params.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-        params.vuforiaLicenseKey = ""; //Enter Key Here;
+        params.vuforiaLicenseKey = "AQOWMXn/////AAAAGWYPWNBbCk0gtnLrpRXAzO9bS+VnD/Wd9Pign89BeWodWrRXamhMi5AX7ErlnOnYEHKwCEssFuJ2dlBqsKia/2Q1H6dFeQUHPeesNoCnzO7oeU6dnIMrH+EQuWDNTtPBVq+OhQDmHRt+0XpPr8MI74+hixoupz/GdJyIQANn8Y/qwF2j9rm9RaU2+aS14vdLcwLXhVotRKU3IZrQeYOdU2nuskzlOKG+/oPUZJMdOhJI+ONVXRAsB19vf00e/anLybmlMu0wWDg3x3eg2WpyrBnKSLLgYO6wpL70Lcb/OI4XmQJxq251/x6dqdHMjDZq8JdGOdiGw0umm1Y0cX6K56b7LgzWpWMMwBGCY3pTRdAgAQOWMXn/////AAAAGWYPWNBbCk0gtnLrpRXAzO9bS+VnD/Wd9Pign89BeWodWrRXamhMi5AX7ErlnOnYEHKwCEssFuJ2dlBqsKia/2Q1H6dFeQUHPeesNoCnzO7oeU6dnIMrH+EQuWDNTtPBVq+OhQDmHRt+0XpPr8MI74+hixoupz/GdJyIQANn8Y/qwF2j9rm9RaU2+aS14vdLcwLXhVotRKU3IZrQeYOdU2nuskzlOKG+/oPUZJMdOhJI+ONVXRAsB19vf00e/anLybmlMu0wWDg3x3eg2WpyrBnKSLLgYO6wpL70Lcb/OI4XmQJxq251/x6dqdHMjDZq8JdGOdiGw0umm1Y0cX6K56b7LgzWpWMMwBGCY3pTRdAg"; //Enter Key Here;
 
 
         params.cameraMonitorFeedback = VuforiaLocalizer.Parameters.CameraMonitorFeedback.AXES;
