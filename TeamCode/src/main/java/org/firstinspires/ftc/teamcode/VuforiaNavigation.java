@@ -54,9 +54,10 @@ import java.util.List;
 
 
 
-@Autonomous(name="Vuforia 11621 Navigation", group ="Examples")
+@Autonomous(name="Vuforia Navigation Binh", group ="Examples")
 //@Disabled
 public class VuforiaNavigation extends LinearOpMode {
+
 
     public static final String TAG = "Vuforia Sample";
 
@@ -95,7 +96,6 @@ public class VuforiaNavigation extends LinearOpMode {
 
 
         OpenGLMatrix wheelsLocationOnField = OpenGLMatrix
-
                 .translation(12*mmPerInch, mmFTCFieldWidth/2, 0)
                 .multiplied(Orientation.getRotationMatrix(
 
@@ -106,10 +106,8 @@ public class VuforiaNavigation extends LinearOpMode {
 
 
         OpenGLMatrix legosLocationOnField = OpenGLMatrix
-
                 .translation(-36*mmPerInch, mmFTCFieldWidth/2, 0)
                 .multiplied(Orientation.getRotationMatrix(
-
                         AxesReference.EXTRINSIC, AxesOrder.XZX,
                         AngleUnit.DEGREES, 90, 0, 0));
         legos.setLocation(legosLocationOnField);

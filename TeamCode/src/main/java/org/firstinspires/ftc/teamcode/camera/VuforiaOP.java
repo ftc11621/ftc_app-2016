@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.R;
 /**
  * Created by abrah on 10/14/2016.
  */
-public class VuforiaOp extends LinearOpMode {
+public class VuforiaOP extends LinearOpMode {
 
 
     public void runOpMode() throws InterruptedException {

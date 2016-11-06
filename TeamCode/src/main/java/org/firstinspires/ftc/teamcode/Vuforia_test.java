@@ -34,6 +34,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.ftcrobotcontroller.R;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
@@ -54,51 +55,46 @@ import java.util.List;
 
 
 
-@Autonomous(name="Vuforia Test", group ="Examples")
+@Autonomous(name="Vuforia 11621 Test", group ="Examples")
 //@Disabled
 public class Vuforia_test extends LinearOpMode {
 
-    private Vuforia vuforia_navigate;
+    private static final boolean alliance = true;   // true=Blue alliance, false=Red alliance
 
-    OpenGLMatrix lastLocation = null;
+    private VuforiaNav vuforia_navigate = null;
+    private  VuforiaTrackable wheels = null;
+    private VuforiaTrackable legos = null;
+    private OpenGLMatrix lastRobotLocation = null;
 
+   @Override public void runOpMode() {
+       vuforia_navigate = new VuforiaNav(alliance);     // true=Blue alliance, false=Red alliance
 
-    @Override public void runOpMode() {
+       waitForStart();
 
-        vuforia_navigate = new Vuforia();
+       vuforia_navigate.targets.activate();  // start vuforia tracking
 
-        // track all targets
-        List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
-        allTrackables.addAll(vuforia_navigate.visionTargets);
+      while (opModeIsActive()) {
 
-        waitForStart();
+          if(alliance) {        // Blue alliance
+              telemetry.addData("Wheels: ", vuforia_navigate.isWheel_visible() ? "Visible" : "Not Visisble");
+              telemetry.addData("Legos: ", vuforia_navigate.isLego_visible() ? "Visible" : "Not Visisble");
 
-        /** Start tracking the data sets we care about. */
-        vuforia_navigate.visionTargets.activate();
+          } else {              // Red alliance
 
-        while (opModeIsActive()) {
+          }
 
-            for (VuforiaTrackable trackable : allTrackables) {
+          // Getting robot X,Y location in the Field
+          OpenGLMatrix lastLocation = vuforia_navigate.getRobotLocation();
+          if (lastLocation != null)    {
+              telemetry.addData("Pos", vuforia_navigate.format(lastLocation));
+              telemetry.addData("X = ", vuforia_navigate.getX());       // x coordinate
+              telemetry.addData("Y = ", vuforia_navigate.getY());       // y coordinate
+          } else {
+              telemetry.addData("Pos", "Unknown");
+          }
+          telemetry.update();
 
-                telemetry.addData(trackable.getName(), ((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible() ? "Visible" : "Not Visible");    //
-
-                OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
-                if (robotLocationTransform != null) {
-                    lastLocation = robotLocationTransform;
-                }
-            }
-            /**
-             * Provide feedback as to where the robot was last located (if we know).
-             */
-            if (lastLocation != null) {
-                //  RobotLog.vv(TAG, "robot=%s", format(lastLocation));
-                telemetry.addData("Pos", vuforia_navigate.format(lastLocation));
-            } else {
-                telemetry.addData("Pos", "Unknown");
-            }
-            telemetry.update();
-        }
-    }
-
-
+         idle();
+      }
+   }
 }
