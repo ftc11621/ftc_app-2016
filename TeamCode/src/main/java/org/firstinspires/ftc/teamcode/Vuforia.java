@@ -26,7 +26,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.m
 
 public class Vuforia {
 
-    public static final String TAG = "Vuforia Test";
+    public static final String TAG = "Vuforia Sample";
     OpenGLMatrix lastLocation = null;
     VuforiaLocalizer vuforiaLocalizer;
     VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(com.qualcomm.ftcrobotcontroller.R.id.cameraMonitorViewId);
@@ -37,10 +37,9 @@ public class Vuforia {
     float mmFTCFieldWidth  = (12*12 - 2) * mmPerInch;   // the FTC field is ~11'10" center-to-center of the glass panels
 
     // phone location in robot, change if necessary
-    // phone in front is 0, -90, 0 rotation, -90, 0, 0 when in the middle of right side
-    // translation x=mmBotWidth/2 on the right side, x=0, y=mmBothWidth/2 in front
+    // phone in front is 0, -90, 0 rotation
     OpenGLMatrix phoneLocationOnRobot = OpenGLMatrix
-            .translation(0, mmBotWidth/2, 0)
+            .translation(mmBotWidth/2,0,0)
             .multiplied(Orientation.getRotationMatrix(
                     AxesReference.EXTRINSIC, AxesOrder.YZY,
                     AngleUnit.DEGREES, 0, -90, 0));  // -90, 0, 0 when on the right side
