@@ -66,12 +66,12 @@ public class VuforiaNav {
         legos.setLocation(legosLocationOnField);
         RobotLog.ii(TAG, "Legos Target=%s", format(legosLocationOnField));
 
-
+        // for phone in front
         OpenGLMatrix phoneLocationOnRobot = OpenGLMatrix
                 .translation(mmBotWidth/2,0,0)
                 .multiplied(Orientation.getRotationMatrix(
                         AxesReference.EXTRINSIC, AxesOrder.YZY,
-                        AngleUnit.DEGREES, -90, 0, 0));
+                        AngleUnit.DEGREES, -90, 90, 0));  // -90,0,0 for the right side
         RobotLog.ii(TAG, "phone=%s", format(phoneLocationOnRobot));
 
 
@@ -87,16 +87,17 @@ public class VuforiaNav {
         return ((VuforiaTrackableDefaultListener) legos.getListener()).isVisible();
     }
 
-    public OpenGLMatrix getRobotLocation()  {
+    public boolean updateRobotLocation()  {
         OpenGLMatrix robotLocationTransform = null;
         for (VuforiaTrackable trackable : allTrackables) {
 
             robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
             if (robotLocationTransform != null) {
                 lastRobotLocation = robotLocationTransform;
+                return true;    // new location found
             }
         }
-        return lastRobotLocation;
+        return false;       // when no new location found
     }
 
     public double getX() {
@@ -106,6 +107,21 @@ public class VuforiaNav {
     public double getY() {
         float[] coordinates = lastRobotLocation.getTranslation().getData();
         return coordinates[1];
+    }
+
+    public float get_orientation(int angleorder) {  // 1st, 2nd, and 3rd angle
+        float orient_angle;
+        switch (angleorder) {
+            case 1:
+                orient_angle = Orientation.getOrientation(lastRobotLocation, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle;
+                break;
+            case 2:
+                orient_angle = Orientation.getOrientation(lastRobotLocation, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).secondAngle;
+                break;
+            default:
+                orient_angle = Orientation.getOrientation(lastRobotLocation, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+        }
+        return orient_angle;
     }
 
     String format(OpenGLMatrix transformationMatrix) {

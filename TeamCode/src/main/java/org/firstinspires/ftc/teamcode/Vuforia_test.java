@@ -83,14 +83,20 @@ public class Vuforia_test extends LinearOpMode {
 
           }
 
-          // Getting robot X,Y location in the Field
-          OpenGLMatrix lastLocation = vuforia_navigate.getRobotLocation();
-          if (lastLocation != null)    {
-              telemetry.addData("Pos", vuforia_navigate.format(lastLocation));
+          // Getting robot X,Y location in the Field, use the updateRobotLocation to update the location first
+          telemetry.addData("New location ?", vuforia_navigate.updateRobotLocation()? "New" : "Previous found location");
+
+          if (vuforia_navigate.lastRobotLocation != null)    {
+              telemetry.addData("Last Position", vuforia_navigate.format(vuforia_navigate.lastRobotLocation));
               telemetry.addData("X = ", vuforia_navigate.getX());       // x coordinate
               telemetry.addData("Y = ", vuforia_navigate.getY());       // y coordinate
+              // phone orientation angle, if the phone is -90,90,0 in front landscape, then it's the Y-axis.
+              telemetry.addData("1st Angle = ", vuforia_navigate.get_orientation(1));       // 1st angle depends how the phone is oriented
+              telemetry.addData("2nd Angle = ", vuforia_navigate.get_orientation(2));       // 2nd angle depends how the phone is oriented
+              telemetry.addData("3rd Angle = ", vuforia_navigate.get_orientation(3));       // 3rd angle depends how the phone is oriented
+
           } else {
-              telemetry.addData("Pos", "Unknown");
+              telemetry.addData("Last Position", "Never found");
           }
           telemetry.update();
 
