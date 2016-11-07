@@ -70,22 +70,18 @@ public class Driver_Mode extends OpMode
     @Override
     public void init() {
 
-        //launcherMotor  = hardwareMap.dcMotor.get("motor_launcher");
+        launcherMotor  = hardwareMap.dcMotor.get("motor_launcher");
         intakeMotor =hardwareMap.dcMotor.get("motor_intake");
         leftMotor  = hardwareMap.dcMotor.get("motor_1");
         rightMotor = hardwareMap.dcMotor.get("motor_2");
 
-        // eg: Set the drive motor directions:
-        // Reverse the motor that runs backwards when connected directly to the battery
+        // eg: Set the drive motor
         rightMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         leftMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-        //launcherMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+        launcherMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intakeMotor.setDirection(DcMotor.Direction.FORWARD);
     }
 
-    /*
-     * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
-     */
     @Override
     public void init_loop() {
 
@@ -96,11 +92,8 @@ public class Driver_Mode extends OpMode
      */
     @Override
     public void start() {
-
         runtime.reset();
-        //launcherMotor.setPower(0.0);
-        //intakeMotor.setPower(0.0);
-        //launcherMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        launcherMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     /*
@@ -108,11 +101,31 @@ public class Driver_Mode extends OpMode
      */
     @Override
     public void loop() {
-        //telemetry.addData("Status", "Running: " + runtime.toString());
 
+        if (gamepad2.y) {                   // run launcher
+            launcherMotor.setDirection(DcMotor.Direction.REVERSE);
+            runtime.reset();
+            int initial_launcher = launcherMotor.getCurrentPosition();
+            launcherMotor.setTargetPosition(initial_launcher + (int)(1.5 * 1440)); // 1.5 revolution to shoot
+            launcherMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            launcherMotor.setPower(1.0);
+            while (runtime.seconds() < 1.0 && launcherMotor.isBusy()) {
+                // while still spinning
+            }
+            launcherMotor.setPower(0.0);
 
-        if (gamepad2.y) {                   // shoot launcher
-            //launcherMotor.setPower(1.0);
+            runtime.reset();
+            // resume to the initial launcher position, ready to launch again
+            launcherMotor.setDirection(DcMotor.Direction.FORWARD); // reverse direction
+            launcherMotor.setTargetPosition(initial_launcher + 1440);
+            launcherMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            launcherMotor.setPower(0.1);
+            while (runtime.seconds() < 5.0 && launcherMotor.isBusy()) {
+                // while still spinning
+            }
+            launcherMotor.setPower(0.0);
+            launcherMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         } else if(gamepad2.a) {             // spin Intake
             intakeMotor.setPower(1.0);
         } else if(gamepad2.b) {             // semi-autonomous beacon claiming
@@ -146,5 +159,4 @@ public class Driver_Mode extends OpMode
     @Override
     public void stop() {
     }
-
 }
