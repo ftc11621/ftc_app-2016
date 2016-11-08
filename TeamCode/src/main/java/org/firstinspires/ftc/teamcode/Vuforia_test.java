@@ -60,7 +60,7 @@ import java.util.List;
 public class Vuforia_test extends LinearOpMode {
 
     private static final boolean alliance = true;   // true=Blue alliance, false=Red alliance
-
+    //private RobotDriver robotDriver = null;
     private VuforiaNav vuforia_navigate = null;
     private  VuforiaTrackable wheels = null;
     private VuforiaTrackable legos = null;
@@ -72,6 +72,8 @@ public class Vuforia_test extends LinearOpMode {
        waitForStart();
 
        vuforia_navigate.targets.activate();  // start vuforia tracking
+       //robotDriver = new RobotDriver(this,hardwareMap);
+
 
       while (opModeIsActive()) {
 
@@ -99,6 +101,8 @@ public class Vuforia_test extends LinearOpMode {
               telemetry.addData("Last Position", "Never found");
           }
           telemetry.update();
+
+          //robotDriver.goStraight(RobotDriver.Speed.normal);
 
          idle();
       }
