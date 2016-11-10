@@ -36,6 +36,7 @@ import com.qualcomm.ftcrobotcontroller.R;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -64,7 +65,8 @@ public class Vuforia_test extends LinearOpMode {
     private VuforiaNav vuforia_navigate = null;
     private  VuforiaTrackable wheels = null;
     private VuforiaTrackable legos = null;
-    private OpenGLMatrix lastRobotLocation = null;
+    //private OpenGLMatrix lastRobotLocation = null;
+    private ElapsedTime runtime = new ElapsedTime();
 
    @Override public void runOpMode() {
        vuforia_navigate = new VuforiaNav(alliance);     // true=Blue alliance, false=Red alliance
@@ -78,28 +80,36 @@ public class Vuforia_test extends LinearOpMode {
       while (opModeIsActive()) {
 
           if(alliance) {        // Blue alliance
-              telemetry.addData("Wheels: ", vuforia_navigate.isWheel_visible() ? "Visible" : "Not Visisble");
-              telemetry.addData("Legos: ", vuforia_navigate.isLego_visible() ? "Visible" : "Not Visisble");
+              if(vuforia_navigate.isWheel_visible() || vuforia_navigate.isLego_visible()) {      // if wheels is visible
+                  if(vuforia_navigate.updateRobotLocation()) {
+                      runtime.reset();
+                  }
+                  //if (vuforia_navigate.updateRobotLocation()) {     // if the current robot location available
+                  telemetry.addData("Time position last updated (msec)" , "%.0f" , runtime.milliseconds());
+                  telemetry.addData("X = ", "%.0f", vuforia_navigate.getX());       // x coordinate
+                  telemetry.addData("Y = ", "%.0f", vuforia_navigate.getY());       // y coordinate
+                  telemetry.addData("Angle from X-axis = " , "%.1f", vuforia_navigate.get_orientation(3));
+
+                  // specify the destination coordinates, in this case X,Y of the Wheels
+                  telemetry.addData("Distance to Wheels = ", "%.0f",  vuforia_navigate.get_Destination_Distance(12*25.4, (12*12 - 2) * 25.4/2.0));
+                  // angle > 0 when the robot has to turn right, set the coordinate of the destination
+                  telemetry.addData("Angle robot needs to turn toward Wheels= ", "%.1f",  vuforia_navigate.get_robot_need_to_turn_Angle(12*25.4, (12*12 - 2) * 25.4/2.0));
+
+                  telemetry.addData("Distance to Legos = ", "%.0f", vuforia_navigate.get_Destination_Distance(-36*25.4, (12*12 - 2) * 25.4/2.0));
+                  telemetry.addData("Angle robot needs to turn toward Legos= ", "%.1f",  vuforia_navigate.get_robot_need_to_turn_Angle(-36*25.4, (12*12 - 2) * 25.4/2.0));
+
+                  //telemetry.addData("1st Angle = ", vuforia_navigate.get_orientation(1));       // 1st angle depends how the phone is oriented
+                  //telemetry.addData("2nd Angle = ", vuforia_navigate.get_orientation(2));       // 2nd angle depends how the phone is oriented
+                  // telemetry.addData("3rd Angle = ", vuforia_navigate.get_orientation(3));       // 3rd angle depends how the phone is oriented
+
+              } else {
+                  telemetry.addData("Wheels or Legos: ", "Not Visible");
+              }
 
           } else {              // Red alliance
 
           }
 
-          // Getting robot X,Y location in the Field, use the updateRobotLocation to update the location first
-          telemetry.addData("New location ?", vuforia_navigate.updateRobotLocation()? "New" : "Previous found location");
-
-          if (vuforia_navigate.lastRobotLocation != null)    {
-              telemetry.addData("Last Position", vuforia_navigate.format(vuforia_navigate.lastRobotLocation));
-              telemetry.addData("X = ", vuforia_navigate.getX());       // x coordinate
-              telemetry.addData("Y = ", vuforia_navigate.getY());       // y coordinate
-              // phone orientation angle, if the phone is -90,90,0 in front landscape, then it's the Y-axis.
-              telemetry.addData("1st Angle = ", vuforia_navigate.get_orientation(1));       // 1st angle depends how the phone is oriented
-              telemetry.addData("2nd Angle = ", vuforia_navigate.get_orientation(2));       // 2nd angle depends how the phone is oriented
-              telemetry.addData("3rd Angle = ", vuforia_navigate.get_orientation(3));       // 3rd angle depends how the phone is oriented
-
-          } else {
-              telemetry.addData("Last Position", "Never found");
-          }
           telemetry.update();
 
           //robotDriver.goStraight(RobotDriver.Speed.normal);

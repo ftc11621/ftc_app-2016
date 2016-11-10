@@ -89,15 +89,16 @@ public class VuforiaNav {
 
     public boolean updateRobotLocation()  {
         OpenGLMatrix robotLocationTransform = null;
+        boolean currentlocation_flag = false;
         for (VuforiaTrackable trackable : allTrackables) {
 
             robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
             if (robotLocationTransform != null) {
                 lastRobotLocation = robotLocationTransform;
-                return true;    // new location found
+                currentlocation_flag = true;
             }
         }
-        return false;       // when no new location found
+        return currentlocation_flag;       // when no new location found
     }
 
     public double getX() {
@@ -107,6 +108,10 @@ public class VuforiaNav {
     public double getY() {
         float[] coordinates = lastRobotLocation.getTranslation().getData();
         return coordinates[1];
+    }
+
+    public double get_Destination_Distance(double destination_X, double destination_Y) {
+        return Math.sqrt((getX()-destination_X)*(getX()-destination_X) + (getY()-destination_Y)*(getY()-destination_Y));
     }
 
     public float get_orientation(int angleorder) {  // 1st, 2nd, and 3rd angle
@@ -122,6 +127,12 @@ public class VuforiaNav {
                 orient_angle = Orientation.getOrientation(lastRobotLocation, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
         }
         return orient_angle;
+    }
+
+    // angle > 0 when the destination is on the right side of the robot
+    public double get_robot_need_to_turn_Angle(double destination_X, double destination_Y) {
+        double destination_from_y_axis_angle = Math.toDegrees( Math.atan2(destination_X-getX(), destination_Y-getY()));
+        return  destination_from_y_axis_angle + get_orientation(3);
     }
 
     String format(OpenGLMatrix transformationMatrix) {
