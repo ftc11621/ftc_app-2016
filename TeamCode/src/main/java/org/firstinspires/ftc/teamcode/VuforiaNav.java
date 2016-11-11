@@ -110,11 +110,11 @@ public class VuforiaNav {
         return coordinates[1];
     }
 
-    public double get_Destination_Distance(double destination_X, double destination_Y) {
+    public double getDestinationDistance(double destination_X, double destination_Y) {
         return Math.sqrt((getX()-destination_X)*(getX()-destination_X) + (getY()-destination_Y)*(getY()-destination_Y));
     }
 
-    public float get_orientation(int angleorder) {  // 1st, 2nd, and 3rd angle
+    public float getOrientation(int angleorder) {  // 1st, 2nd, and 3rd angle
         float orient_angle;
         switch (angleorder) {
             case 1:
@@ -132,7 +132,7 @@ public class VuforiaNav {
     // angle > 0 when the destination is on the right side of the robot
     public double get_robot_need_to_turn_Angle(double destination_X, double destination_Y) {
         double destination_from_y_axis_angle = Math.toDegrees( Math.atan2(destination_X-getX(), destination_Y-getY()));
-        return  destination_from_y_axis_angle + get_orientation(3);
+        return  destination_from_y_axis_angle + getOrientation(3);
     }
 
     String format(OpenGLMatrix transformationMatrix) {

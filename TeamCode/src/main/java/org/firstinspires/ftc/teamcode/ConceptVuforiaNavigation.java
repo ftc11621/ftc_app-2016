@@ -139,16 +139,16 @@ public class ConceptVuforiaNavigation extends LinearOpMode {
          * example "StonesAndChips", datasets can be found in in this project in the
          * documentation directory.
          */
-        VuforiaTrackables stonesAndChips = this.vuforia.loadTrackablesFromAsset("StonesAndChips");
-        VuforiaTrackable redTarget = stonesAndChips.get(0);
+        VuforiaTrackables ftcDat = this.vuforia.loadTrackablesFromAsset("FTC_2016-17");
+        VuforiaTrackable redTarget = ftcDat.get(0);
         redTarget.setName("RedTarget");  // Stones
 
-        VuforiaTrackable blueTarget  = stonesAndChips.get(1);
+        VuforiaTrackable blueTarget  = ftcDat.get(1);
         blueTarget.setName("BlueTarget");  // Chips
 
         /** For convenience, gather together all the trackable objects in one easily-iterable collection */
         List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
-        allTrackables.addAll(stonesAndChips);
+        allTrackables.addAll(ftcDat);
 
         /**
          * We use units of mm here because that's the recommended units of measurement for the
@@ -299,7 +299,7 @@ public class ConceptVuforiaNavigation extends LinearOpMode {
         waitForStart();
 
         /** Start tracking the data sets we care about. */
-        stonesAndChips.activate();
+        ftcDat.activate();
 
         while (opModeIsActive()) {
 

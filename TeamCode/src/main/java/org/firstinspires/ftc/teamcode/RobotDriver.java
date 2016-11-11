@@ -22,7 +22,7 @@ public class RobotDriver {
     static final double     WHEELS_SPACING_CM       = 34.3;     // spacing between wheels for turns
 
     private ElapsedTime runtime = new ElapsedTime();
-    private int MAX_TIMEOUT;
+    private int MAX_TIMEOUT = 30;
 
     public RobotDriver(LinearOpMode opMode, HardwareMap hardwareMap ) {
         this.leftMotor  = hardwareMap.dcMotor.get("motor_2");
@@ -104,18 +104,15 @@ public class RobotDriver {
         rightMotor.setPower(rightPower);  // turn a litte to get away from the wall
     }
 
-    public void go(Direction direction, Speed speed, double distance, double timeout){
+    public void go(Speed speed, double distance, double timeout){
         moveMotors(speed, distance, distance, timeout);
     }
 
-    public void go(Direction direction, Speed speed, double distance){
+    public void go( Speed speed, double distance){
         MAX_TIMEOUT = 30;
         moveMotors(speed, distance, distance, MAX_TIMEOUT);
     }
 
-    //public void goDistance(Speed speed, double distance, double timeout){
-    //    moveMotors(speed, distance, distance, timeout);
-    //}
 
     private void moveMotors(Speed speed, double leftDistance, double rightDistance, double timeout) {
         int newLeftTarget = leftMotor.getCurrentPosition() + (int)(leftDistance * COUNTS_PER_CM);

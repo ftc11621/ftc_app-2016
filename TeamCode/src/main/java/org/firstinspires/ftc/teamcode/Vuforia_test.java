@@ -32,28 +32,11 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.ftcrobotcontroller.R;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.matrices.MatrixF;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-
-import java.util.ArrayList;
-import java.util.List;
-
 
 
 @Autonomous(name="Vuforia 11621 Test", group ="Examples")
@@ -88,19 +71,19 @@ public class Vuforia_test extends LinearOpMode {
                   telemetry.addData("Time position last updated (msec)" , "%.0f" , runtime.milliseconds());
                   telemetry.addData("X = ", "%.0f", vuforia_navigate.getX());       // x coordinate
                   telemetry.addData("Y = ", "%.0f", vuforia_navigate.getY());       // y coordinate
-                  telemetry.addData("Angle from X-axis = " , "%.1f", vuforia_navigate.get_orientation(3));
+                  telemetry.addData("Angle from X-axis = " , "%.1f", vuforia_navigate.getOrientation(3));
 
                   // specify the destination coordinates, in this case X,Y of the Wheels
-                  telemetry.addData("Distance to Wheels = ", "%.0f",  vuforia_navigate.get_Destination_Distance(12*25.4, (12*12 - 2) * 25.4/2.0));
+                  telemetry.addData("Distance to Wheels = ", "%.0f",  vuforia_navigate.getDestinationDistance(12*25.4, (12*12 - 2) * 25.4/2.0));
                   // angle > 0 when the robot has to turn right, set the coordinate of the destination
                   telemetry.addData("Angle robot needs to turn toward Wheels= ", "%.1f",  vuforia_navigate.get_robot_need_to_turn_Angle(12*25.4, (12*12 - 2) * 25.4/2.0));
 
-                  telemetry.addData("Distance to Legos = ", "%.0f", vuforia_navigate.get_Destination_Distance(-36*25.4, (12*12 - 2) * 25.4/2.0));
+                  telemetry.addData("Distance to Legos = ", "%.0f", vuforia_navigate.getDestinationDistance(-36*25.4, (12*12 - 2) * 25.4/2.0));
                   telemetry.addData("Angle robot needs to turn toward Legos= ", "%.1f",  vuforia_navigate.get_robot_need_to_turn_Angle(-36*25.4, (12*12 - 2) * 25.4/2.0));
 
-                  //telemetry.addData("1st Angle = ", vuforia_navigate.get_orientation(1));       // 1st angle depends how the phone is oriented
-                  //telemetry.addData("2nd Angle = ", vuforia_navigate.get_orientation(2));       // 2nd angle depends how the phone is oriented
-                  // telemetry.addData("3rd Angle = ", vuforia_navigate.get_orientation(3));       // 3rd angle depends how the phone is oriented
+                  //telemetry.addData("1st Angle = ", vuforia_navigate.getOrientation(1));       // 1st angle depends how the phone is oriented
+                  //telemetry.addData("2nd Angle = ", vuforia_navigate.getOrientation(2));       // 2nd angle depends how the phone is oriented
+                  // telemetry.addData("3rd Angle = ", vuforia_navigate.getOrientation(3));       // 3rd angle depends how the phone is oriented
 
               } else {
                   telemetry.addData("Wheels or Legos: ", "Not Visible");
