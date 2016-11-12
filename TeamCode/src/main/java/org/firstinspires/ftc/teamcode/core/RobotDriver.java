@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.core;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -35,6 +35,10 @@ public class RobotDriver {
     public void setRunMode(DcMotor.RunMode runMode){
         leftMotor.setMode(runMode);
         rightMotor.setMode(runMode);
+    }
+
+    public void turnToAngle(double fromAngle, double toAngle) {
+        //todo implement
     }
 
     public static enum Direction { forward, back}

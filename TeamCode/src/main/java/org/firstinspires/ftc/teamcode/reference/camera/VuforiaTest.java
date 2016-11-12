@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.camera;
+package org.firstinspires.ftc.teamcode.reference.camera;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;

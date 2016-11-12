@@ -1,9 +1,7 @@
-package org.firstinspires.ftc.teamcode.camera;
+package org.firstinspires.ftc.teamcode.reference.camera;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.vuforia.HINT;
 
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;

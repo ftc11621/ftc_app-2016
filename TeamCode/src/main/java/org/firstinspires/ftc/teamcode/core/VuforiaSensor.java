@@ -1,5 +1,6 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.core;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -16,8 +17,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class VuforiaNav {
+@Autonomous(name="Vuforia", group ="Competition")
+public class VuforiaSensor {
 
     float mmPerInch        = 25.4f;
     float mmBotWidth       = 18 * mmPerInch;            // ... or whatever is right for your robot
@@ -32,7 +33,7 @@ public class VuforiaNav {
     List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
 
     // Constructor
-    public VuforiaNav (boolean  BlueOrRed) {
+    public VuforiaSensor(boolean  BlueOrRed) {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(com.qualcomm.ftcrobotcontroller.R.id.cameraMonitorViewId);
         parameters.vuforiaLicenseKey = "AdksQ3j/////AAAAGVB9GUsSEE0BlMaVB7HcRZRM4Sv74bxusFbCpn3gwnUkr3GuOtSWhrTCHnTU/93+Im+JlrYI6///bytu1igZT48xQ6182nSTpVzJ2ZP+Q/sNzSg3qvIOMnjEptutngqB+e3mQ1+YTiDa9aZod1e8X7UvGsAJ3cfV+X/S3E4M/81d1IRSMPRPEaLpKFdMqN3AcbDpBHoqp82fAp7XWVN3qd/BRe0CAAoNsr26scPBAxvm9cizRG1WeRSFms3XkwFN6eGpH7VpNAdPPXep9RQ3lLZMTFQGOfiV/vRQXq/Tlaj/b7dkA12zBSW81MfBiXRxp06NGieFe7KvXNuu2aDyyXoaPFsI44FEGp1z/SVSEVR4"; // Insert your own key here
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
@@ -130,7 +131,7 @@ public class VuforiaNav {
     }
 
     // angle > 0 when the destination is on the right side of the robot
-    public double get_robot_need_to_turn_Angle(double destination_X, double destination_Y) {
+    public double getRobotNeedToTurnAngle(double destination_X, double destination_Y) {
         double destination_from_y_axis_angle = Math.toDegrees( Math.atan2(destination_X-getX(), destination_Y-getY()));
         return  destination_from_y_axis_angle + getOrientation(3);
     }
@@ -139,4 +140,7 @@ public class VuforiaNav {
         return transformationMatrix.formatAsTransform();
     }
 
+    public void activate() {
+        this.targets.activate();
+    }
 }

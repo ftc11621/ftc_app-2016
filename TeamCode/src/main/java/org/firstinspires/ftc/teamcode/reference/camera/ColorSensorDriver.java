@@ -1,5 +1,4 @@
-package org.firstinspires.ftc.teamcode.camera;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+package org.firstinspires.ftc.teamcode.reference.camera;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 
