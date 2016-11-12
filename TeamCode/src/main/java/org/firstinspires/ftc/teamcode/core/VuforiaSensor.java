@@ -38,7 +38,6 @@ public class VuforiaSensor {
         parameters.vuforiaLicenseKey = "AdksQ3j/////AAAAGVB9GUsSEE0BlMaVB7HcRZRM4Sv74bxusFbCpn3gwnUkr3GuOtSWhrTCHnTU/93+Im+JlrYI6///bytu1igZT48xQ6182nSTpVzJ2ZP+Q/sNzSg3qvIOMnjEptutngqB+e3mQ1+YTiDa9aZod1e8X7UvGsAJ3cfV+X/S3E4M/81d1IRSMPRPEaLpKFdMqN3AcbDpBHoqp82fAp7XWVN3qd/BRe0CAAoNsr26scPBAxvm9cizRG1WeRSFms3XkwFN6eGpH7VpNAdPPXep9RQ3lLZMTFQGOfiV/vRQXq/Tlaj/b7dkA12zBSW81MfBiXRxp06NGieFe7KvXNuu2aDyyXoaPFsI44FEGp1z/SVSEVR4"; // Insert your own key here
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
         this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
-
         targets = this.vuforia.loadTrackablesFromAsset("FTC_2016-17");
         wheels = targets.get(0);
         wheels.setName("wheels");
@@ -91,6 +90,7 @@ public class VuforiaSensor {
     public boolean updateRobotLocation()  {
         OpenGLMatrix robotLocationTransform = null;
         boolean currentlocation_flag = false;
+
         for (VuforiaTrackable trackable : allTrackables) {
 
             robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
@@ -112,7 +112,7 @@ public class VuforiaSensor {
     }
 
     public double getDestinationDistance(double destination_X, double destination_Y) {
-        return Math.sqrt((getX()-destination_X)*(getX()-destination_X) + (getY()-destination_Y)*(getY()-destination_Y));
+        return Math.sqrt(Math.pow(getX()-destination_X,2) + Math.pow(getY()-destination_Y,2));
     }
 
     public float getOrientation(int angleorder) {  // 1st, 2nd, and 3rd angle

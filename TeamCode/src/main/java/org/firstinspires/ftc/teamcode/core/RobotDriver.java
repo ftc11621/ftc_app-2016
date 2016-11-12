@@ -16,10 +16,10 @@ public class RobotDriver {
     private static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
     private static final double     WHEEL_DIAMETER_CM       = 9.15 ;     // For figuring circumference
     private static final double     COUNTS_PER_CM           = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-            (WHEEL_DIAMETER_CM * 3.1415);
-    LinearOpMode opMode = null;
+            (WHEEL_DIAMETER_CM * Math.PI );
+    private LinearOpMode opMode = null;
 
-    static final double     WHEELS_SPACING_CM       = 34.3;     // spacing between wheels for turns
+    private static final double     WHEELS_SPACING_CM       = 34.3;     // spacing between wheels for turns
 
     private ElapsedTime runtime = new ElapsedTime();
     private int MAX_TIMEOUT = 30;

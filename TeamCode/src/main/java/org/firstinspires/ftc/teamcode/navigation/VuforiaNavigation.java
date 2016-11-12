@@ -35,6 +35,7 @@ package org.firstinspires.ftc.teamcode.navigation;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.core.ButtonPusher;
 import org.firstinspires.ftc.teamcode.core.Launcher;
 import org.firstinspires.ftc.teamcode.core.RobotDriver;
 import org.firstinspires.ftc.teamcode.core.VuforiaSensor;
@@ -65,7 +66,8 @@ public class VuforiaNavigation extends LinearOpMode {
         double toAngle = vuforia.getRobotNeedToTurnAngle(36*25.4,36*25.4);
         double fromAngle =vuforia.getOrientation(3);
         robotDriver.turnToAngle(fromAngle,toAngle);
-        robotDriver.goStraight(RobotDriver.Speed.normal);
+
+        robotDriver.go(RobotDriver.Speed.normal, distance);
         //stop and shoot
         launcher.shoot();
         //go to the beacon position
@@ -74,6 +76,10 @@ public class VuforiaNavigation extends LinearOpMode {
         //go near the beacon
         //sense the color
         //push the correct button
+        ButtonPusher buttonPusher = new ButtonPusher();
+        buttonPusher.pushButton(ButtonPusher.Button.left);
+
+
 
 
 
