@@ -30,25 +30,24 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.reference;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 /**
- Autonomous toward a wall, when it's close turn 90 degree left
+ Autonomous example move each wheel by distance
  */
 
-@Autonomous(name="Auto Find white line", group="Examples")  // @Autonomous(...) is the other common choice
+@Autonomous(name="Auto USonic 2", group="Examples")  // @Autonomous(...) is the other common choice
 @Disabled
-public class Auto_ultrasonic_ex3 extends LinearOpMode {
+public class Auto_ultrasonic_ex2 extends LinearOpMode {
 
     static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
@@ -56,11 +55,10 @@ public class Auto_ultrasonic_ex3 extends LinearOpMode {
     static final double     COUNTS_PER_CM           = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_CM * 3.1415);
     static final double     DRIVE_SPEED             = 0.5;
-    static final double     TURN_SPEED              = 0.2;
-    static final double     WHEELS_SPACING_CM       = 34.3;     // spacing between wheels
+    static final double     TURN_SPEED              = 0.1;
 
     ModernRoboticsI2cRangeSensor rangeSensor;
-    OpticalDistanceSensor odsSensor;  // Hardware Device Object
+
 
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
@@ -76,7 +74,7 @@ public class Auto_ultrasonic_ex3 extends LinearOpMode {
         rightMotor = hardwareMap.dcMotor.get("motor_1");
 
         rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensor_1");
-        odsSensor = hardwareMap.opticalDistanceSensor.get("opticalSensor_1");
+
 
 
         // eg: Set the drive motor directions:
@@ -98,21 +96,15 @@ public class Auto_ultrasonic_ex3 extends LinearOpMode {
         telemetry.addData("Range: ", "%.2f cm", rangeSensor.getDistance(DistanceUnit.CM));
         telemetry.update();
 
-        // Calibrating the light sensor
-        double optical_floor = odsSensor.getRawLightDetected();
-        telemetry.addData("Raw",  optical_floor);
-        telemetry.addData("Normal", odsSensor.getLightDetected());
 
-    sleep(100);
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
 
-        ///////////////////////////////////////////////////////////
         // WRITE AUTONOMOUS sequence below ===========================================
 
-        // First move forward to 30 cm distance to a wall
-        double target_distance = 25.0;   // 10 cm target distance
+        // Note: Reverse movement is obtained by setting a negative distance (not speed)
+        double target_distance = 10.0;   // 10 cm target distance
         double motor_need_to_go_distance = rangeSensor.getDistance(DistanceUnit.CM) - target_distance;
 
         while (motor_need_to_go_distance > 0) {
@@ -124,42 +116,19 @@ public class Auto_ultrasonic_ex3 extends LinearOpMode {
         }
 
 
-        // Turn left 90 degree, check wheel diameter and spacing if it's not accurate
-        double angle_turn = -90.0;     // positive to turn right
-        double wheels_turn_cm = 3.14*WHEELS_SPACING_CM * angle_turn/360.0; // wheels distance to turn to the angle
-        encoderDrive(TURN_SPEED, wheels_turn_cm, -wheels_turn_cm, 30.0);
-        // Then move forward to find a white line by a beacon
-        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftMotor.setPower(0.1);
-        rightMotor.setPower(0.1);
-        runtime.reset();
-        // run until white line is found or 10 sec timeouts
-        while((odsSensor.getRawLightDetected() < 1.5*optical_floor) && (runtime.seconds() < 10.0)) {
-            telemetry.addData("Look for white line, Range: ", "%.2f cm", rangeSensor.getDistance(DistanceUnit.CM));
-            telemetry.update();
-            sleep(200);
-        }
-        telemetry.addData("White line found, Range: ", "%.2f cm", rangeSensor.getDistance(DistanceUnit.CM));
-        telemetry.update();
-
-        leftMotor.setPower(0); // stop the motors
-        rightMotor.setPower(0);
-
         // End of AUTONOMOUS sequence ================================================
-        //////////////////////////////////////////////////////////////////////////
 
         // run until the end of the match (driver presses STOP)
-        //while (opModeIsActive()) {
-        //    telemetry.addData("Status", "Run Time: " + runtime.toString());
-        //    telemetry.update();
+        while (opModeIsActive()) {
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.update();
 
             // eg: Run wheels in tank mode (note: The joystick goes negative when pushed forwards)
             // leftMotor.setPower(-gamepad1.left_stick_y);
             // rightMotor.setPower(-gamepad1.right_stick_y);
 
-        //    idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
-       // }
+            idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
+        }
     }
 
     /*
@@ -176,7 +145,6 @@ public class Auto_ultrasonic_ex3 extends LinearOpMode {
 
         int newLeftTarget;
         int newRightTarget;
-
 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
@@ -202,11 +170,11 @@ public class Auto_ultrasonic_ex3 extends LinearOpMode {
                     (leftMotor.isBusy() && rightMotor.isBusy())) {
 
                 // Display it for the driver.
-                telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
-                telemetry.addData("Path2",  "Running at %7d :%7d",
-                        leftMotor.getCurrentPosition(),
-                        rightMotor.getCurrentPosition());
-                telemetry.update();
+                //telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
+                //telemetry.addData("Path2",  "Running at %7d :%7d",
+                //        leftMotor.getCurrentPosition(),
+               //         rightMotor.getCurrentPosition());
+               // telemetry.update();
             }
 
             // Stop all motion;

@@ -30,7 +30,7 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.reference;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -39,12 +39,22 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
- This is the final code for Driver Mode in the competition
+ * This file contains an example of an iterative (Non-Linear) "OpMode".
+ * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
+ * The names of OpModes appear on the menu of the FTC Driver Station.
+ * When an selection is made from the menu, the corresponding OpMode
+ * class is instantiated on the Robot Controller and executed.
+ *
+ * This particular OpMode just executes a basic Tank Drive Teleop for a PushBot
+ * It includes all the skeletal structure that all iterative OpModes contain.
+ *
+ * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
+ * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Driver Mode", group="Competition")  // @Autonomous(...) is the other common choice
+@TeleOp(name="Launcher Example", group="Examples")  // @Autonomous(...) is the other common choice
 //@Disabled
-public class Driver_Mode extends OpMode
+public class Launcher_example extends OpMode
 {
     /* Declare OpMode members. */
     static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
@@ -59,32 +69,35 @@ public class Driver_Mode extends OpMode
 
     private DcMotor launcherMotor = null;
     private DcMotor intakeMotor = null;
-    private DcMotor leftMotor = null;
-    private DcMotor rightMotor = null;
-
-    double MaxDcPower = 0.07;       // chassis motors speeds
 
     /*
      * Code to run ONCE when the driver hits INIT
      */
     @Override
     public void init() {
+        telemetry.addData("Status", "Joy Stick Initialized");
 
-        launcherMotor  = hardwareMap.dcMotor.get("motor_launcher");
-        intakeMotor =hardwareMap.dcMotor.get("motor_intake");
-        leftMotor  = hardwareMap.dcMotor.get("motor_1");
-        rightMotor = hardwareMap.dcMotor.get("motor_2");
+        /* eg: Initialize the hardware variables. Note that the strings used here as parameters
+         * to 'get' must correspond to the names assigned during the robot configuration
+         * step (using the FTC Robot Controller app on the phone).
+         */
+         launcherMotor  = hardwareMap.dcMotor.get("motor_launcher");
+         intakeMotor =hardwareMap.dcMotor.get("motor_intake");
 
-        // eg: Set the drive motor
-        rightMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        leftMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-        launcherMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        intakeMotor.setDirection(DcMotor.Direction.FORWARD);
+
+        // eg: Set the drive motor directions:
+        // Reverse the motor that runs backwards when connected directly to the battery
+
+         launcherMotor.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+        // telemetry.addData("Status", "Initialized");
+         intakeMotor.setDirection(DcMotor.Direction.FORWARD);
     }
 
+    /*
+     * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
+     */
     @Override
     public void init_loop() {
-
     }
 
     /*
@@ -92,8 +105,11 @@ public class Driver_Mode extends OpMode
      */
     @Override
     public void start() {
+
         runtime.reset();
-        launcherMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        launcherMotor.setPower(0.0);
+        intakeMotor.setPower(0.0);
+
     }
 
     /*
@@ -101,56 +117,27 @@ public class Driver_Mode extends OpMode
      */
     @Override
     public void loop() {
+        telemetry.addData("Status", "Running: " + runtime.toString());
 
-        if (gamepad2.y) {                   // run launcher
-            launcherMotor.setDirection(DcMotor.Direction.REVERSE);
-            runtime.reset();
-            int initial_launcher = launcherMotor.getCurrentPosition();
-            launcherMotor.setTargetPosition(initial_launcher + (int)(1.5 * 1440)); // 1.5 revolution to shoot
-            launcherMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        launcherMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        double MaxDcPower = 0.05;
+        if (gamepad2.y) {
+            // shoot launcher
+
+            //runtime.reset();
+            //while(runtime.seconds()<1.0) {
             launcherMotor.setPower(1.0);
-            while (runtime.seconds() < 1.0 && launcherMotor.isBusy()) {
-                // while still spinning
-            }
-            launcherMotor.setPower(0.0);
-
-            runtime.reset();
-            // resume to the initial launcher position, ready to launch again
-            launcherMotor.setDirection(DcMotor.Direction.FORWARD); // reverse direction
-            launcherMotor.setTargetPosition(initial_launcher + 1440);
-            launcherMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            launcherMotor.setPower(0.1);
-            while (runtime.seconds() < 5.0 && launcherMotor.isBusy()) {
-                // while still spinning
-            }
-            launcherMotor.setPower(0.0);
-            launcherMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        } else if(gamepad2.a) {             // spin Intake
+        } else if(gamepad2.a) {
             intakeMotor.setPower(1.0);
-        } else if(gamepad2.b) {             // semi-autonomous beacon claiming
-            // add code that works with autonomous beacon claiming here.
-        } else if(gamepad1.dpad_down) {        // Chassis maximum motors power
-            MaxDcPower = 0.1;
-        } else if(gamepad1.dpad_left) {
-            MaxDcPower = 0.2;
-        } else if(gamepad1.dpad_up) {
-            MaxDcPower = 0.3;
-        } else if(gamepad1.dpad_right) {        // Last chassis maximum power setting
-            MaxDcPower = 1.0;
-        } else {
+            //}
             //launcherMotor.setPower(0);
+        } else {
+            launcherMotor.setPower(0);
             intakeMotor.setPower(0);
+
         }
-        // add beacon claiming servo motor
 
 
-
-
-
-
-        leftMotor.setPower(-gamepad1.left_stick_y * MaxDcPower);    // tank style joysticks
-        rightMotor.setPower(-gamepad1.right_stick_y * MaxDcPower);
     }
 
     /*
@@ -159,4 +146,5 @@ public class Driver_Mode extends OpMode
     @Override
     public void stop() {
     }
+
 }
