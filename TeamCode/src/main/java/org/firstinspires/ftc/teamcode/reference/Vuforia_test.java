@@ -50,6 +50,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.teamcode.core.VuforiaSensor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,14 +63,14 @@ public class Vuforia_test extends LinearOpMode {
 
     private static final boolean alliance = true;   // true=Blue alliance, false=Red alliance
     //private RobotDriver robotDriver = null;
-    private VuforiaNav vuforia_navigate = null;
+    private VuforiaSensor vuforiaSensor = null;
     private  VuforiaTrackable wheels = null;
     private VuforiaTrackable legos = null;
     //private OpenGLMatrix lastRobotLocation = null;
     private ElapsedTime runtime = new ElapsedTime();
 
    @Override public void runOpMode() {
-       vuforia_navigate = new VuforiaNav(alliance);     // true=Blue alliance, false=Red alliance
+       vuforiaSensor = new VuforiaSensor(alliance);     // true=Blue alliance, false=Red alliance
 
        waitForStart();
 

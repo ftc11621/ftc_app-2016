@@ -38,9 +38,24 @@ public class RobotDriver {
     }
 
     public void turnToAngle(double fromAngle, double toAngle) {
-        //todo implement
+        double turningDegrees = toAngle - fromAngle; //Get the total defrees to turn
+        if (Math.abs(turningDegrees) > 180){
+            //Instead of turning all the way around, we turn the opposite direction, this tells how to get those degrees
+            //subtract turning degrees from 360 to get the opposite degrees to turn and multiply by minus one to get the turn
+
+            turningDegrees = (360 - turningDegrees) * -1;
+        }
+        setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        double totalDistanceToMove = getDistanceFor1Degree() * turningDegrees;// get total distance to move in centimeters
+        //move the motors
+        moveMotors(Speed.turn,totalDistanceToMove,-1 * totalDistanceToMove,MAX_TIMEOUT);
+
     }
 
+    private double getDistanceFor1Degree(){
+        return Math.PI*WHEELS_SPACING_CM / 360;
+
+    }
     public static enum Direction { forward, back}
     public static enum Turn {slightLeft(0.05,0.15), hardLeft(0,0.1), slightRight(0.15,0.05), hardRight(0.1,0), left90(0,0.5), right90(0.5,0);
         double leftPower = 0;

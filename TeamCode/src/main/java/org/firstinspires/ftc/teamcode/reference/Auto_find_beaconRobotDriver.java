@@ -108,13 +108,13 @@ public class Auto_find_beaconRobotDriver extends LinearOpMode {
             telemetry.addData("Distance remaining: ", motor_need_to_go_distance);
             telemetry.update();
 
-            robotDriver.go(RobotDriver.Direction.forward, RobotDriver.Speed.normal, motor_need_to_go_distance );
+            robotDriver.go (RobotDriver.Speed.normal, motor_need_to_go_distance );
             motor_need_to_go_distance = rangeSensors.getFrontDistance(200) - target_distance;
         }
 
 
         // Turn left 90 degree, check wheel diameter and spacing if it's not accurate
-        robotDriver.turn(RobotDriver.Turn.left90);
+       // robotDriver.turn(RobotDriver.Turn.left90);
 
 /*
 
