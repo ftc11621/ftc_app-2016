@@ -39,6 +39,7 @@ import org.firstinspires.ftc.teamcode.core.ButtonPusher;
 import org.firstinspires.ftc.teamcode.core.Launcher;
 import org.firstinspires.ftc.teamcode.core.RobotDriver;
 import org.firstinspires.ftc.teamcode.core.VuforiaSensor;
+import org.firstinspires.ftc.teamcode.reference.ConceptScanServo;
 
 
 @Autonomous(name="Vuforia Navigation Binh", group ="Competition")
@@ -52,11 +53,13 @@ public class VuforiaNavigation extends LinearOpMode {
     RobotDriver robotDriver;
     VuforiaSensor vuforia;
     Launcher launcher;
+
     @Override public void runOpMode() {
 
         vuforia = new VuforiaSensor(true);
         robotDriver = new RobotDriver(this,hardwareMap);
         launcher = new Launcher(hardwareMap);
+
         telemetry.addData(">", "Press Play to start tracking");
         telemetry.update();
         waitForStart();
@@ -64,16 +67,24 @@ public class VuforiaNavigation extends LinearOpMode {
         //go to the shooting position
         double distance = vuforia.getDestinationDistance(36*25.4,36*25.4);
         double toAngle = vuforia.getRobotNeedToTurnAngle(36*25.4,36*25.4);
+        double  finaldistance = vuforia.getDestinationDistance(72*25.4,72*25.4);
+        double toAngle1 = vuforia.getRobotNeedToTurnAngle(72*25.4,72*25.4);
         double fromAngle =vuforia.getOrientation(3);
         robotDriver.turnToAngle(fromAngle,toAngle);
 
         robotDriver.go(RobotDriver.Speed.normal, distance);
         //stop and shoot
+        robotDriver.stop();
         launcher.shoot();
         //go to the beacon position
+        robotDriver.turnToAngle(fromAngle,toAngle1);
+        robotDriver.go(RobotDriver.Speed.normal,finaldistance);
         //stop
+        robotDriver.stop();
         //turn to face the beacon
+
         //go near the beacon
+
         //sense the color
         //push the correct button
         ButtonPusher buttonPusher = new ButtonPusher();
