@@ -70,7 +70,7 @@ public class Auto_find_beaconRobotDriver extends LinearOpMode {
 
         // Robot Configuration names ========================================
 
-        robotDriver = new RobotDriver(this, hardwareMap);
+        robotDriver = new RobotDriver(hardwareMap);
         rangeSensors = new RangeSensor(hardwareMap);
         //odsSensor = hardwareMap.opticalDistanceSensor.get("opticalSensor_1");
         //colorSensor = hardwareMap.colorSensor.get("sensor_color");

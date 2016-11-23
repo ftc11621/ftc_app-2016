@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.navigation.VuforiaNavigation;
+
 
 public class RobotDriver {
     private DcMotor leftMotor = null;
@@ -17,19 +19,19 @@ public class RobotDriver {
     private static final double     WHEEL_DIAMETER_CM       = 9.15 ;     // For figuring circumference
     private static final double     COUNTS_PER_CM           = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_CM * Math.PI );
-    private LinearOpMode opMode = null;
+
 
     private static final double     WHEELS_SPACING_CM       = 34.3;     // spacing between wheels for turns
 
     private ElapsedTime runtime = new ElapsedTime();
     private int MAX_TIMEOUT = 30;
 
-    public RobotDriver(LinearOpMode opMode, HardwareMap hardwareMap ) {
+    public RobotDriver(HardwareMap hardwareMap) {
         this.leftMotor  = hardwareMap.dcMotor.get("motor_2");
         this.rightMotor = hardwareMap.dcMotor.get("motor_1");
         rightMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         leftMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-        this.opMode = opMode;
+
     }
 
     public void setRunMode(DcMotor.RunMode runMode){
@@ -56,6 +58,9 @@ public class RobotDriver {
         return Math.PI*WHEELS_SPACING_CM / 360;
 
     }
+
+
+
     public static enum Direction { forward, back}
     public static enum Turn {slightLeft(0.05,0.15), hardLeft(0,0.1), slightRight(0.15,0.05), hardRight(0.1,0), left90(0,0.5), right90(0.5,0);
         double leftPower = 0;
@@ -77,7 +82,8 @@ public class RobotDriver {
 
     private Speed speed;
 
-    public static enum Speed {fast(1.0),normal(0.5), slow(0.25), turn(0.2);
+    public static enum Speed {fast(1.0),normal(0.5), slow(0.25), turn(0.2), speed1(0.1), speed2(0.2), speed3(0.3),
+        speed4(0.4),speed5(0.5),speed6(0.6),speed7(0.7),speed8(0.8),speed9(0.9),speed10(1.0);
 
         Speed(double speed) {
           this.speed = speed;
@@ -149,8 +155,7 @@ public class RobotDriver {
         rightMotor.setPower(Math.abs(speed.getSpeed()));
 
         // keep looping while we are still active, and there is time left, and both motors are running.
-        while (opMode.opModeIsActive() &&
-                (runtime.seconds() < timeout) &&
+        while ((runtime.seconds() < timeout) &&
                 (isMoving())) {
 
             // Display it for the driver.
@@ -176,6 +181,10 @@ public class RobotDriver {
     public void stop(){
         leftMotor.setPower(0.0);    // stop motors
         rightMotor.setPower(0.0);
+    }
+    public void reverse(){
+        int newLeftTarget =
+
     }
 
 

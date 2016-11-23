@@ -34,9 +34,12 @@ package org.firstinspires.ftc.teamcode.navigation;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.core.ButtonPusher;
+import org.firstinspires.ftc.teamcode.core.Intake;
+import org.firstinspires.ftc.teamcode.core.Launcher;
+import org.firstinspires.ftc.teamcode.core.RobotDriver;
 
 /**
  This is the final code for Driver Mode in the competition
@@ -47,22 +50,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Driver_Mode extends OpMode
 {
     /* Declare OpMode members. */
-    static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_CM       = 9.15 ;     // For figuring circumference
-    static final double     COUNTS_PER_CM           = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-            (WHEEL_DIAMETER_CM * 3.1415);
-    static final double     DRIVE_SPEED             = 0.5;
-    static final double     TURN_SPEED              = 0.1;
 
     private ElapsedTime runtime = new ElapsedTime();
 
-    private DcMotor launcherMotor = null;
-    private DcMotor intakeMotor = null;
-    private DcMotor leftMotor = null;
-    private DcMotor rightMotor = null;
-
-    double MaxDcPower = 0.07;       // chassis motors speeds
+    RobotDriver robotDriver;
+    Launcher launcher;
+    Intake intake;
+    ButtonPusher buttonPusher;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -70,16 +64,13 @@ public class Driver_Mode extends OpMode
     @Override
     public void init() {
 
-        launcherMotor  = hardwareMap.dcMotor.get("motor_launcher");
-        intakeMotor =hardwareMap.dcMotor.get("motor_intake");
-        leftMotor  = hardwareMap.dcMotor.get("motor_1");
-        rightMotor = hardwareMap.dcMotor.get("motor_2");
 
-        // eg: Set the drive motor
-        rightMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        leftMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-        launcherMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        intakeMotor.setDirection(DcMotor.Direction.FORWARD);
+        robotDriver = new RobotDriver(hardwareMap);
+        launcher = new Launcher(hardwareMap);
+        intake = new Intake (hardwareMap);
+        buttonPusher = new ButtonPusher(hardwareMap);
+
+
     }
 
     @Override
@@ -93,7 +84,7 @@ public class Driver_Mode extends OpMode
     @Override
     public void start() {
         runtime.reset();
-        launcherMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        launcher.resetEncoder();
     }
 
     /*
@@ -103,54 +94,28 @@ public class Driver_Mode extends OpMode
     public void loop() {
 
         if (gamepad2.y) {                   // run launcher
-            launcherMotor.setDirection(DcMotor.Direction.REVERSE);
-            runtime.reset();
-            int initial_launcher = launcherMotor.getCurrentPosition();
-            launcherMotor.setTargetPosition(initial_launcher + (int)(1.5 * 1440)); // 1.5 revolution to shoot
-            launcherMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            launcherMotor.setPower(1.0);
-            while (runtime.seconds() < 1.0 && launcherMotor.isBusy()) {
-                // while still spinning
-            }
-            launcherMotor.setPower(0.0);
-
-            runtime.reset();
-            // resume to the initial launcher position, ready to launch again
-            launcherMotor.setDirection(DcMotor.Direction.FORWARD); // reverse direction
-            launcherMotor.setTargetPosition(initial_launcher + 1440);
-            launcherMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            launcherMotor.setPower(0.1);
-            while (runtime.seconds() < 5.0 && launcherMotor.isBusy()) {
-                // while still spinning
-            }
-            launcherMotor.setPower(0.0);
-            launcherMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            launcher.shoot();
 
         } else if(gamepad2.a) {             // spin Intake
-            intakeMotor.setPower(1.0);
+            intake.takein();
         } else if(gamepad2.b) {             // semi-autonomous beacon claiming
+            buttonPusher.pushButton(ButtonPusher.Button.left);
             // add code that works with autonomous beacon claiming here.
         } else if(gamepad1.dpad_down) {        // Chassis maximum motors power
-            MaxDcPower = 0.1;
+            robotDriver.setSpeed(RobotDriver.Speed.speed1);
         } else if(gamepad1.dpad_left) {
-            MaxDcPower = 0.2;
+            robotDriver.setSpeed(RobotDriver.Speed.speed3);
         } else if(gamepad1.dpad_up) {
-            MaxDcPower = 0.3;
+            robotDriver.setSpeed(RobotDriver.Speed.speed5);
         } else if(gamepad1.dpad_right) {        // Last chassis maximum power setting
-            MaxDcPower = 1.0;
+            robotDriver.setSpeed(RobotDriver.Speed.speed10);
         } else {
-            //launcherMotor.setPower(0);
-            intakeMotor.setPower(0);
         }
         // add beacon claiming servo motor
 
 
 
-
-
-
-        leftMotor.setPower(-gamepad1.left_stick_y * MaxDcPower);    // tank style joysticks
-        rightMotor.setPower(-gamepad1.right_stick_y * MaxDcPower);
+        robotDriver.turn(-gamepad1.left_stick_y*0.7, -gamepad1.right_stick_y*0.7); //tank style joysticks
     }
 
     /*

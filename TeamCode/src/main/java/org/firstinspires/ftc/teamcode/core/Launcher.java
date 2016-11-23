@@ -13,7 +13,7 @@ public class Launcher {
 
     private ElapsedTime runtime = new ElapsedTime();
     public Launcher(HardwareMap hardwareMap){
-        this.launcherMotor = hardwareMap.dcMotor.get("motor_3");
+        this.launcherMotor = hardwareMap.dcMotor.get("motor_launcher");
     }
 
     public void shoot() {
@@ -38,6 +38,9 @@ public class Launcher {
             // while still spinning
         }
         launcherMotor.setPower(0.0);
+        launcherMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+    public void resetEncoder(){
         launcherMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 }

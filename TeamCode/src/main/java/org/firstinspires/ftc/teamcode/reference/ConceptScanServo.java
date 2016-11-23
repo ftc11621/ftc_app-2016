@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.reference;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.teamcode.core.ButtonPusher;
 
 /**
  * This OpMode scans a single servo back and forwards until Stop is pressed.
@@ -21,16 +22,17 @@ import com.qualcomm.robotcore.hardware.Servo;
  */
 @Autonomous(name = "Concept: Scan Servo", group = "Examples")
 //@Disabled
-public class ConceptScanServo extends LinearOpMode {
 
-    static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
-    static final int    CYCLE_MS    =   50;     // period of each cycle
-    static final double MAX_POS     =  1.0;     // Maximum rotational position
-    static final double MIN_POS     =  0.0;     // Minimum rotational position
+    public class ConceptScanServo extends LinearOpMode {
+
+    static final double INCREMENT = 0.01;     // amount to slew servo each CYCLE_MS cycle
+    static final int CYCLE_MS = 50;     // period of each cycle
+    static final double MAX_POS = 1.0;     // Maximum rotational position
+    static final double MIN_POS = 0.0;     // Minimum rotational position
 
     // Define class members
-    Servo   servo;
-    double  position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
+    Servo servo;
+    double position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
     boolean rampUp = true;
 
 
@@ -42,27 +44,26 @@ public class ConceptScanServo extends LinearOpMode {
         servo = hardwareMap.servo.get("beacon_servo");
 
         // Wait for the start button
-        telemetry.addData(">", "Press Start to scan Servo." );
+        telemetry.addData(">", "Press Start to scan Servo.");
         telemetry.update();
         waitForStart();
 
 
         // Scan servo till stop pressed.
-        while(opModeIsActive()){
+        while (opModeIsActive()) {
 
             // slew the servo, according to the rampUp (direction) variable.
             if (rampUp) {
                 // Keep stepping up until we hit the max value.
-                position += INCREMENT ;
-                if (position >= MAX_POS ) {
+                position += INCREMENT;
+                if (position >= MAX_POS) {
                     position = MAX_POS;
                     rampUp = !rampUp;   // Switch ramp direction
                 }
-            }
-            else {
+            } else {
                 // Keep stepping down until we hit the min value.
-                position -= INCREMENT ;
-                if (position <= MIN_POS ) {
+                position -= INCREMENT;
+                if (position <= MIN_POS) {
                     position = MIN_POS;
                     rampUp = !rampUp;  // Switch ramp direction
                 }
@@ -70,7 +71,7 @@ public class ConceptScanServo extends LinearOpMode {
 
             // Display the current value
             telemetry.addData("Servo Position", "%5.2f", position);
-            telemetry.addData(">", "Press Stop to end test." );
+            telemetry.addData(">", "Press Stop to end test.");
             telemetry.update();
 
             // Set the servo to the new position and pause;
@@ -84,3 +85,36 @@ public class ConceptScanServo extends LinearOpMode {
         telemetry.update();
     }
 }
+    /*@Override
+    public void runOpMode() {
+
+        // Connect to servo (Assume PushBot Left Hand)
+        // Change the text in quotes to match any servo name on your robot.
+        ButtonPusher buttonPusher = new ButtonPusher(hardwareMap);
+
+        // Wait for the start button
+        telemetry.addData(">", "Press Start to scan Servo." );
+        telemetry.update();
+        waitForStart();
+
+
+        // Scan servo till stop pressed.
+        buttonPusher.pushButton(ButtonPusher.Button.left);
+
+            // slew the servo, according to the rampUp (direction) variable.
+
+
+
+            // Display the current value
+
+
+            // Set the servo to the new position and pause;
+
+        }
+
+        // Signal done;
+
+
+    }*/
+
+
