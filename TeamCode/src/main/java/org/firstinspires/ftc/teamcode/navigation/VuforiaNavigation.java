@@ -46,10 +46,15 @@ public class VuforiaNavigation extends BaseNavigation {
      public void navigate() {
 
        //go to the shooting position
-        moveToPosition(36 * 25.4, 36 * 25.4);
+         moveToPosition(36 * 25.4, 36 * 25.4);
         //stop and shoot
-        launcher.shoot();
+         launcher.shoot();
+         launcher.loadParticle(); // load another partile
+         launcher.shoot();
         //go to the beacon position
+         //open the launcher servo
+         //launcher.shoot();
+         //
         moveToPosition(72*25.4 , 72* 25.4);
         //turn to face the beacon
 

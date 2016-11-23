@@ -32,26 +32,28 @@ public class ButtonPusher {
         // slew the servo, according to the rampUp (direction) variable.
         if (Button.left.equals(button)) {
             // Keep stepping up until we hit the max value.
-            position += INCREMENT;
-            if (position >= MAX_POS) {
-                position = MAX_POS;
-
+            while(position < MAX_POS) {
+                position += INCREMENT;
+                if (position >= MAX_POS) {
+                    position = MAX_POS;
+                }
+                servo.setPosition(position);
             }
         } else {
             // Keep stepping down until we hit the min value.
-            position -= INCREMENT;
-            if (position <= MIN_POS) {
-                position = MIN_POS;
-
+            while(position >= MIN_POS) {
+                position -= INCREMENT;
+                if (position <= MIN_POS) {
+                    position = MIN_POS;
+                }
+                servo.setPosition(position);
             }
         }
 
-
         // Display the current value
 
-
         // Set the servo to the new position and pause;
-        servo.setPosition(position);
+        //servo.setPosition(position);
         servo.setPosition(0.5);
 
     }
