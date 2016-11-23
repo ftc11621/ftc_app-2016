@@ -10,11 +10,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 public class Intake {
-    private DcMotor intakeMotor;
+    private DcMotor intakeMotor = null;
 
     private ElapsedTime runtime = new ElapsedTime();
     public Intake(HardwareMap hardwareMap){
         this.intakeMotor = hardwareMap.dcMotor.get("motor_intake");
+        //intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // no encoder by default
     }
 
     public void takein() {
@@ -29,16 +30,16 @@ public class Intake {
     }
 
     private void spin() {
-        intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        // intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intakeMotor.setPower(1.0);
         runtime.reset();
         while (runtime.seconds() < 5.0 && intakeMotor.isBusy()) {
             // while still spinning
         }
         intakeMotor.setPower(0.0);
-        runtime.reset();
+        //runtime.reset();
         // resume to the initial launcher position, ready to launch again
-        intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
 
