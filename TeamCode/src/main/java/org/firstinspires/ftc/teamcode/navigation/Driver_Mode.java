@@ -84,7 +84,7 @@ public class Driver_Mode extends OpMode
     @Override
     public void start() {
         runtime.reset();
-        launcher.resetEncoder();
+        launcher.resetLauncher();
     }
 
     /*

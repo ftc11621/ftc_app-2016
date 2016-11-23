@@ -9,15 +9,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 public class Launcher {
-    private DcMotor launcherMotor;
-
+    private DcMotor launcherMotor = null;
     private ElapsedTime runtime = new ElapsedTime();
+
     public Launcher(HardwareMap hardwareMap){
         this.launcherMotor = hardwareMap.dcMotor.get("motor_launcher");
+        launcherMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void shoot() {
-        launcherMotor.setDirection(DcMotor.Direction.REVERSE);
         runtime.reset();
         int initial_launcher = launcherMotor.getCurrentPosition();
         launcherMotor.setTargetPosition(initial_launcher + (int)(1.5 * 1440)); // 1.5 revolution to shoot
@@ -25,6 +25,9 @@ public class Launcher {
         launcherMotor.setPower(1.0);
         while (runtime.seconds() < 1.0 && launcherMotor.isBusy()) {
             // while still spinning
+        }
+        for(int nn=20 ; nn > 1; nn--) {   // for smooth stopping to protect the motor or gear box
+            launcherMotor.setPower((double)nn*0.05);
         }
         launcherMotor.setPower(0.0);
 
@@ -37,10 +40,14 @@ public class Launcher {
         while (runtime.seconds() < 5.0 && launcherMotor.isBusy()) {
             // while still spinning
         }
+
+        resetLauncher();
+
+    }
+
+    public void resetLauncher(){
         launcherMotor.setPower(0.0);
         launcherMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    }
-    public void resetEncoder(){
-        launcherMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        launcherMotor.setDirection(DcMotor.Direction.REVERSE);  // ready to shoot next time
     }
 }
