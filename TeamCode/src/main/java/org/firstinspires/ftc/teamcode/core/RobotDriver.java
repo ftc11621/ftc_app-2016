@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode.core;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.teamcode.navigation.VuforiaNavigation;
 
 
 public class RobotDriver {
@@ -183,7 +180,7 @@ public class RobotDriver {
         rightMotor.setPower(0.0);
     }
     public void reverse(){
-        
+
 
     }
 

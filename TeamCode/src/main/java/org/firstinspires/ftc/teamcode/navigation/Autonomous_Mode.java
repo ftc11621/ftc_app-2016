@@ -41,7 +41,7 @@ import org.firstinspires.ftc.teamcode.core.VuforiaSensor;
 
 @Autonomous(name="Vuforia Navigation Binh", group ="Competition")
 //@Disabled
-public class VuforiaNavigation extends BaseNavigation {
+public class Autonomous_Mode extends BaseNavigation {
 
      public void navigate() {
 

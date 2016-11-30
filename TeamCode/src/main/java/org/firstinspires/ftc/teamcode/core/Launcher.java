@@ -23,10 +23,10 @@ public class Launcher {
     public void shoot() {
         runtime.reset();
         int initial_launcher = launcherMotor.getCurrentPosition();
-        launcherMotor.setTargetPosition(initial_launcher + (int)(1.5 * 1440)); // 1.5 revolution to shoot
+        launcherMotor.setTargetPosition(initial_launcher + (int)(1.5 * 1440/6)); // 1.5 revolution to shoot
         launcherMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        launcherMotor.setPower(1.0);
-        while (runtime.seconds() < 1.0 && launcherMotor.isBusy()) {
+        launcherMotor.setPower(0.5);
+        while (runtime.seconds() < 5.0 && launcherMotor.isBusy()) {
             // while still spinning
         }
         for(int nn=20 ; nn > 1; nn--) {   // for smooth stopping to protect the motor or gear box
@@ -37,7 +37,7 @@ public class Launcher {
         runtime.reset();
         // resume to the initial launcher position, ready to launch again
         launcherMotor.setDirection(DcMotor.Direction.FORWARD); // reverse direction
-        launcherMotor.setTargetPosition(initial_launcher + 1440);
+        launcherMotor.setTargetPosition(initial_launcher - (int)(1.0 * 1440/6) );
         launcherMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         launcherMotor.setPower(0.1);
         while (runtime.seconds() < 5.0 && launcherMotor.isBusy()) {
