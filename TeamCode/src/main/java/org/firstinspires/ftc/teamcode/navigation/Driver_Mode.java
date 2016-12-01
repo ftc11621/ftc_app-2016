@@ -93,11 +93,16 @@ public class Driver_Mode extends OpMode
     @Override
     public void loop() {
 
+        if(gamepad2.a) {             // spin Intake when pressed and hold "A" button
+            intake.takein();
+        } else {                      // stop Intake
+            intake.stop();
+        }
+
         if (gamepad2.y) {                   // run launcher
             launcher.shoot();
-
-        } else if(gamepad2.a) {             // spin Intake
-            intake.takein();
+        //} else if(gamepad2.a) {             // spin Intake
+        //    intake.takein();
         } else if(gamepad2.b) {             // semi-autonomous beacon claiming
             buttonPusher.pushButton(ButtonPusher.Button.left);
             // add code that works with autonomous beacon claiming here.

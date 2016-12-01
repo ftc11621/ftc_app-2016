@@ -15,7 +15,6 @@ public class Intake {
     private ElapsedTime runtime = new ElapsedTime();
     public Intake(HardwareMap hardwareMap){
         this.intakeMotor = hardwareMap.dcMotor.get("motor_intake");
-        //intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // no encoder by default
     }
 
     public void takein() {
@@ -25,21 +24,20 @@ public class Intake {
     public void kickout() {
         intakeMotor.setDirection(DcMotor.Direction.FORWARD);
         spin();
+    }
 
-
+    public void stop() {
+        intakeMotor.setPower(0.0);
     }
 
     private void spin() {
         // intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intakeMotor.setPower(1.0);
-        runtime.reset();
-        while (runtime.seconds() < 5.0 && intakeMotor.isBusy()) {
-            // while still spinning
-        }
-        intakeMotor.setPower(0.0);
         //runtime.reset();
-        // resume to the initial launcher position, ready to launch again
-        //intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //while (runtime.seconds() < 1.0 && intakeMotor.isBusy()) {
+        //    // while still spinning
+        //}
+        //intakeMotor.setPower(0.0);
     }
 
 

@@ -58,7 +58,7 @@ import java.util.List;
 
 
 @Autonomous(name="Vuforia 11621 Test", group ="Examples")
-//@Disabled
+@Disabled
 public class Vuforia_test extends LinearOpMode {
 
     private static final boolean alliance = true;   // true=Blue alliance, false=Red alliance

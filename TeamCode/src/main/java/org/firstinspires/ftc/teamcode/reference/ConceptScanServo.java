@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.reference;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -21,7 +22,7 @@ import org.firstinspires.ftc.teamcode.core.ButtonPusher;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 @Autonomous(name = "Concept: Scan Servo", group = "Examples")
-//@Disabled
+@Disabled
 
     public class ConceptScanServo extends LinearOpMode {
 

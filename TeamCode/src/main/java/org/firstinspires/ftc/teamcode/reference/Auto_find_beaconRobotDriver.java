@@ -36,6 +36,7 @@ import android.app.Activity;
 import android.view.View;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -51,7 +52,7 @@ import org.firstinspires.ftc.teamcode.core.RobotDriver;
  */
 
 @Autonomous(name="Auto Find Beacon", group="Examples")  // @Autonomous(...) is the other common choice
-//@Disabled
+@Disabled
 public class Auto_find_beaconRobotDriver extends LinearOpMode {
 
     private RangeSensor rangeSensors = null;

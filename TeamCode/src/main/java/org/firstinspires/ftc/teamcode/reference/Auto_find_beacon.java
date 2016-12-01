@@ -36,6 +36,7 @@ import android.app.Activity;
 import android.view.View;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -49,7 +50,7 @@ import org.firstinspires.ftc.teamcode.core.RangeSensor;
  */
 
 @Autonomous(name="Auto Find Beacon 1", group="Examples")  // @Autonomous(...) is the other common choice
-//@Disabled
+@Disabled
 public class Auto_find_beacon extends LinearOpMode {
 
     static final double     SPEED1                  = 0.05;

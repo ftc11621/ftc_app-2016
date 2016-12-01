@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.reference;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.core.RangeSensor;
 
 @TeleOp(name="Range Sensors test", group="Examples")  // @Autonomous(...) is the other common choice
-//@Disabled
+@Disabled
 public class RangeSensor_test extends OpMode {
 
     private RangeSensor rangeSensors = null;
