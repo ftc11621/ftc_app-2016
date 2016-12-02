@@ -35,6 +35,7 @@ package org.firstinspires.ftc.teamcode.navigation;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.core.ButtonPusher;
 import org.firstinspires.ftc.teamcode.core.Intake;
@@ -92,6 +93,8 @@ public class Driver_Mode extends OpMode
      */
     @Override
     public void loop() {
+        telemetry.addData("Driver Mode", "In loop");
+        telemetry.update();
 
         if(gamepad2.a) {             // spin Intake when pressed and hold "A" button
             intake.takein();
@@ -101,6 +104,9 @@ public class Driver_Mode extends OpMode
 
         if (gamepad2.y) {                   // run launcher
             launcher.shoot();
+            RobotLog.ii("Driver Mode", "Shooting");
+            telemetry.addData("Launcher","Shooting");
+            telemetry.update();
         //} else if(gamepad2.a) {             // spin Intake
         //    intake.takein();
         } else if(gamepad2.b) {             // semi-autonomous beacon claiming

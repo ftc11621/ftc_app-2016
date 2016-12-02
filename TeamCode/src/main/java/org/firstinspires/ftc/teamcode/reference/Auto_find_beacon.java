@@ -98,7 +98,7 @@ public class Auto_find_beacon extends LinearOpMode {
         odsSensor = hardwareMap.opticalDistanceSensor.get("opticalSensor_1");
         colorSensor = hardwareMap.colorSensor.get("sensor_color");
 
-        // Color sensor set up
+        // ColorSense sensor set up
         float hsvValues[] = {0F,0F,0F};
         final float values[] = hsvValues;   // values is a reference to the hsvValues array.
         final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(com.qualcomm.ftcrobotcontroller.R.id.RelativeLayout);
@@ -185,7 +185,7 @@ public class Auto_find_beacon extends LinearOpMode {
         // Looking for beacon color, red in this case
         // convert the RGB values to HSV values from the color sensor
         runtime.reset();
-        Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);
+        ColorSense.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);
         while ((colorSensor.red() < 2) && (runtime.seconds() < 30.0)) {   // looking for red beacon or timeout
             // add motor movement below until the color is detected
 
@@ -197,10 +197,10 @@ public class Auto_find_beacon extends LinearOpMode {
             // to the HSVToColor method.
             relativeLayout.post(new Runnable() {
                 public void run() {
-                    relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));
+                    relativeLayout.setBackgroundColor(ColorSense.HSVToColor(0xff, values));
                 }
             });
-            Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);
+            ColorSense.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);
 
         }
         leftMotor.setPower(0); // stop the motors

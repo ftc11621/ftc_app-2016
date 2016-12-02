@@ -17,7 +17,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 
 
-@Autonomous(name="Concept: Color Sensor", group = "Concept")
+@Autonomous(name="Concept: ColorSense Sensor", group = "Concept")
 //@Disabled
 public class ColorSensorDriver extends LinearOpMode {
 
