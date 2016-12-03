@@ -35,6 +35,7 @@ package org.firstinspires.ftc.teamcode.navigation;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.core.ButtonPusher;
+import org.firstinspires.ftc.teamcode.core.ParticleDoor;
 import org.firstinspires.ftc.teamcode.core.RobotDriver;
 import org.firstinspires.ftc.teamcode.core.VuforiaSensor;
 
@@ -45,11 +46,12 @@ public class Autonomous_Mode extends BaseNavigation {
 
      public void navigate() {
 
+         ParticleDoor pDoor = new ParticleDoor(hardwareMap);
        //go to the shooting position
          moveToPosition(36 * 25.4, 36 * 25.4);
         //stop and shoot
          launcher.shoot();
-         launcher.loadParticle(); // load another partile
+         pDoor.openDoor(); // load another partile
          launcher.shoot();
         //go to the beacon position
          //open the launcher servo

@@ -10,36 +10,35 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 public class Launcher {
+    private double power = 0.8;
     private DcMotor launcherMotor = null;
-    Servo servo_launcher = null;
     private ElapsedTime runtime = new ElapsedTime();
+    private Integer initialLauncherPosition = null;
 
+    private Integer oneTurn = 240; //240 is 1440/6
     public Launcher(HardwareMap hardwareMap){
         this.launcherMotor = hardwareMap.dcMotor.get("motor_launcher");
-        //this.servo_launcher = hardwareMap.servo.get("servo_launcher");
-        launcherMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        launcherMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);  //Set current position to 0
+        launcherMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        launcherMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        initialLauncherPosition = 0;
+
     }
 
     public void shoot() {
         runtime.reset();
-        int initial_launcher = launcherMotor.getCurrentPosition();
-        launcherMotor.setTargetPosition(initial_launcher + (int)(1.5 * 1440/6)); // 1.5 revolution to shoot
-        launcherMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        launcherMotor.setPower(0.5);
-        while (runtime.seconds() < 5.0 && launcherMotor.isBusy()) {
+        launcherMotor.setTargetPosition(initialLauncherPosition + (int)(1 * oneTurn)); // 1.5 revolution to shoot
+        launcherMotor.setPower(power);
+        while (runtime.seconds() < 2.0 && launcherMotor.isBusy()) {
             // while still spinning
         }
-        for(int nn=20 ; nn > 1; nn--) {   // for smooth stopping to protect the motor or gear box
-            launcherMotor.setPower((double)nn*0.05);
-        }
+
         launcherMotor.setPower(0.0);
 
         runtime.reset();
         // resume to the initial launcher position, ready to launch again
-        launcherMotor.setDirection(DcMotor.Direction.FORWARD); // reverse direction
-        launcherMotor.setTargetPosition(initial_launcher - (int)(1.0 * 1440/6) );
-        launcherMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        launcherMotor.setPower(0.1);
+        launcherMotor.setTargetPosition(initialLauncherPosition);
+        launcherMotor.setPower(0.3);
         while (runtime.seconds() < 5.0 && launcherMotor.isBusy()) {
             // while still spinning
         }
@@ -48,20 +47,14 @@ public class Launcher {
 
     }
 
+    public void setPower(double power){
+        this.power = power;
+    }
     public void resetLauncher(){
         launcherMotor.setPower(0.0);
-        launcherMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //launcherMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         launcherMotor.setDirection(DcMotor.Direction.REVERSE);  // ready to shoot next time
     }
 
-    public void loadParticle() {
-        for(int nn = 0 ; nn<9 ; nn++) {
-            //servo_launcher.setPosition((double)nn * 0.1);
-        }
-    }
-    public void closeParticle_entry() {
-        for(int nn = 9 ; nn> 0 ; nn--) {
-            //servo_launcher.setPosition((double)nn * 0.1);
-        }
-    }
+
 }

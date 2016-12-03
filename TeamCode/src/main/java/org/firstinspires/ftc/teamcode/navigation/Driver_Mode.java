@@ -35,11 +35,11 @@ package org.firstinspires.ftc.teamcode.navigation;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.core.ButtonPusher;
 import org.firstinspires.ftc.teamcode.core.Intake;
 import org.firstinspires.ftc.teamcode.core.Launcher;
+import org.firstinspires.ftc.teamcode.core.ParticleDoor;
 import org.firstinspires.ftc.teamcode.core.RobotDriver;
 
 /**
@@ -58,6 +58,7 @@ public class Driver_Mode extends OpMode
     Launcher launcher;
     Intake intake;
     ButtonPusher buttonPusher;
+    ParticleDoor pDoor;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -70,6 +71,7 @@ public class Driver_Mode extends OpMode
         launcher = new Launcher(hardwareMap);
         intake = new Intake (hardwareMap);
         buttonPusher = new ButtonPusher(hardwareMap);
+        pDoor = new ParticleDoor(hardwareMap);
 
 
     }
@@ -93,9 +95,15 @@ public class Driver_Mode extends OpMode
      */
     @Override
     public void loop() {
-        telemetry.addData("Driver Mode", "In loop");
-        telemetry.update();
+        //telemetry.addData("Driver Mode", "In loop");
+        //telemetry.update();
 
+        if(gamepad2.x){
+            pDoor.closeDoor();
+        }
+        else if (gamepad2.b){
+            pDoor.openDoor();
+        }
         if(gamepad2.a) {             // spin Intake when pressed and hold "A" button
             intake.takein();
         } else {                      // stop Intake
@@ -104,11 +112,6 @@ public class Driver_Mode extends OpMode
 
         if (gamepad2.y) {                   // run launcher
             launcher.shoot();
-            RobotLog.ii("Driver Mode", "Shooting");
-            telemetry.addData("Launcher","Shooting");
-            telemetry.update();
-        //} else if(gamepad2.a) {             // spin Intake
-        //    intake.takein();
         } else if(gamepad2.b) {             // semi-autonomous beacon claiming
             buttonPusher.pushButton(ButtonPusher.Button.left);
             // add code that works with autonomous beacon claiming here.
@@ -124,9 +127,8 @@ public class Driver_Mode extends OpMode
         }
         // add beacon claiming servo motor
 
-
-
         robotDriver.turn(-gamepad1.left_stick_y*0.7, -gamepad1.right_stick_y*0.7); //tank style joysticks
+        //robotDriver.turn(gamepad1.right_stick_y*0.7, gamepad1.left_stick_y*0.7); //tank style intake is the front
     }
 
     /*
