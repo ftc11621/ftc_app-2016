@@ -12,7 +12,10 @@ public class ColorSense {
 
     public ColorSense(HardwareMap hardwareMap) {
         colorSensor = hardwareMap.colorSensor.get("color_sensor");
-        colorSensor.enableLed(true);
+        float hsvValues[] = {0F,0F,0F};
+        final float values[] = hsvValues; // values is a reference to the hsvValues array.
+
+        colorSensor.enableLed(false);
 
     }
 

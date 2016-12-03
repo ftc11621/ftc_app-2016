@@ -49,6 +49,7 @@ import org.firstinspires.ftc.teamcode.core.RangeSensor;
  Autonomous toward a wall, when it's close turn 90 degree left
  */
 
+
 @Autonomous(name="Auto Find Beacon 1", group="Examples")  // @Autonomous(...) is the other common choice
 @Disabled
 public class Auto_find_beacon extends LinearOpMode {
