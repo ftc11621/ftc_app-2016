@@ -179,10 +179,7 @@ public class RobotDriver {
         leftMotor.setPower(0.0);    // stop motors
         rightMotor.setPower(0.0);
     }
-    public void reverse(){
 
-
-    }
 
 
 }
