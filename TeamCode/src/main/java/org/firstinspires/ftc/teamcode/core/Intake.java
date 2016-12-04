@@ -12,9 +12,18 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Intake {
     private DcMotor intakeMotor = null;
 
+    private double power = 1.0;
     private ElapsedTime runtime = new ElapsedTime();
     public Intake(HardwareMap hardwareMap){
         this.intakeMotor = hardwareMap.dcMotor.get("motor_intake");
+    }
+
+    public double getPower() {
+        return power;
+    }
+
+    public void setPower(double power) {
+        this.power = power;
     }
 
     public void takein() {
@@ -32,13 +41,14 @@ public class Intake {
 
     private void spin() {
         // intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        intakeMotor.setPower(1.0);
+        intakeMotor.setPower(power);
         //runtime.reset();
         //while (runtime.seconds() < 1.0 && intakeMotor.isBusy()) {
         //    // while still spinning
         //}
         //intakeMotor.setPower(0.0);
     }
+
 
 
 }

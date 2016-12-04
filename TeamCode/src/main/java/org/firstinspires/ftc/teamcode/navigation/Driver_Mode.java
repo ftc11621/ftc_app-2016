@@ -100,10 +100,6 @@ public class Driver_Mode extends OpMode
 
         gamepadOne();
         gamepadTwo();
-
-
-    robotDriver.turn(-gamepad1.left_stick_y*0.7, -gamepad1.right_stick_y*0.7); //tank style joysticks
-    //robotDriver.turn(gamepad1.right_stick_y*0.7, gamepad1.left_stick_y*0.7); //tank style intake is the front
 }
 
     /*
@@ -123,7 +119,7 @@ public class Driver_Mode extends OpMode
             robotDriver.setSpeed(RobotDriver.Speed.speed10);
         } else {
         }
-        // add beacon claiming servo motor
+        robotDriver.turn(-gamepad1.left_stick_y*0.7, -gamepad1.right_stick_y*0.7); //tank style joysticks
 
     }
     private void gamepadTwo(){
@@ -133,9 +129,15 @@ public class Driver_Mode extends OpMode
         else if (gamepad2.b){
             pDoor.openDoor();
         }
-        if(gamepad2.a) {             // spin Intake when pressed and hold "A" button
+        if(gamepad2.right_stick_y > 0) {// spin Intake when pressed and hold "A" button
+            intake.setPower(gamepad2.right_stick_y);
             intake.takein();
-        } else {                      // stop Intake
+        } else if (gamepad2.right_stick_y < 0){                      // stop Intake
+            intake.setPower(gamepad2.right_stick_y * -1);
+            intake.kickout();
+
+        }
+        else {
             intake.stop();
         }
 

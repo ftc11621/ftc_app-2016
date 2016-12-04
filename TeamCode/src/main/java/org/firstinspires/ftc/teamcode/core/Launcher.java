@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.core;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -20,6 +21,7 @@ public class Launcher {
         this.launcherMotor = hardwareMap.dcMotor.get("motor_launcher");
         launcherMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);  //Set current position to 0
         launcherMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        launcherMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         launcherMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         initialLauncherPosition = 0;
 

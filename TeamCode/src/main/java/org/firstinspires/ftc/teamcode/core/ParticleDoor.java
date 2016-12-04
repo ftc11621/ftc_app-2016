@@ -21,6 +21,7 @@ public class ParticleDoor {
 
     public ParticleDoor(HardwareMap hardwareMap) {
         servo = hardwareMap.servo.get("servo_launcher");
+        closeDoor();
     }
 
     public boolean isOpen() {
