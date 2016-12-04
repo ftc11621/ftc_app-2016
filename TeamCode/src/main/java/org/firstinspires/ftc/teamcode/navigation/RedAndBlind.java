@@ -13,8 +13,7 @@ import org.firstinspires.ftc.teamcode.core.RobotDriver;
 //@Disabled
 public class RedAndBlind extends BaseNavigation {
     public void navigate() {
-
-         robotDriver.go(RobotDriver.Speed.normal, 30*2.54);
+        robotDriver.go(RobotDriver.Speed.normal, 30*2.54);
         ParticleDoor pDoor = new ParticleDoor(hardwareMap);
         launcher.shoot();
         pDoor.openDoor();
