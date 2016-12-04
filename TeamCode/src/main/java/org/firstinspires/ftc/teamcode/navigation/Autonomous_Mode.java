@@ -33,6 +33,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package org.firstinspires.ftc.teamcode.navigation;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.core.ButtonPusher;
 import org.firstinspires.ftc.teamcode.core.ParticleDoor;
@@ -47,22 +48,32 @@ public class Autonomous_Mode extends BaseNavigation {
      public void navigate() {
 
          ParticleDoor pDoor = new ParticleDoor(hardwareMap);
-       //go to the shooting position
+         baseLog("Launcher:","Shoot Launcher");
+         //go to the shooting position
          moveToPosition(36 * 25.4, 36 * 25.4);
+         baseLog("Robot;","Stop");
+         baseLog("Launcher","Shoot Launcher");
         //stop and shoot
          launcher.shoot();
          pDoor.openDoor(); // load another partile
          launcher.shoot();
+         baseLog("Robot","Move To Position");
         //go to the beacon position
+         baseLog("Robot","Open Launcher Servo");
          //open the launcher servo
+         baseLog("Launcher","Shoot Launcher");
          //launcher.shoot();
          //
         moveToPosition(72*25.4 , 72* 25.4);
+         baseLog("Robot","Turn To Beacon");
         //turn to face the beacon
 
+         baseLog("Robot","Move To Beacon");
         //go near the beacon
 
+         baseLog("Sensor","Sense Color");
         //sense the color
+         baseLog("Button Pusher", "Push Correct Button");
         //push the correct button
          buttonPusher.pushButton(ButtonPusher.Button.left);
 
@@ -72,12 +83,15 @@ public class Autonomous_Mode extends BaseNavigation {
 
     }
 
+    private double cameraAxleDistance = 200;
+    private double axisCameraDistance = 25;
     public void moveToPosition(double destination_x, double destination_y, VuforiaSensor vuforia) {
         double distance = vuforia.getDestinationDistance(destination_x, destination_y);
         double toAngle = vuforia.getRobotNeedToTurnAngle(destination_x, destination_y);
         double fromAngle = vuforia.getOrientation(3);
+        robotDriver.go(RobotDriver.Speed.speed5,cameraAxleDistance);
         robotDriver.turnToAngle(fromAngle,toAngle);
-        robotDriver.go(RobotDriver.Speed.normal, distance);
+        robotDriver.go(RobotDriver.Speed.normal, distance - cameraAxleDistance);
         stop();
 
     }

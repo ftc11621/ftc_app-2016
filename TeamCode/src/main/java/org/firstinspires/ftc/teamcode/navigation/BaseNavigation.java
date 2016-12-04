@@ -27,8 +27,7 @@ public abstract class BaseNavigation extends LinearOpMode {
         launcher = new Launcher(hardwareMap);
         buttonPusher = new ButtonPusher(hardwareMap);
 
-        telemetry.addData(">", "Press Play to start tracking");
-        telemetry.update();
+        baseLog(">", "Press Play to start tracking");
         waitForStart();
         vuforia.activate();
         navigate();
@@ -36,6 +35,11 @@ public abstract class BaseNavigation extends LinearOpMode {
 
 
 
+    }
+
+    protected void baseLog(String key, String messasge) {
+        telemetry.addData(key, messasge);
+        telemetry.update();
     }
 
     protected abstract void navigate();

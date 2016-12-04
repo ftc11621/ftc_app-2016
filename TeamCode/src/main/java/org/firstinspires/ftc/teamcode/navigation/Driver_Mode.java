@@ -98,6 +98,35 @@ public class Driver_Mode extends OpMode
         //telemetry.addData("Driver Mode", "In loop");
         //telemetry.update();
 
+        gamepadOne();
+        gamepadTwo();
+
+
+    robotDriver.turn(-gamepad1.left_stick_y*0.7, -gamepad1.right_stick_y*0.7); //tank style joysticks
+    //robotDriver.turn(gamepad1.right_stick_y*0.7, gamepad1.left_stick_y*0.7); //tank style intake is the front
+}
+
+    /*
+     * Code to run ONCE after the driver hits STOP
+     */
+    @Override
+    public void stop() {
+    }
+    private void gamepadOne(){
+        if(gamepad1.dpad_down) {        // Chassis maximum motors power
+            robotDriver.setSpeed(RobotDriver.Speed.speed1);
+        } else if(gamepad1.dpad_left) {
+            robotDriver.setSpeed(RobotDriver.Speed.speed3);
+        } else if(gamepad1.dpad_up) {
+            robotDriver.setSpeed(RobotDriver.Speed.speed5);
+        } else if(gamepad1.dpad_right) {        // Last chassis maximum power setting
+            robotDriver.setSpeed(RobotDriver.Speed.speed10);
+        } else {
+        }
+        // add beacon claiming servo motor
+
+    }
+    private void gamepadTwo(){
         if(gamepad2.x){
             pDoor.closeDoor();
         }
@@ -110,31 +139,12 @@ public class Driver_Mode extends OpMode
             intake.stop();
         }
 
+
         if (gamepad2.y) {                   // run launcher
             launcher.shoot();
-        } else if(gamepad2.b) {             // semi-autonomous beacon claiming
-            buttonPusher.pushButton(ButtonPusher.Button.left);
+        } //else if(gamepad2.b) {             // semi-autonomous beacon claiming
+            //buttonPusher.pushButton(ButtonPusher.Button.left);
             // add code that works with autonomous beacon claiming here.
-        } else if(gamepad1.dpad_down) {        // Chassis maximum motors power
-            robotDriver.setSpeed(RobotDriver.Speed.speed1);
-        } else if(gamepad1.dpad_left) {
-            robotDriver.setSpeed(RobotDriver.Speed.speed3);
-        } else if(gamepad1.dpad_up) {
-            robotDriver.setSpeed(RobotDriver.Speed.speed5);
-        } else if(gamepad1.dpad_right) {        // Last chassis maximum power setting
-            robotDriver.setSpeed(RobotDriver.Speed.speed10);
-        } else {
-        }
-        // add beacon claiming servo motor
-
-        robotDriver.turn(-gamepad1.left_stick_y*0.7, -gamepad1.right_stick_y*0.7); //tank style joysticks
-        //robotDriver.turn(gamepad1.right_stick_y*0.7, gamepad1.left_stick_y*0.7); //tank style intake is the front
-    }
-
-    /*
-     * Code to run ONCE after the driver hits STOP
-     */
-    @Override
-    public void stop() {
+        //}
     }
 }
