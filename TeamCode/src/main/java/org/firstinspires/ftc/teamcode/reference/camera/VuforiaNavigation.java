@@ -7,6 +7,7 @@
 
     package org.firstinspires.ftc.teamcode.reference.camera;
     import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+    import com.qualcomm.robotcore.eventloop.opmode.Disabled;
     import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
     import com.qualcomm.robotcore.util.RobotLog;
 
@@ -63,7 +64,7 @@
      */
 //new way to register opmodes, don't need ftcopmoderegister anymore
     @Autonomous(name="Concept:Vuforia Navigation", group ="Concept")
-
+    @Disabled
     public class VuforiaNavigation extends LinearOpMode {
 
 

@@ -19,15 +19,16 @@ public class Launcher {
     private Integer oneTurn = 240; //240 is 1440/6
     public Launcher(HardwareMap hardwareMap){
         this.launcherMotor = hardwareMap.dcMotor.get("motor_launcher");
+        launcherMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         launcherMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);  //Set current position to 0
         launcherMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         launcherMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        launcherMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        initialLauncherPosition = 0;
-
+        //launcherMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        initialLauncherPosition = launcherMotor.getCurrentPosition();
     }
 
     public void shoot() {
+        launcherMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         runtime.reset();
         launcherMotor.setTargetPosition(initialLauncherPosition + (int)(1 * oneTurn)); // 1.5 revolution to shoot
         launcherMotor.setPower(power);
@@ -39,9 +40,10 @@ public class Launcher {
 
         runtime.reset();
         // resume to the initial launcher position, ready to launch again
+        launcherMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // to be more accurate
         launcherMotor.setTargetPosition(initialLauncherPosition);
         launcherMotor.setPower(0.3);
-        while (runtime.seconds() < 5.0 && launcherMotor.isBusy()) {
+        while (runtime.seconds() < 3.0 && launcherMotor.isBusy()) {
             // while still spinning
         }
 
@@ -55,7 +57,7 @@ public class Launcher {
     public void resetLauncher(){
         launcherMotor.setPower(0.0);
         //launcherMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        launcherMotor.setDirection(DcMotor.Direction.REVERSE);  // ready to shoot next time
+        //launcherMotor.setDirection(DcMotor.Direction.REVERSE);  // ready to shoot next time
     }
 
 
