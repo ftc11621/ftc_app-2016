@@ -23,12 +23,11 @@ public class Launcher {
         launcherMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);  //Set current position to 0
         launcherMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         launcherMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        //launcherMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        launcherMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         initialLauncherPosition = launcherMotor.getCurrentPosition();
     }
 
     public void shoot() {
-        launcherMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         runtime.reset();
         launcherMotor.setTargetPosition(initialLauncherPosition + (int)(1 * oneTurn)); // 1.5 revolution to shoot
         launcherMotor.setPower(power);
@@ -40,11 +39,14 @@ public class Launcher {
 
         runtime.reset();
         // resume to the initial launcher position, ready to launch again
-        launcherMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // to be more accurate
         launcherMotor.setTargetPosition(initialLauncherPosition);
         launcherMotor.setPower(0.3);
         while (runtime.seconds() < 3.0 && launcherMotor.isBusy()) {
             // while still spinning
+        }
+        runtime.reset();    // below to self-adjust after overshooting
+        while(runtime.seconds()<2.0) {
+            // self-adjusting until it is within 10 encorder counts of initial position or time out
         }
 
         resetLauncher();
