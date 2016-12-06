@@ -18,7 +18,7 @@ public class RobotDriver {
             (WHEEL_DIAMETER_CM * Math.PI );
 
 
-    private static final double     WHEELS_SPACING_CM       = 34.3;     // spacing between wheels for turns
+    private static final double     WHEELS_SPACING_CM       = 40.8;     // spacing between wheels for turns
 
     private ElapsedTime runtime = new ElapsedTime();
     private int MAX_TIMEOUT = 30;
