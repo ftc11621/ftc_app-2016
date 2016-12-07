@@ -41,7 +41,7 @@ import org.firstinspires.ftc.teamcode.core.RobotDriver;
 import org.firstinspires.ftc.teamcode.core.VuforiaSensor;
 
 
-@Autonomous(name="Vuforia Navigation Binh", group ="Competition")
+@Autonomous(name="Vuforia Navigation Blue", group ="Competition")
 //@Disabled
 public class Autonomous_Mode extends BaseNavigation {
 
