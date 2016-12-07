@@ -98,8 +98,8 @@ public class Driver_Mode extends OpMode
         //telemetry.addData("Driver Mode", "In loop");
         //telemetry.update();
 
-        gamepadOne();
-        gamepadTwo();
+        gamepadDriver();
+        gamepadGunner();
 }
 
     /*
@@ -108,7 +108,7 @@ public class Driver_Mode extends OpMode
     @Override
     public void stop() {
     }
-    private void gamepadOne(){
+    private void gamepadDriver(){
         if(gamepad1.dpad_down) {        // Chassis maximum motors power
             robotDriver.setSpeed(RobotDriver.Speed.speed1);
         } else if(gamepad1.dpad_left) {
@@ -117,12 +117,16 @@ public class Driver_Mode extends OpMode
             robotDriver.setSpeed(RobotDriver.Speed.speed5);
         } else if(gamepad1.dpad_right) {        // Last chassis maximum power setting
             robotDriver.setSpeed(RobotDriver.Speed.speed10);
-        } else {
+        } else if(gamepad1.left_trigger > 0) {
+            robotDriver.backwards();
+        }
+        else if (gamepad1.right_trigger > 0){
+            robotDriver.forward();
         }
         robotDriver.turn(-gamepad1.left_stick_y* robotDriver.getSpeed().getSpeed(), -gamepad1.right_stick_y*robotDriver.getSpeed().getSpeed()); //tank style joysticks
 
     }
-    private void gamepadTwo(){
+    private void gamepadGunner(){
         if(gamepad2.x){
             pDoor.closeDoor();
         }

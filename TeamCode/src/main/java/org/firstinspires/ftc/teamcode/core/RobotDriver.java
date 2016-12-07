@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.core;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -26,9 +27,8 @@ public class RobotDriver {
     public RobotDriver(HardwareMap hardwareMap) {
         this.leftMotor  = hardwareMap.dcMotor.get("motor_2");
         this.rightMotor = hardwareMap.dcMotor.get("motor_1");
-        rightMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        leftMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-
+        forward();
+        backwards();
     }
 
     public void setRunMode(DcMotor.RunMode runMode){
@@ -57,7 +57,15 @@ public class RobotDriver {
     }
 
 
+    public void forward(){
+        rightMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        leftMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+    }
 
+    public void backwards(){
+        rightMotor.setDirection(DcMotor.Direction.REVERSE); // Set to Forward if using AndyMark motors
+        leftMotor.setDirection(DcMotor.Direction.FORWARD);// Set to Reverse if using AndyMark motors
+    }
     public static enum Direction { forward, back}
     public static enum Turn {slightLeft(0.05,0.15), hardLeft(0,0.1), slightRight(0.15,0.05), hardRight(0.1,0), left90(0,0.5), right90(0.5,0);
         double leftPower = 0;
