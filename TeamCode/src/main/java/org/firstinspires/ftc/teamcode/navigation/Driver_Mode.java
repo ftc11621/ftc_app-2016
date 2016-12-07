@@ -73,7 +73,6 @@ public class Driver_Mode extends OpMode
         buttonPusher = new ButtonPusher(hardwareMap);
         pDoor = new ParticleDoor(hardwareMap);
 
-
     }
 
     @Override
@@ -86,6 +85,7 @@ public class Driver_Mode extends OpMode
      */
     @Override
     public void start() {
+        robotDriver.setSpeed(RobotDriver.Speed.speed1);
         runtime.reset();
         launcher.resetLauncher();
     }
@@ -119,7 +119,7 @@ public class Driver_Mode extends OpMode
             robotDriver.setSpeed(RobotDriver.Speed.speed10);
         } else {
         }
-        robotDriver.turn(-gamepad1.left_stick_y*0.7, -gamepad1.right_stick_y*0.7); //tank style joysticks
+        robotDriver.turn(-gamepad1.left_stick_y* robotDriver.getSpeed().getSpeed(), -gamepad1.right_stick_y*robotDriver.getSpeed().getSpeed()); //tank style joysticks
 
     }
     private void gamepadTwo(){

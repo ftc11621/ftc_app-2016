@@ -30,6 +30,8 @@ public class VuforiaSensor {
     VuforiaTrackables targets = null;
     VuforiaTrackable wheels = null;
     VuforiaTrackable legos = null;
+    VuforiaTrackable tools = null;
+    VuforiaTrackable gears = null;
     List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
 
     // Constructor
@@ -42,20 +44,24 @@ public class VuforiaSensor {
         wheels = targets.get(0);
         wheels.setName("wheels");
 
+        tools = targets.get(1);
+        tools.setName("tools");
+
         legos  = targets.get(2);
         legos.setName("legos");
+
+        gears  = targets.get(3);
+        gears.setName("gears");
 
         /** For convenience, gather together all the trackable objects in one easily-iterable collection */
         //List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
         allTrackables.addAll(targets);
+
         OpenGLMatrix wheelsLocationOnField = OpenGLMatrix
                 .translation(12*mmPerInch, mmFTCFieldWidth/2, 0)
                 .multiplied(Orientation.getRotationMatrix(
-
                         AxesReference.EXTRINSIC, AxesOrder.XZX,
                         AngleUnit.DEGREES, 90, 0, 0));
-        wheels.setLocation(wheelsLocationOnField);
-        RobotLog.ii(TAG, "Wheels Target=%s", format(wheelsLocationOnField));
 
 
         OpenGLMatrix legosLocationOnField = OpenGLMatrix
@@ -63,8 +69,19 @@ public class VuforiaSensor {
                 .multiplied(Orientation.getRotationMatrix(
                         AxesReference.EXTRINSIC, AxesOrder.XZX,
                         AngleUnit.DEGREES, 90, 0, 0));
-        legos.setLocation(legosLocationOnField);
-        RobotLog.ii(TAG, "Legos Target=%s", format(legosLocationOnField));
+
+
+        OpenGLMatrix toolsLocationOnField = OpenGLMatrix
+                .translation(-mmFTCFieldWidth/2, 36*mmPerInch, 0)
+                .multiplied(Orientation.getRotationMatrix(AxesReference.EXTRINSIC, AxesOrder.XZX,
+                        AngleUnit.DEGREES, 90, 90, 0));
+
+
+        OpenGLMatrix gearsLocationOnField = OpenGLMatrix
+                .translation(-mmFTCFieldWidth/2, -12*mmPerInch, 0)
+                .multiplied(Orientation.getRotationMatrix(AxesReference.EXTRINSIC, AxesOrder.XZX,
+                        AngleUnit.DEGREES, 90, 90, 0));
+
 
         // for phone in front
         OpenGLMatrix phoneLocationOnRobot = OpenGLMatrix
@@ -72,11 +89,22 @@ public class VuforiaSensor {
                 .multiplied(Orientation.getRotationMatrix(
                         AxesReference.EXTRINSIC, AxesOrder.YZY,
                         AngleUnit.DEGREES, -90, 90, 0));  // -90,0,0 for the right side
-        RobotLog.ii(TAG, "phone=%s", format(phoneLocationOnRobot));
 
+        wheels.setLocation(wheelsLocationOnField);
+        legos.setLocation(legosLocationOnField);
+        tools.setLocation(toolsLocationOnField);
+        gears.setLocation(gearsLocationOnField);
+
+        RobotLog.ii(TAG, "Wheels Target=%s", format(wheelsLocationOnField));
+        RobotLog.ii(TAG, "Legos Target=%s", format(legosLocationOnField));
+        RobotLog.ii(TAG, "Tools Target=%s", format(toolsLocationOnField));
+        RobotLog.ii(TAG, "Gears Target=%s", format(gearsLocationOnField));
+        RobotLog.ii(TAG, "phone=%s", format(phoneLocationOnRobot));
 
         ((VuforiaTrackableDefaultListener)wheels.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
         ((VuforiaTrackableDefaultListener)legos.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
+        ((VuforiaTrackableDefaultListener)tools.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
+        ((VuforiaTrackableDefaultListener)gears.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
 
     }
 
@@ -85,6 +113,13 @@ public class VuforiaSensor {
     }
     public boolean isLego_visible() {
         return ((VuforiaTrackableDefaultListener) legos.getListener()).isVisible();
+    }
+
+    public boolean isTools_visible() {
+        return ((VuforiaTrackableDefaultListener) tools.getListener()).isVisible();
+    }
+    public boolean isGears_visible() {
+        return ((VuforiaTrackableDefaultListener) gears.getListener()).isVisible();
     }
 
     public boolean updateRobotLocation()  {

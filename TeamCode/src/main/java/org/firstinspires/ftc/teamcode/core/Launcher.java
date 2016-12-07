@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 public class Launcher {
-    private double power = 0.8;
+    private double power = 0.1;
     private DcMotor launcherMotor = null;
     private ElapsedTime runtime = new ElapsedTime();
     private Integer initialLauncherPosition = null;
