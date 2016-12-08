@@ -111,7 +111,7 @@ public abstract class BaseNavigation extends LinearOpMode {
     // to move a distance then shoot two particles
     public void moveAndShoot(double distance_to_move) {
         ParticleDoor partDoor = new ParticleDoor(hardwareMap); // on top to make sure it opens before interrupt
-        robotDriver.go(RobotDriver.Speed.speed3, -30 * 2.54); // negative for intake front
+        robotDriver.go(RobotDriver.Speed.speed3, distance_to_move); // negative for intake front
 
         launcher.shoot();   // shoot 1st particle
         partDoor.openDoor();
