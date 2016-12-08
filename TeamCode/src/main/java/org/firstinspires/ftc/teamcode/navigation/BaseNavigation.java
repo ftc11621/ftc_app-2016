@@ -21,7 +21,6 @@ public abstract class BaseNavigation extends LinearOpMode {
     VuforiaSensor vuforia;
     Launcher launcher;
     ButtonPusher buttonPusher;
-    //ColorSense beaconColor;
     ElapsedTime runtime= new ElapsedTime();
 
     // Coordinates of the Vuforia pictures
@@ -41,8 +40,9 @@ public abstract class BaseNavigation extends LinearOpMode {
         robotDriver = new RobotDriver(hardwareMap);
         launcher = new Launcher(hardwareMap);
         buttonPusher = new ButtonPusher(hardwareMap);
-        //beaconColor = new ColorSense(hardwareMap);
+
         //ElapsedTime runtime = new ElapsedTime();
+
 
         baseLog(">", "Press Play to start tracking");
         waitForStart();
@@ -72,18 +72,57 @@ public abstract class BaseNavigation extends LinearOpMode {
             return false;
         }
 
-        telemetry.addData("Vuforia", "Visible");
+        telemetry.addData("Vuforia picture", "Visible");
         telemetry.update();
-        if(vuforia.updateRobotLocation()) {
-            double distance_CM = 0.1 * vuforia.getDestinationDistance(destination_x, destination_y); // in CM
+
+        runtime.reset();    // 5 seconds timeout if it can't find location
+        while(runtime.seconds() < 5.0 && !vuforia.updateRobotLocation()) {
+
             double toAngle = vuforia.getRobotNeedToTurnAngle(destination_x, destination_y);
 
-            robotDriver.setSpeed(RobotDriver.Speed.speed3);
+
+            runtime.reset();
+            while(runtime.seconds() < 5.0 && Math.abs(toAngle) > 45){ // if the camera does not face the picture, incorrect location
+                sleep(500);
+                vuforia.updateRobotLocation();
+                toAngle = vuforia.getRobotNeedToTurnAngle(destination_x, destination_y);
+            }
+
+            double distance_CM = 0.1 * vuforia.getDestinationDistance(destination_x, destination_y); // in CM
+
+            telemetry.addData("X" , vuforia.getX());
+            telemetry.addData("Y", vuforia.getY());
+            telemetry.addData("Distance to Gears", "%.0f", vuforia.getDestinationDistance(Vuforia_gears_x,Vuforia_gears_y));
+            telemetry.addData("Angle to Gears", "%.0f", vuforia.getRobotNeedToTurnAngle(Vuforia_gears_x,Vuforia_gears_y));
+            telemetry.update();
+
+            robotDriver.setSpeed(RobotDriver.Speed.speed4);
             robotDriver.turnToAngle(0, toAngle);
-            robotDriver.go(RobotDriver.Speed.speed2, distance_CM);
+            robotDriver.go(RobotDriver.Speed.speed3, distance_CM);
+            sleep(500);
+        }
+        if(runtime.seconds()>=5.0) { // fail to update location by timeout
+            return false;
         }
         //stop();
         return true;
+    }
+
+    // to move a distance then shoot two particles
+    public void moveAndShoot(double distance_to_move) {
+        ParticleDoor partDoor = new ParticleDoor(hardwareMap); // on top to make sure it opens before interrupt
+        robotDriver.go(RobotDriver.Speed.speed3, -30 * 2.54); // negative for intake front
+
+        launcher.shoot();   // shoot 1st particle
+        partDoor.openDoor();
+        runtime.reset();
+        while (runtime.seconds() < 1.0) {    // wait for the chance the door is fully open
+        }
+        launcher.shoot();   // shoot 2nd particle
+        partDoor.closeDoor();  // to close the door at the end
+        runtime.reset();
+        while (runtime.seconds() < 1.0) {    // wait for the chance the door to close
+        }
     }
 
 }
