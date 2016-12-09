@@ -67,13 +67,13 @@ public class Driver_Mode extends OpMode
     @Override
     public void init() {
 
-
         robotDriver = new RobotDriver(hardwareMap);
         launcher = new Launcher(hardwareMap);
         intake = new Intake (hardwareMap);
         buttonPusher = new ButtonPusher(hardwareMap);
         pDoor = new ParticleDoor(hardwareMap);
-
+        telemetry.addData("Door", "CLOSE");
+        telemetry.update();
     }
 
     @Override
@@ -130,9 +130,13 @@ public class Driver_Mode extends OpMode
     private void gamepadGunner(){
         if(gamepad2.x){
             pDoor.closeDoor();
+            telemetry.addData("Door", "CLOSE");
+            telemetry.update();
         }
         else if (gamepad2.b){
             pDoor.openDoor();
+            telemetry.addData("Door", "OPEN");
+            telemetry.update();
         }
         if(gamepad2.right_stick_y > 0) {// spin Intake when pressed and hold "A" button
             intake.setPower(gamepad2.right_stick_y);
@@ -147,8 +151,10 @@ public class Driver_Mode extends OpMode
         }
 
 
-        if (gamepad2.y) {                   // run launcher
-            launcher.shoot();
+        if (gamepad2.y) {     // run launcher if the robot is not driven
+            if( (Math.abs(gamepad1.left_stick_y) + Math.abs(gamepad1.right_stick_y)) < 0.1) {
+                launcher.shoot();
+            }
         } //else if(gamepad2.b) {             // semi-autonomous beacon claiming
             //buttonPusher.pushButton(ButtonPusher.Button.left);
             // add code that works with autonomous beacon claiming here.
