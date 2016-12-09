@@ -15,7 +15,7 @@ public class RedAndBlindRamp extends BaseNavigation{
     protected void navigate() {
         moveAndShoot(-30);
         robotDriver.turn(Turn.right90);
-        robotDriver.go(Speed.speed3,15 * InchesToCentimeters);
+        robotDriver.go(Speed.speed3,25 * InchesToCentimeters);
 
         while(opModeIsActive()) {       // to prevent stuck in a loop
             // to avoid crashes
