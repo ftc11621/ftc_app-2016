@@ -45,6 +45,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.core.RangeSensor;
 import org.firstinspires.ftc.teamcode.core.RobotDriver;
+import org.firstinspires.ftc.teamcode.core.Speed;
 
 
 /**
@@ -109,7 +110,7 @@ public class Auto_find_beaconRobotDriver extends LinearOpMode {
             telemetry.addData("Distance remaining: ", motor_need_to_go_distance);
             telemetry.update();
 
-            robotDriver.go (RobotDriver.Speed.normal, motor_need_to_go_distance );
+            robotDriver.go (Speed.normal, motor_need_to_go_distance );
             motor_need_to_go_distance = rangeSensors.getFrontDistance(200) - target_distance;
         }
 
