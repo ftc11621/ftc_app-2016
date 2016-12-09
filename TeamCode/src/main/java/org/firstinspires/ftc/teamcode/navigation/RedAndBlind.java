@@ -21,7 +21,7 @@ public class RedAndBlind extends BaseNavigation {
 
         ElapsedTime runtime_navigate = new ElapsedTime();
 
-        moveAndShoot(-30.0 * 2.54);     // negative for intake front
+        moveAndShoot(-30.0);     // negative for intake front
 
         /*
         robotDriver.go(RobotDriver.Speed.speed3, -30 * 2.54); // negative for intake front

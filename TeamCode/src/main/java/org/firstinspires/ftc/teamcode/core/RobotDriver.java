@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.core;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -28,7 +27,6 @@ public class RobotDriver {
         this.leftMotor  = hardwareMap.dcMotor.get("motor_2");
         this.rightMotor = hardwareMap.dcMotor.get("motor_1");
         forward();
-        backwards();
     }
 
     public void setRunMode(DcMotor.RunMode runMode){
@@ -67,36 +65,7 @@ public class RobotDriver {
         leftMotor.setDirection(DcMotor.Direction.FORWARD);// Set to Reverse if using AndyMark motors
     }
 
-    public static enum Direction { forward, back}
-    public static enum Turn {slightLeft(0.05,0.15), hardLeft(0,0.1), slightRight(0.15,0.05), hardRight(0.1,0), left90(0,0.5), right90(0.5,0);
-        double leftPower = 0;
-        double rightPower = 0;
-
-        Turn(double leftPower, double rightPower) {
-            this.leftPower = leftPower;
-            this.rightPower = rightPower;
-        }
-
-        public double getLeftPower() {
-            return leftPower;
-        }
-
-        public double getRightPower() {
-            return rightPower;
-        }
-    }
-
     private Speed speed;
-
-    public static enum Speed {fast(1.0),normal(0.5), slow(0.25), turn(0.2), speed1(0.1), speed2(0.2), speed3(0.3),
-        speed4(0.4),speed5(0.5),speed6(0.6),speed7(0.7),speed8(0.8),speed9(0.9),speed10(1.0);
-
-        Speed(double speed) {
-          this.speed = speed;
-        }
-        double speed;
-        public double getSpeed() {return this.speed;}
-    }
 
     public Speed getSpeed() {
         return speed;

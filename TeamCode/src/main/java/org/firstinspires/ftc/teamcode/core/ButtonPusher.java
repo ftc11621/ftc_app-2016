@@ -1,14 +1,11 @@
 package org.firstinspires.ftc.teamcode.core;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.*;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * Created by Gary on 11/12/16.
  */
-@TeleOp(name = "Button Pusher", group = "Examples")
 //@Disabled
 public class ButtonPusher {
     static final double INCREMENT = 0.01;     // amount to slew servo each CYCLE_MS cycle
@@ -20,10 +17,9 @@ public class ButtonPusher {
     double position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
 
 
-    public enum Button {left, right}
 
     public ButtonPusher(HardwareMap hardwareMap) {
-        servo = hardwareMap.servo.get("beacon_servo");
+        //servo = hardwareMap.servo.get("beacon_servo");
     }
 
     public void pushButton(Button button) {

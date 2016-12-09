@@ -41,6 +41,7 @@ import org.firstinspires.ftc.teamcode.core.Intake;
 import org.firstinspires.ftc.teamcode.core.Launcher;
 import org.firstinspires.ftc.teamcode.core.ParticleDoor;
 import org.firstinspires.ftc.teamcode.core.RobotDriver;
+import org.firstinspires.ftc.teamcode.core.Speed;
 
 /**
  This is the final code for Driver Mode in the competition
@@ -85,7 +86,7 @@ public class Driver_Mode extends OpMode
      */
     @Override
     public void start() {
-        robotDriver.setSpeed(RobotDriver.Speed.speed1);
+        robotDriver.setSpeed(Speed.speed1);
         runtime.reset();
         launcher.resetLauncher();
     }
@@ -110,13 +111,13 @@ public class Driver_Mode extends OpMode
     }
     private void gamepadDriver(){
         if(gamepad1.dpad_down) {        // Chassis maximum motors power
-            robotDriver.setSpeed(RobotDriver.Speed.speed1);
+            robotDriver.setSpeed(Speed.speed1);
         } else if(gamepad1.dpad_left) {
-            robotDriver.setSpeed(RobotDriver.Speed.speed3);
+            robotDriver.setSpeed(Speed.speed2);
         } else if(gamepad1.dpad_up) {
-            robotDriver.setSpeed(RobotDriver.Speed.speed5);
+            robotDriver.setSpeed(Speed.speed3);
         } else if(gamepad1.dpad_right) {        // Last chassis maximum power setting
-            robotDriver.setSpeed(RobotDriver.Speed.speed10);
+            robotDriver.setSpeed(Speed.speed5);
         } else if(gamepad1.left_trigger > 0) {
             robotDriver.backwards();
         }

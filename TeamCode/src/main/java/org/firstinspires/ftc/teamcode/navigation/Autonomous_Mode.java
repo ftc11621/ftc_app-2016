@@ -33,11 +33,11 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package org.firstinspires.ftc.teamcode.navigation;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.teamcode.core.Button;
 import org.firstinspires.ftc.teamcode.core.ButtonPusher;
 import org.firstinspires.ftc.teamcode.core.ParticleDoor;
-import org.firstinspires.ftc.teamcode.core.RobotDriver;
+import org.firstinspires.ftc.teamcode.core.Speed;
 import org.firstinspires.ftc.teamcode.core.VuforiaSensor;
 
 
@@ -75,7 +75,7 @@ public class Autonomous_Mode extends BaseNavigation {
         //sense the color
          baseLog("Button Pusher", "Push Correct Button");
         //push the correct button
-         buttonPusher.pushButton(ButtonPusher.Button.left);
+         //buttonPusher.pushButton(Button.left);
 
 
 
@@ -89,9 +89,9 @@ public class Autonomous_Mode extends BaseNavigation {
         double distance = vuforia.getDestinationDistance(destination_x, destination_y);
         double toAngle = vuforia.getRobotNeedToTurnAngle(destination_x, destination_y);
         double fromAngle = vuforia.getOrientation(3);
-        robotDriver.go(RobotDriver.Speed.speed5,cameraAxleDistance);
+        robotDriver.go(Speed.speed5,cameraAxleDistance);
         robotDriver.turnToAngle(fromAngle,toAngle);
-        robotDriver.go(RobotDriver.Speed.normal, distance - cameraAxleDistance);
+        robotDriver.go(Speed.normal, distance - cameraAxleDistance);
         stop();
 
     }

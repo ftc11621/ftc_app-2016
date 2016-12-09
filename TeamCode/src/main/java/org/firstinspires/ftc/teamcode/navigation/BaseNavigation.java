@@ -3,12 +3,11 @@ package org.firstinspires.ftc.teamcode.navigation;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.teamcode.core.ButtonPusher;
-import org.firstinspires.ftc.teamcode.core.ColorSense;
 import org.firstinspires.ftc.teamcode.core.Launcher;
 import org.firstinspires.ftc.teamcode.core.ParticleDoor;
 import org.firstinspires.ftc.teamcode.core.RobotDriver;
+import org.firstinspires.ftc.teamcode.core.Speed;
 import org.firstinspires.ftc.teamcode.core.VuforiaSensor;
 
 /**
@@ -17,6 +16,7 @@ import org.firstinspires.ftc.teamcode.core.VuforiaSensor;
 
 public abstract class BaseNavigation extends LinearOpMode {
 
+    protected final double InchesToCentimeters = 2.54;
     RobotDriver robotDriver;
     VuforiaSensor vuforia;
     Launcher launcher;
@@ -96,9 +96,9 @@ public abstract class BaseNavigation extends LinearOpMode {
             telemetry.addData("Angle to Gears", "%.0f", vuforia.getRobotNeedToTurnAngle(Vuforia_gears_x,Vuforia_gears_y));
             telemetry.update();
 
-            robotDriver.setSpeed(RobotDriver.Speed.speed4);
+            robotDriver.setSpeed(Speed.speed4);
             robotDriver.turnToAngle(0, toAngle);
-            robotDriver.go(RobotDriver.Speed.speed3, distance_CM);
+            robotDriver.go(Speed.speed3, distance_CM);
             sleep(500);
         }
         if(runtime.seconds()>=5.0) { // fail to update location by timeout
@@ -111,7 +111,7 @@ public abstract class BaseNavigation extends LinearOpMode {
     // to move a distance then shoot two particles
     public void moveAndShoot(double distance_to_move) {
         ParticleDoor partDoor = new ParticleDoor(hardwareMap); // on top to make sure it opens before interrupt
-        robotDriver.go(RobotDriver.Speed.speed3, distance_to_move); // negative for intake front
+        robotDriver.go(Speed.speed3, distance_to_move * InchesToCentimeters); // negative for intake front
 
         launcher.shoot();   // shoot 1st particle
         partDoor.openDoor();

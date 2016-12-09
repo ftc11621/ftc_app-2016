@@ -17,8 +17,6 @@ public class ParticleDoor {
     double position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
 
 
-    public enum Button {left, right}
-
     public ParticleDoor(HardwareMap hardwareMap) {
         servo = hardwareMap.servo.get("servo_launcher");
         closeDoor();
