@@ -44,9 +44,10 @@ public abstract class BaseNavigation extends LinearOpMode {
         //ElapsedTime runtime = new ElapsedTime();
 
 
+
         baseLog(">", "Press Play to start tracking");
         waitForStart();
-        vuforia.activate();
+        //vuforia.activate();
         navigate();
 
 

@@ -60,6 +60,7 @@ public class Driver_Mode extends OpMode
     Intake intake;
     ButtonPusher buttonPusher;
     ParticleDoor pDoor;
+    Boolean driver_mode_direction = false;  // forward = true;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -119,13 +120,19 @@ public class Driver_Mode extends OpMode
         } else if(gamepad1.dpad_right) {        // Last chassis maximum power setting
             robotDriver.setSpeed(Speed.speed5);
         } else if(gamepad1.left_trigger > 0) {
-            robotDriver.backwards();
+            //robotDriver.backwards();
+            driver_mode_direction=true;
         }
         else if (gamepad1.right_trigger > 0){
             robotDriver.forward();
+            driver_mode_direction = false;
         }
-        robotDriver.turn(-gamepad1.left_stick_y* robotDriver.getSpeed().getSpeed(), -gamepad1.right_stick_y*robotDriver.getSpeed().getSpeed()); //tank style joysticks
 
+        if (driver_mode_direction) {
+            robotDriver.turn(-gamepad1.left_stick_y * robotDriver.getSpeed().getSpeed(), -gamepad1.right_stick_y * robotDriver.getSpeed().getSpeed()); //tank style joysticks
+        } else {
+            robotDriver.turn(gamepad1.right_stick_y * robotDriver.getSpeed().getSpeed(), gamepad1.left_stick_y * robotDriver.getSpeed().getSpeed());
+        }
     }
     private void gamepadGunner(){
         if(gamepad2.x){
@@ -152,7 +159,7 @@ public class Driver_Mode extends OpMode
 
 
         if (gamepad2.y) {     // run launcher if the robot is not driven
-            if( (Math.abs(gamepad1.left_stick_y) + Math.abs(gamepad1.right_stick_y)) < 0.1) {
+            if( (Math.abs(gamepad1.left_stick_y) + Math.abs(gamepad1.right_stick_y)) < 0.2) {
                 launcher.shoot();
             }
         } //else if(gamepad2.b) {             // semi-autonomous beacon claiming

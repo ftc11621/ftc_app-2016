@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.navigation;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.core.ColorSense;
@@ -11,8 +12,8 @@ import org.firstinspires.ftc.teamcode.core.RobotDriver;
  * Created by HeavenDog on 12/4/2016.
  */
 
-@Autonomous(name="Autonomous Red Blind 1", group ="Competition")
-//@Disabled
+@Autonomous(name="Autonomous Red Blind 1", group ="Test")
+@Disabled
 public class RedAndBlind extends BaseNavigation {
 
 

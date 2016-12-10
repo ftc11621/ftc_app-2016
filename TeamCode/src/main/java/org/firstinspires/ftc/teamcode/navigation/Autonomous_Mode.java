@@ -33,6 +33,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package org.firstinspires.ftc.teamcode.navigation;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.core.Button;
 import org.firstinspires.ftc.teamcode.core.ButtonPusher;
@@ -42,7 +43,7 @@ import org.firstinspires.ftc.teamcode.core.VuforiaSensor;
 
 
 @Autonomous(name="Vuforia Navigation Blue", group ="Competition")
-//@Disabled
+@Disabled
 public class Autonomous_Mode extends BaseNavigation {
 
      public void navigate() {
