@@ -34,11 +34,13 @@ package org.firstinspires.ftc.teamcode.navigation;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.core.ButtonPusher;
 import org.firstinspires.ftc.teamcode.core.Intake;
 import org.firstinspires.ftc.teamcode.core.Launcher;
+import org.firstinspires.ftc.teamcode.core.LedDriver;
 import org.firstinspires.ftc.teamcode.core.ParticleDoor;
 import org.firstinspires.ftc.teamcode.core.RobotDriver;
 import org.firstinspires.ftc.teamcode.core.Speed;
@@ -60,6 +62,7 @@ public class Driver_Mode extends OpMode
     Intake intake;
     ButtonPusher buttonPusher;
     ParticleDoor pDoor;
+    LedDriver LD;
     Boolean driver_mode_direction = false;  // forward = true;
 
     /*
@@ -69,10 +72,12 @@ public class Driver_Mode extends OpMode
     public void init() {
 
         robotDriver = new RobotDriver(hardwareMap);
+        robotDriver.setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         launcher = new Launcher(hardwareMap);
         intake = new Intake (hardwareMap);
         buttonPusher = new ButtonPusher(hardwareMap);
         pDoor = new ParticleDoor(hardwareMap);
+        LD = new LedDriver(hardwareMap);
         telemetry.addData("Door", "CLOSE");
         telemetry.update();
     }
@@ -97,8 +102,6 @@ public class Driver_Mode extends OpMode
      */
     @Override
     public void loop() {
-        //telemetry.addData("Driver Mode", "In loop");
-        //telemetry.update();
 
         gamepadDriver();
         gamepadGunner();
@@ -110,6 +113,7 @@ public class Driver_Mode extends OpMode
     @Override
     public void stop() {
     }
+
     private void gamepadDriver(){
         if(gamepad1.dpad_down) {        // Chassis maximum motors power
             robotDriver.setSpeed(Speed.speed1);
@@ -134,7 +138,19 @@ public class Driver_Mode extends OpMode
             robotDriver.turn(gamepad1.right_stick_y * robotDriver.getSpeed().getSpeed(), gamepad1.left_stick_y * robotDriver.getSpeed().getSpeed());
         }
     }
+
     private void gamepadGunner(){
+       if(gamepad2.dpad_up){
+           LD.LedOn();
+           telemetry.addData("LED", "ON");
+           telemetry.update();
+       }
+        else if (gamepad2.dpad_down){
+           LD.LedOff();
+           telemetry.addData("LED", "OFF");
+           telemetry.update();
+       }
+
         if(gamepad2.x){
             pDoor.closeDoor();
             telemetry.addData("Door", "CLOSE");
