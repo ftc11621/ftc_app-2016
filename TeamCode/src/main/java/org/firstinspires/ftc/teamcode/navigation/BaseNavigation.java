@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.core.ButtonPusher;
 import org.firstinspires.ftc.teamcode.core.Launcher;
 import org.firstinspires.ftc.teamcode.core.ParticleDoor;
+import org.firstinspires.ftc.teamcode.core.Picture;
 import org.firstinspires.ftc.teamcode.core.RobotDriver;
 import org.firstinspires.ftc.teamcode.core.Speed;
 import org.firstinspires.ftc.teamcode.core.VuforiaSensor;
@@ -23,20 +24,12 @@ public abstract class BaseNavigation extends LinearOpMode {
     ButtonPusher buttonPusher;
     ElapsedTime runtime= new ElapsedTime();
 
-    // Coordinates of the Vuforia pictures
-    final float Vuforia_wheels_x = 12 * 25.4f;
-    final float Vuforia_wheels_y = (12 * 12 - 2) * 25.4f / 2.0f;
-    final float Vuforia_legos_x = -36 * 25.4f;
-    final float Vuforia_legos_y = (12 * 12 - 2) * 25.4f / 2.0f;
-    final float Vuforia_tools_x = -(12 * 12 - 2) * 25.4f / 2.0f;
-    final float Vuforia_tools_y = 36 * 25.4f;
-    final float Vuforia_gears_x = -(12 * 12 - 2) * 25.4f / 2.0f;
-    final float Vuforia_gears_y = -12 * 25.4f;
+
 
 
     @Override public void runOpMode() {
 
-        vuforia = new VuforiaSensor(true);
+        vuforia = new VuforiaSensor();
         robotDriver = new RobotDriver(hardwareMap);
         launcher = new Launcher(hardwareMap);
         buttonPusher = new ButtonPusher(hardwareMap);
@@ -93,8 +86,8 @@ public abstract class BaseNavigation extends LinearOpMode {
 
             telemetry.addData("X" , vuforia.getX());
             telemetry.addData("Y", vuforia.getY());
-            telemetry.addData("Distance to Gears", "%.0f", vuforia.getDestinationDistance(Vuforia_gears_x,Vuforia_gears_y));
-            telemetry.addData("Angle to Gears", "%.0f", vuforia.getRobotNeedToTurnAngle(Vuforia_gears_x,Vuforia_gears_y));
+            telemetry.addData("Distance to Gears", "%.0f", vuforia.getDistanceToPicture(Picture.gears));
+            telemetry.addData("Angle to Gears", "%.0f", vuforia.getAngleToPicture(Picture.gears));
             telemetry.update();
 
             robotDriver.setSpeed(Speed.speed4);

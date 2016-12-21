@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -32,10 +33,12 @@ public class VuforiaSensor {
     VuforiaTrackable legos = null;
     VuforiaTrackable tools = null;
     VuforiaTrackable gears = null;
+
+
     List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
 
     // Constructor
-    public VuforiaSensor(boolean  BlueOrRed) {
+    public VuforiaSensor() {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(com.qualcomm.ftcrobotcontroller.R.id.cameraMonitorViewId);
         parameters.vuforiaLicenseKey = "AdksQ3j/////AAAAGVB9GUsSEE0BlMaVB7HcRZRM4Sv74bxusFbCpn3gwnUkr3GuOtSWhrTCHnTU/93+Im+JlrYI6///bytu1igZT48xQ6182nSTpVzJ2ZP+Q/sNzSg3qvIOMnjEptutngqB+e3mQ1+YTiDa9aZod1e8X7UvGsAJ3cfV+X/S3E4M/81d1IRSMPRPEaLpKFdMqN3AcbDpBHoqp82fAp7XWVN3qd/BRe0CAAoNsr26scPBAxvm9cizRG1WeRSFms3XkwFN6eGpH7VpNAdPPXep9RQ3lLZMTFQGOfiV/vRQXq/Tlaj/b7dkA12zBSW81MfBiXRxp06NGieFe7KvXNuu2aDyyXoaPFsI44FEGp1z/SVSEVR4"; // Insert your own key here
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
@@ -137,6 +140,27 @@ public class VuforiaSensor {
         return currentlocation_flag;       // when no new location found
     }
 
+    public double getDistanceToPicture(Picture picture){
+        return getDestinationDistance(picture.getX(), picture.getY());
+    }
+
+    public double getAngleToPicture(Picture picture){
+        return getRobotNeedToTurnAngle(picture.getX(), picture.getY());
+    }
+
+    public void telemetryUpdate(Telemetry telemetry){
+        if(updateRobotLocation()) {
+            telemetry.addData("X", "%.0f", getX());
+            telemetry.addData("Y", "%.0f", getY());
+
+            for (Picture picture : Picture.values()) {
+                telemetry.addData("Distance to "+picture.name(), "%.0f", getDistanceToPicture(picture));
+                telemetry.addData("Angle to "+picture.name(), "%.0f", getAngleToPicture(picture));
+            }
+
+            telemetry.update();
+        }
+    }
     public double getX() {
         float[] coordinates = lastRobotLocation.getTranslation().getData();
         return coordinates[0];

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.core.ColorSense;
 import org.firstinspires.ftc.teamcode.core.ParticleDoor;
+import org.firstinspires.ftc.teamcode.core.Picture;
 import org.firstinspires.ftc.teamcode.core.RobotDriver;
 
 /**
@@ -54,15 +55,10 @@ public class RedAndBlind extends BaseNavigation {
         */
 
         // Going to beacon
-        if (moveToPosition(Vuforia_gears_x + 200, Vuforia_gears_y)) { // 300 mm from gears
-            telemetry.addData("X" , vuforia.getX());
-            telemetry.addData("Y", vuforia.getY());
-            telemetry.addData("Distance to Gears", "%.0f", vuforia.getDestinationDistance(Vuforia_gears_x,Vuforia_gears_y));
-            telemetry.addData("Angle to Gears", "%.0f", vuforia.getRobotNeedToTurnAngle(Vuforia_gears_x,Vuforia_gears_y));
-            telemetry.update();
-
+        if (moveToPosition(Picture.gears.getX() + 200, Picture.gears.getY())) { // 300 mm from gears
+            vuforia.telemetryUpdate(telemetry);
             // Now all the way to the beacon
-            if (moveToPosition(Vuforia_gears_x + 50, Vuforia_gears_y)) { // 50mm
+            if (moveToPosition(Picture.gears.getX() + 50, Picture.gears.getY())) { // 50mm
                 sleep(1000);  // just in case the color sensor needs time
 
                 // read beacon's color

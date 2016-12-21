@@ -100,6 +100,11 @@ public class RobotDriver {
     }
 
     public void turn(double leftPower, double rightPower){
+        if(DcMotor.Direction.REVERSE.equals(rightMotor.getDirection()))
+        {
+            leftMotor.setPower(rightPower);
+            rightMotor.setPower(leftPower);  // turn a litte to get away from the wall
+        }
         leftMotor.setPower(leftPower);
         rightMotor.setPower(rightPower);  // turn a litte to get away from the wall
     }
