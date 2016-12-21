@@ -56,6 +56,25 @@ public class Launcher {
     public void setPower(double power){
         this.power = power;
     }
+
+    public double getPower() {
+        return power;
+    }
+    public void increasePower() {
+        this.power = this.power+0.05;
+        if (this.power > 1.0) {
+            this.power = 1;
+        }
+
+    }
+    public void decreasePower(){
+        this.power = this.power - 0.05;
+        if (this.power < 0){
+            this.power = 0;
+        }
+
+    }
+
     public void resetLauncher(){
         launcherMotor.setPower(0.0);
         //launcherMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

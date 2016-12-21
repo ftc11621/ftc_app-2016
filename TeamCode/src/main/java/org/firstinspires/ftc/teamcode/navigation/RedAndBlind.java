@@ -60,6 +60,7 @@ public class RedAndBlind extends BaseNavigation {
             telemetry.addData("Distance to Gears", "%.0f", vuforia.getDestinationDistance(Vuforia_gears_x,Vuforia_gears_y));
             telemetry.addData("Angle to Gears", "%.0f", vuforia.getRobotNeedToTurnAngle(Vuforia_gears_x,Vuforia_gears_y));
             telemetry.update();
+
             // Now all the way to the beacon
             if (moveToPosition(Vuforia_gears_x + 50, Vuforia_gears_y)) { // 50mm
                 sleep(1000);  // just in case the color sensor needs time
