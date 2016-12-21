@@ -164,11 +164,31 @@ public class Driver_Mode extends OpMode
         if(gamepad2.right_stick_y > 0) {// spin Intake when pressed and hold "A" button
             intake.setPower(gamepad2.right_stick_y);
             intake.takein();
-        } else if (gamepad2.right_stick_y < 0){                      // stop Intake
+        } else if (gamepad2.right_stick_y < 0) {                      // stop Intake
             intake.setPower(gamepad2.right_stick_y * -1);
             intake.kickout();
+        }
+        if(gamepad2.left_trigger > 0 ) {
+            if (runtime.milliseconds()>500){
+                launcher.increasePower();
+                telemetry.addData("Power", launcher.getPower());
+                telemetry.update();
+                runtime.reset();
+            }
+
 
         }
+        if (gamepad2.right_trigger < 0){
+            if (runtime.milliseconds() > 500){
+                launcher.decreasePower();
+                telemetry.addData("Power",launcher.getPower());
+                telemetry.update();
+                runtime.reset();
+            }
+
+        }
+
+
         else {
             intake.stop();
         }
