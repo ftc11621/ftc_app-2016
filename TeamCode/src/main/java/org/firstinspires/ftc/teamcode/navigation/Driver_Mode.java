@@ -178,7 +178,7 @@ public class Driver_Mode extends OpMode
 
 
         }
-        if (gamepad2.right_trigger < 0){
+        if (gamepad2.right_trigger > 0){
             if (runtime.milliseconds() > 500){
                 launcher.decreasePower();
                 telemetry.addData("Power",launcher.getPower());
