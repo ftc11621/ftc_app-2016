@@ -86,12 +86,13 @@ public class VuforiaSensor {
                         AngleUnit.DEGREES, 90, 90, 0));
 
 
-        // for phone in front
+        // for phone in front, 6mm to the left
         OpenGLMatrix phoneLocationOnRobot = OpenGLMatrix
-                .translation(0,0,0)
+                .translation(-6,0,0)
                 .multiplied(Orientation.getRotationMatrix(
                         AxesReference.EXTRINSIC, AxesOrder.YZY,
-                        AngleUnit.DEGREES, -90, 90, 0));  // -90,0,0 for the right side
+                        AngleUnit.DEGREES, -90, 90, 180));  // insert phone from the left front
+                        //AngleUnit.DEGREES, -90, 90, 0));  // -90,0,0 for the right side
 
         wheels.setLocation(wheelsLocationOnField);
         legos.setLocation(legosLocationOnField);
