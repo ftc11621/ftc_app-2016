@@ -38,6 +38,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.teamcode.core.Picture;
 import org.firstinspires.ftc.teamcode.core.VuforiaSensor;
 
 
@@ -61,9 +62,38 @@ public class Vuforia_test extends LinearOpMode {
        vuforiaSensor.activate();  // start vuforia tracking
        //robotDriver = new RobotDriver(this,hardwareMap);
 
-
+       //vuforiaSensor.getAngleToPicture(Picture.gears);
       while (opModeIsActive()) {
+          runtime.reset();
+          while(runtime.seconds()< 5.0 && !vuforiaSensor.isWheel_visible() && !vuforiaSensor.isLego_visible() && !vuforiaSensor.isTools_visible() && !vuforiaSensor.isGears_visible()) { // 5 sec timeout to find a blue pattern
+              telemetry.addData("Vuforia", "NOT visible");
+              telemetry.update();
+          }
 
+          if(vuforiaSensor.isWheel_visible() || vuforiaSensor.isLego_visible() || vuforiaSensor.isTools_visible() || vuforiaSensor.isGears_visible()) { // 5 sec timeout to find a blue pattern
+/*
+              if (vuforiaSensor.updateRobotLocation()) {
+                  for (Picture picture : Picture.values()) {
+
+                      // old codes
+                      telemetry.addData("Distance " + picture.name(), "%.0f inch",
+                                 vuforiaSensor.getDestinationDistance(picture.getX(), picture.getY()) / 25.4);
+                      telemetry.addData("Angle " + picture.name(), "%.0f",
+                                 vuforiaSensor.getRobotNeedToTurnAngle(picture.getX(), picture.getY()));
+
+                      // new codes
+                      telemetry.addData("New code Distance " + picture.name(), "%.0f inch",
+                                 vuforiaSensor.getDistanceToPicture(picture) / 25.4);
+                      telemetry.addData("New code Angle " + picture.name(), "%.0f",
+                              vuforiaSensor.getAngleToPicture(picture));
+                  }
+                  telemetry.update();
+              }
+*/
+              vuforiaSensor.telemetryUpdate(telemetry);
+          }
+
+          /*
           if(alliance) {        // Blue alliance
               if(vuforiaSensor.isWheel_visible() || vuforiaSensor.isLego_visible()) {      // if wheels is visible
                   if(vuforiaSensor.updateRobotLocation()) {
@@ -83,11 +113,6 @@ public class Vuforia_test extends LinearOpMode {
                   telemetry.addData("Distance to Legos = ", "%.0f", vuforiaSensor.getDestinationDistance(-36*25.4, (12*12 - 2) * 25.4/2.0));
                   telemetry.addData("Angle robot needs to turn toward Legos= ", "%.1f",  vuforiaSensor.getRobotNeedToTurnAngle(-36*25.4, (12*12 - 2) * 25.4/2.0));
 
-                  //telemetry.addData("1st Angle = ", vuforiaSensor.getOrientation(1));       // 1st angle depends how the phone is oriented
-                  //telemetry.addData("2nd Angle = ", vuforiaSensor.getOrientation(2));       // 2nd angle depends how the phone
-                  //
-                  // is oriented
-                  // telemetry.addData("3rd Angle = ", vuforiaSensor.getOrientation(3));       // 3rd angle depends how the phone is oriented
 
               } else {
                   telemetry.addData("Wheels or Legos: ", "Not Visible");
@@ -99,9 +124,10 @@ public class Vuforia_test extends LinearOpMode {
 
           telemetry.update();
 
-          //robotDriver.goStraight(RobotDriver.Speed.normal);
 
+*/
          idle();
       }
+
    }
 }

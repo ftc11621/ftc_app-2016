@@ -88,7 +88,7 @@ public class VuforiaSensor {
 
         // for phone in front, 6mm to the left
         OpenGLMatrix phoneLocationOnRobot = OpenGLMatrix
-                .translation(-6,0,0)
+                .translation(0 , -6, 0)
                 .multiplied(Orientation.getRotationMatrix(
                         AxesReference.EXTRINSIC, AxesOrder.YZY,
                         AngleUnit.DEGREES, -90, 90, 180));  // insert phone from the left front
@@ -155,7 +155,7 @@ public class VuforiaSensor {
             telemetry.addData("Y", "%.0f", getY());
 
             for (Picture picture : Picture.values()) {
-                telemetry.addData("Distance to "+picture.name(), "%.0f", getDistanceToPicture(picture));
+                telemetry.addData("Distance to "+picture.name(), "%.0f inch", getDistanceToPicture(picture) / 25.4);
                 telemetry.addData("Angle to "+picture.name(), "%.0f", getAngleToPicture(picture));
             }
 

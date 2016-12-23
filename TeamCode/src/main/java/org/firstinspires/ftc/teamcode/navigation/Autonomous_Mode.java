@@ -43,57 +43,14 @@ import org.firstinspires.ftc.teamcode.core.VuforiaSensor;
 
 
 @Autonomous(name="Vuforia Navigation Blue", group ="Competition")
-@Disabled
+//@Disabled
 public class Autonomous_Mode extends BaseNavigation {
 
      public void navigate() {
 
-         ParticleDoor pDoor = new ParticleDoor(hardwareMap);
-         baseLog("Launcher:","Shoot Launcher");
+         //ParticleDoor pDoor = new ParticleDoor(hardwareMap);
+         //baseLog("Launcher:","Shoot Launcher");
          //go to the shooting position
-         moveToPosition(36 * 25.4, 36 * 25.4);
-         baseLog("Robot;","Stop");
-         baseLog("Launcher","Shoot Launcher");
-        //stop and shoot
-         launcher.shoot();
-         pDoor.openDoor(); // load another partile
-         launcher.shoot();
-         baseLog("Robot","Move To Position");
-        //go to the beacon position
-         baseLog("Robot","Open Launcher Servo");
-         //open the launcher servo
-         baseLog("Launcher","Shoot Launcher");
-         //launcher.shoot();
-         //
-        moveToPosition(72*25.4 , 72* 25.4);
-         baseLog("Robot","Turn To Beacon");
-        //turn to face the beacon
-
-         baseLog("Robot","Move To Beacon");
-        //go near the beacon
-
-         baseLog("Sensor","Sense Color");
-        //sense the color
-         baseLog("Button Pusher", "Push Correct Button");
-        //push the correct button
-         //buttonPusher.pushButton(Button.left);
-
-
-
-
-
-    }
-
-    private double cameraAxleDistance = 200;
-    private double axisCameraDistance = 25;
-    public void moveToPosition(double destination_x, double destination_y, VuforiaSensor vuforia) {
-        double distance = vuforia.getDestinationDistance(destination_x, destination_y);
-        double toAngle = vuforia.getRobotNeedToTurnAngle(destination_x, destination_y);
-        double fromAngle = vuforia.getOrientation(3);
-        robotDriver.go(Speed.speed5,cameraAxleDistance);
-        robotDriver.turnToAngle(fromAngle,toAngle);
-        robotDriver.go(Speed.normal, distance - cameraAxleDistance);
-        stop();
-
-    }
+         moveToPosition(-36 * 25.4f, 59 * 25.4f);
+     }
 }
