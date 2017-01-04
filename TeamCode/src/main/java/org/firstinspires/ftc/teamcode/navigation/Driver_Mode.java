@@ -171,31 +171,28 @@ public class Driver_Mode extends OpMode
             telemetry.update();
             intake.setPower(gamepad2.right_stick_y * -1);
             intake.kickout();
+        } else {
+            intake.stop();
         }
-        if(gamepad2.left_trigger > 0 ) {
-            if (runtime.milliseconds()>500){
+
+        if(gamepad2.left_stick_y > 0.99 ) {
+            //if (runtime.milliseconds()>500){
                 launcher.increasePower();
                 telemetry.addData("Power", launcher.getPower());
                 telemetry.update();
-                runtime.reset();
-            }
-
-
-        }
-        if (gamepad2.right_trigger > 0 ){
-            if (runtime.milliseconds() > 500){
+            //    runtime.reset();
+            //}
+        } else if (gamepad2.left_stick_y < -0.99 ){
+            //if (runtime.milliseconds() > 500){
                 launcher.decreasePower();
                 telemetry.addData("Power",launcher.getPower());
                 telemetry.update();
-                runtime.reset();
-            }
-
+            //    runtime.reset();
+            //}
         }
 
 
-        else {
-            intake.stop();
-        }
+
 
 
         if (gamepad2.y) {     // run launcher if the robot is not driven
