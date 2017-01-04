@@ -162,9 +162,13 @@ public class Driver_Mode extends OpMode
             telemetry.update();
         }
         if(gamepad2.right_stick_y > 0) {// spin Intake when pressed and hold "A" button
+            telemetry.addData("Intake Power", gamepad2.right_stick_y);
+            telemetry.update();
             intake.setPower(gamepad2.right_stick_y);
             intake.takein();
-        } else if (gamepad2.right_stick_y < 0) {                      // stop Intake
+        } else if (gamepad2.right_stick_y < 0) {
+            telemetry.addData("Intake Power", gamepad2.right_stick_y);
+            telemetry.update();
             intake.setPower(gamepad2.right_stick_y * -1);
             intake.kickout();
         }
@@ -178,7 +182,7 @@ public class Driver_Mode extends OpMode
 
 
         }
-        if (gamepad2.right_trigger > 0){
+        if (gamepad2.right_trigger > 0 ){
             if (runtime.milliseconds() > 500){
                 launcher.decreasePower();
                 telemetry.addData("Power",launcher.getPower());

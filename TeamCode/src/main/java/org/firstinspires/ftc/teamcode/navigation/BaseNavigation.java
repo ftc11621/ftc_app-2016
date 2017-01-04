@@ -18,11 +18,11 @@ import org.firstinspires.ftc.teamcode.core.VuforiaSensor;
 public abstract class BaseNavigation extends LinearOpMode {
 
     protected final double InchesToCentimeters = 2.54;
-    RobotDriver robotDriver;
-    VuforiaSensor vuforia;
-    Launcher launcher;
-    ButtonPusher buttonPusher;
-    ElapsedTime runtime= new ElapsedTime();
+    protected RobotDriver robotDriver;
+    protected VuforiaSensor vuforia;
+    protected Launcher launcher;
+    protected ButtonPusher buttonPusher;
+    protected ElapsedTime runtime= new ElapsedTime();
 
 
 
@@ -40,8 +40,11 @@ public abstract class BaseNavigation extends LinearOpMode {
 
         baseLog(">", "Press Play to start tracking");
         waitForStart();
-        //vuforia.activate();
+        vuforia.activate();
         navigate();
+
+
+
 
 
 
@@ -57,6 +60,7 @@ public abstract class BaseNavigation extends LinearOpMode {
 
     public boolean moveToPosition(double destination_x, double destination_y) {   // in mm
         runtime.reset();
+
         while(runtime.seconds()< 5.0 && !vuforia.isWheel_visible() && !vuforia.isLego_visible() && !vuforia.isTools_visible() && !vuforia.isGears_visible()) { // 5 sec timeout to find a blue pattern
             telemetry.addData("Vuforia", "NOT visible");
             telemetry.update();
@@ -70,8 +74,9 @@ public abstract class BaseNavigation extends LinearOpMode {
         telemetry.update();
 
         runtime.reset();    // 5 seconds timeout if it can't find location
-        while(runtime.seconds() < 5.0 && !vuforia.updateRobotLocation()) {
-
+//        while(runtime.seconds() < 5.0 && !vuforia.updateRobotLocation()) {
+        if(vuforia.updateRobotLocation()) {
+            vuforia.telemetryUpdate(telemetry);
             double toAngle = vuforia.getRobotNeedToTurnAngle(destination_x, destination_y);
 
 
@@ -83,12 +88,7 @@ public abstract class BaseNavigation extends LinearOpMode {
             }
 
             double distance_CM = 0.1 * vuforia.getDestinationDistance(destination_x, destination_y); // in CM
-
-            telemetry.addData("X" , vuforia.getX());
-            telemetry.addData("Y", vuforia.getY());
-            telemetry.addData("Distance to Gears", "%.0f", vuforia.getDistanceToPicture(Picture.gears));
-            telemetry.addData("Angle to Gears", "%.0f", vuforia.getAngleToPicture(Picture.gears));
-            telemetry.update();
+            vuforia.telemetryUpdate(telemetry);
 
             robotDriver.setSpeed(Speed.speed4);
             robotDriver.turnToAngle(0, toAngle);

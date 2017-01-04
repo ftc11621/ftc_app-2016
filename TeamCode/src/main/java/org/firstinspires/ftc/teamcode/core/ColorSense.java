@@ -7,6 +7,8 @@ import android.view.View;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 /**
  * Created by HeavenDog on 12/1/2016.
  */
@@ -26,17 +28,22 @@ public class ColorSense {
         colorSensor.enableLed(false);
     }
 
-    public static enum Beacon_colors {red, blue, neither};
+    public void telemetryUpdate(Telemetry telemetry) {
+       telemetry.addData("color", senseColor().toString());
+        telemetry.update();
+    }
+
+    ;
 
 
-    public Beacon_colors senseColor() {
+    public BeaconColor senseColor() {
         Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues); /// reading color
         if (colorSensor.red() > 1) {
-            return Beacon_colors.red;
+            return BeaconColor.red;
         } else if (colorSensor.blue() > 1) {
-            return Beacon_colors.blue;
+            return BeaconColor.blue;
         } else {
-            return Beacon_colors.neither;
+            return BeaconColor.neither;
         }
         // change the background color to match the color detected by the RGB sensor.
         // pass a reference to the hue, saturation, and value array as an argument
