@@ -65,7 +65,7 @@ public class Launcher {
         if (this.power > 1.0) {
             this.power = 1;
         }
-        launcherMotor.setPower(this.power);
+        //launcherMotor.setPower(this.power);
 
 
     }
@@ -74,7 +74,7 @@ public class Launcher {
         if (this.power < 0){
             this.power = 0;
         }
-        launcherMotor.setPower(this.power);
+        //launcherMotor.setPower(this.power);
 
     }
 
