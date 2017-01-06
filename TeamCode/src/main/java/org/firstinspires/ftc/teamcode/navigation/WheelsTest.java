@@ -13,19 +13,17 @@ public class WheelsTest extends BaseNavigation{
 
     @Override
     protected void navigate() {
-        sleep(300);
-        moveToPosition(Picture.wheels.getX() + 5 , Picture.wheels.getY() -20); // in inches
+
 
         sleep(1000);
 
-        moveToPosition(Picture.wheels.getX() , Picture.wheels.getY() - 1);
+        moveToPosition(Picture.wheels.getX()  , Picture.wheels.getY() - 500);
+        moveToPosition(Picture.wheels.getX()  , Picture.wheels.getY() - 120);
 
-        sleep(1000);
 
-        moveToPosition(Picture.wheels.getX() - 5 , Picture.wheels.getY() - 10);
-
-        sleep(1000);
 
         vuforia.telemetryUpdate(telemetry);
+
+        sleep(10000);
     }
 }

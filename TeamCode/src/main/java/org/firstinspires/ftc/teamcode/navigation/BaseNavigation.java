@@ -88,6 +88,7 @@ public abstract class BaseNavigation extends LinearOpMode {
             }
 
             double distance_CM = 0.1 * vuforia.getDestinationDistance(destination_x, destination_y); // in CM
+            telemetry.addData("DistanceToTargetCM", distance_CM/2.54);
             vuforia.telemetryUpdate(telemetry);
 
             robotDriver.setSpeed(Speed.speed4);
