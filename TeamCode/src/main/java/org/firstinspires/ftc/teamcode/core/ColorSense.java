@@ -16,20 +16,23 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class ColorSense {
     ColorSensor colorSensor;
     float hsvValues[] = {0F,0F,0F};
-    final float values[] = hsvValues; // values is a reference to the hsvValues array.
-    View relativeLayout;
+    private int redValue;
+    private int greenValue;
+    private int blueValue;
 
     public ColorSense(HardwareMap hardwareMap) {
         colorSensor = hardwareMap.colorSensor.get("color_sensor");
-        //float hsvValues[] = {0F,0F,0F};
 
-        View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(com.qualcomm.ftcrobotcontroller.R.id.RelativeLayout);
+
+       // View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(com.qualcomm.ftcrobotcontroller.R.id.RelativeLayout);
 
         colorSensor.enableLed(false);
     }
 
     public void telemetryUpdate(Telemetry telemetry) {
        telemetry.addData("color", senseColor().toString());
+       telemetry.addData("red", redValue);
+       telemetry.addData("blue", blueValue);
         telemetry.update();
     }
 
@@ -37,7 +40,10 @@ public class ColorSense {
 
 
     public BeaconColor senseColor() {
-        Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues); /// reading color
+        redValue = colorSensor.red();
+        greenValue = colorSensor.green();
+        blueValue = colorSensor.blue();
+        Color.RGBToHSV(redValue * 8, greenValue * 8, blueValue * 8, hsvValues); /// reading color
         if (colorSensor.red() > 1) {
             return BeaconColor.red;
         } else if (colorSensor.blue() > 1) {
@@ -45,14 +51,7 @@ public class ColorSense {
         } else {
             return BeaconColor.neither;
         }
-        // change the background color to match the color detected by the RGB sensor.
-        // pass a reference to the hue, saturation, and value array as an argument
-        // to the HSVToColor method.
-        //relativeLayout.post(new Runnable() {
-        //    public void run() {
-        //        relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));
-        //    }
-        //});
+
     }
 }
 

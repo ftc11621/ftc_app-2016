@@ -78,21 +78,23 @@ public abstract class BaseNavigation extends LinearOpMode {
         if(vuforia.updateRobotLocation()) {
             vuforia.telemetryUpdate(telemetry);
             double toAngle = vuforia.getRobotNeedToTurnAngle(destination_x, destination_y);
+            robotDriver.turnToAngle(0, toAngle);
+            sleep(763);
+            vuforia.updateRobotLocation();
+            toAngle = vuforia.getRobotNeedToTurnAngle(destination_x, destination_y);
+            robotDriver.turnToAngle(0, toAngle);
+            vuforia.updateRobotLocation();
+            //Turn to desired angle
+            //check the angle to see how close it is to to the disired angle
 
 
             runtime.reset();
-            while(runtime.seconds() < 5.0 && Math.abs(toAngle) > 45){ // if the camera does not face the picture, incorrect location
-                sleep(500);
-                vuforia.updateRobotLocation();
-                toAngle = vuforia.getRobotNeedToTurnAngle(destination_x, destination_y);
-            }
 
             double distance_CM = 0.1 * vuforia.getDestinationDistance(destination_x, destination_y); // in CM
             telemetry.addData("DistanceToTargetCM", distance_CM/2.54);
             vuforia.telemetryUpdate(telemetry);
 
             robotDriver.setSpeed(Speed.speed4);
-            robotDriver.turnToAngle(0, toAngle);
             robotDriver.go(Speed.speed3, distance_CM);
             sleep(500);
         }
