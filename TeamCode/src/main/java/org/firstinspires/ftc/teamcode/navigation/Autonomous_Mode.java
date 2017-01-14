@@ -33,13 +33,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package org.firstinspires.ftc.teamcode.navigation;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.core.Button;
-import org.firstinspires.ftc.teamcode.core.ButtonPusher;
-import org.firstinspires.ftc.teamcode.core.ParticleDoor;
 import org.firstinspires.ftc.teamcode.core.Speed;
-import org.firstinspires.ftc.teamcode.core.VuforiaSensor;
 
 
 @Autonomous(name="Vuforia Navigation Blue", group ="Competition")
@@ -51,6 +46,6 @@ public class Autonomous_Mode extends BaseNavigation {
          //ParticleDoor pDoor = new ParticleDoor(hardwareMap);
          //baseLog("Launcher:","Shoot Launcher");
          //go to the shooting position
-         moveToPosition(-36 * 25.4f, 59 * 25.4f);
+         moveToPosition(-36 * 25.4f, 59 * 25.4f, Speed.speed4);
      }
 }

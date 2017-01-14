@@ -9,23 +9,25 @@ import org.firstinspires.ftc.teamcode.core.Speed;
 /**
  * Created by Marie on 1/3/2017.
  */
-@Autonomous(name="Wheels Test", group ="Test")
-public class WheelsTest extends BaseNavigation{
+@Autonomous(name="BlueVuforia", group ="Competition")
+public class BlueVuforiaNav extends BaseNavigation{
 
     @Override
     protected void navigate() {
 
         Speed speed = Speed.speed7;
-        sleep(1000);
+
+        moveAndShoot(38);
+        sleep(800);
 
 
-        moveToPosition(Picture.wheels.getX(20)  , Picture.wheels.getY(20), speed);
+        moveToPosition(Picture.wheels.getX(24)  , Picture.wheels.getY(24), speed);
 
-        sleep(1000);
-        moveToPosition(Picture.wheels.getX(5)  , Picture.wheels.getY(5), speed);
+        sleep(800);
+        moveToPosition(Picture.wheels.getX(6)  , Picture.wheels.getY(6), speed);
 
 
-        pushBeacon(BeaconColor.red);
+        pushBeacon(BeaconColor.blue);
 
         vuforia.telemetryUpdate(telemetry);
 

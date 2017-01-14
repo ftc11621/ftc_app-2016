@@ -3,10 +3,11 @@ package org.firstinspires.ftc.teamcode.navigation;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.core.BeaconColor;
 import org.firstinspires.ftc.teamcode.core.ButtonPusher;
+import org.firstinspires.ftc.teamcode.core.ColorSense;
 import org.firstinspires.ftc.teamcode.core.Launcher;
 import org.firstinspires.ftc.teamcode.core.ParticleDoor;
-import org.firstinspires.ftc.teamcode.core.Picture;
 import org.firstinspires.ftc.teamcode.core.RobotDriver;
 import org.firstinspires.ftc.teamcode.core.Speed;
 import org.firstinspires.ftc.teamcode.core.VuforiaSensor;
@@ -58,7 +59,7 @@ public abstract class BaseNavigation extends LinearOpMode {
 
     protected abstract void navigate();
 
-    public boolean moveToPosition(double destination_x, double destination_y) {   // in mm
+    public boolean moveToPosition(double destination_x, double destination_y, Speed speed) {   // in mm
         runtime.reset();
 
         while(runtime.seconds()< 5.0 && !vuforia.isWheel_visible() && !vuforia.isLego_visible() && !vuforia.isTools_visible() && !vuforia.isGears_visible()) { // 5 sec timeout to find a blue pattern
@@ -94,9 +95,9 @@ public abstract class BaseNavigation extends LinearOpMode {
             telemetry.addData("DistanceToTargetCM", distance_CM/2.54);
             vuforia.telemetryUpdate(telemetry);
 
-            robotDriver.setSpeed(Speed.speed4);
-            robotDriver.go(Speed.speed3, distance_CM);
-            sleep(500);
+            robotDriver.setSpeed(speed);
+            robotDriver.go(speed, distance_CM);
+            sleep(200);
         }
         if(runtime.seconds()>=5.0) { // fail to update location by timeout
             return false;
@@ -108,7 +109,7 @@ public abstract class BaseNavigation extends LinearOpMode {
     // to move a distance then shoot two particles
     public void moveAndShoot(double distance_to_move) {
         ParticleDoor partDoor = new ParticleDoor(hardwareMap); // on top to make sure it opens before interrupt
-        robotDriver.go(Speed.speed3, distance_to_move * InchesToCentimeters); // negative for intake front
+        robotDriver.go(Speed.speed7, distance_to_move * InchesToCentimeters); // negative for intake front
 
         launcher.shoot();   // shoot 1st particle
         partDoor.openDoor();
@@ -122,4 +123,22 @@ public abstract class BaseNavigation extends LinearOpMode {
         }
     }
 
+    protected void pushBeacon(BeaconColor beaconColor) {
+        ColorSense colorSense = new ColorSense(hardwareMap);
+        robotDriver.turnToAngle(0,-12);
+        /*if (BeaconColor.neither.equals(colorSense.senseColor())) {
+            robotDriver.turnToAngle();
+        }*/
+        if(!beaconColor.equals(colorSense.senseColor())){
+            robotDriver.go(Speed.speed2, 10);
+        } else {
+            robotDriver.turnToAngle(0,24);
+            robotDriver.go(Speed.speed2, 10);
+        }
+        sleep(1000);
+        if(!beaconColor.equals(colorSense.senseColor())) {
+            robotDriver.go(Speed.speed3, -5);
+            robotDriver.go(Speed.speed3, 5);
+        }
+    }
 }

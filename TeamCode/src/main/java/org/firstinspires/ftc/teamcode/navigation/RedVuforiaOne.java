@@ -35,10 +35,8 @@ package org.firstinspires.ftc.teamcode.navigation;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.core.ButtonPusher;
 import org.firstinspires.ftc.teamcode.core.ParticleDoor;
-import org.firstinspires.ftc.teamcode.core.RobotDriver;
-import org.firstinspires.ftc.teamcode.core.VuforiaSensor;
+import org.firstinspires.ftc.teamcode.core.Speed;
 
 
 @Autonomous(name="Vuforia Navigation Blue 1", group ="Competition")
@@ -51,7 +49,7 @@ RedVuforiaOne extends BaseNavigation {
          ParticleDoor pDoor = new ParticleDoor(hardwareMap);
          baseLog("Launcher:","Shoot Launcher");
          //go to the shooting position
-         moveToPosition(-36 * 25.4, -36 * 25.4);
+         moveToPosition(-36 * 25.4, -36 * 25.4, Speed.speed4);
          baseLog("Robot;","Stop");
          baseLog("Launcher","Shoot Launcher");
         //stop and shoot
@@ -65,7 +63,7 @@ RedVuforiaOne extends BaseNavigation {
          baseLog("Launcher","Shoot Launcher");
          //launcher.shoot();
          //
-        moveToPosition(-72*25.4 , -72* 25.4);
+        moveToPosition(-72*25.4 , -72* 25.4, Speed.speed4);
          baseLog("Robot","Turn To Beacon");
         //turn to face the beacon
 
