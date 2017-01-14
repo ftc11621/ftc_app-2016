@@ -34,6 +34,8 @@ public class RobotDriver {
         rightMotor.setMode(runMode);
     }
 
+    public void turnToAngle(double angle) { turnToAngle(0, angle);}
+
     public void turnToAngle(double fromAngle, double toAngle) {
         double turningDegrees = toAngle - fromAngle; //Get the total defrees to turn
         if (Math.abs(turningDegrees) > 180){
@@ -138,12 +140,6 @@ public class RobotDriver {
         while ((runtime.seconds() < timeout) &&
                 (isMoving())) {
 
-            // Display it for the driver.
-            //opMode.telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
-            //opMode.telemetry.addData("Path2",  "Running at %7d :%7d",
-            //        leftMotor.getCurrentPosition(),
-            //        rightMotor.getCurrentPosition());
-            //opMode.telemetry.update();
         }
 
         // Stop all motion;

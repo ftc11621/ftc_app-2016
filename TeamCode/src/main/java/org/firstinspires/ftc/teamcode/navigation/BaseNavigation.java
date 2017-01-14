@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.core.ButtonPusher;
 import org.firstinspires.ftc.teamcode.core.ColorSense;
 import org.firstinspires.ftc.teamcode.core.Launcher;
 import org.firstinspires.ftc.teamcode.core.ParticleDoor;
+import org.firstinspires.ftc.teamcode.core.Picture;
 import org.firstinspires.ftc.teamcode.core.RobotDriver;
 import org.firstinspires.ftc.teamcode.core.Speed;
 import org.firstinspires.ftc.teamcode.core.VuforiaSensor;
@@ -23,31 +24,22 @@ public abstract class BaseNavigation extends LinearOpMode {
     protected VuforiaSensor vuforia;
     protected Launcher launcher;
     protected ButtonPusher buttonPusher;
-    protected ElapsedTime runtime= new ElapsedTime();
+    protected ElapsedTime runtime = new ElapsedTime();
 
 
-
-
-    @Override public void runOpMode() {
+    @Override
+    public void runOpMode() {
 
         vuforia = new VuforiaSensor();
         robotDriver = new RobotDriver(hardwareMap);
         launcher = new Launcher(hardwareMap);
         buttonPusher = new ButtonPusher(hardwareMap);
 
-        //ElapsedTime runtime = new ElapsedTime();
-
-
 
         baseLog(">", "Press Play to start tracking");
         waitForStart();
         vuforia.activate();
         navigate();
-
-
-
-
-
 
 
     }
@@ -57,17 +49,24 @@ public abstract class BaseNavigation extends LinearOpMode {
         telemetry.update();
     }
 
+    protected void findPicture()
+    {
+        while(!aPictureIsVisible())
+        {
+            robotDriver.turnToAngle(15);
+            sleep(500);
+        }
+    }
+
     protected abstract void navigate();
 
     public boolean moveToPosition(double destination_x, double destination_y, Speed speed) {   // in mm
         runtime.reset();
 
-        while(runtime.seconds()< 5.0 && !vuforia.isWheel_visible() && !vuforia.isLego_visible() && !vuforia.isTools_visible() && !vuforia.isGears_visible()) { // 5 sec timeout to find a blue pattern
+
+        if (!aPictureIsVisible()) {
             telemetry.addData("Vuforia", "NOT visible");
             telemetry.update();
-        }
-
-        if (!vuforia.isWheel_visible() && !vuforia.isLego_visible() && !vuforia.isTools_visible() && !vuforia.isGears_visible()) {
             return false;
         }
 
@@ -75,35 +74,45 @@ public abstract class BaseNavigation extends LinearOpMode {
         telemetry.update();
 
         runtime.reset();    // 5 seconds timeout if it can't find location
-//        while(runtime.seconds() < 5.0 && !vuforia.updateRobotLocation()) {
-        if(vuforia.updateRobotLocation()) {
-            vuforia.telemetryUpdate(telemetry);
-            double toAngle = vuforia.getRobotNeedToTurnAngle(destination_x, destination_y);
-            robotDriver.turnToAngle(0, toAngle);
-            sleep(763);
-            vuforia.updateRobotLocation();
-            toAngle = vuforia.getRobotNeedToTurnAngle(destination_x, destination_y);
-            robotDriver.turnToAngle(0, toAngle);
-            vuforia.updateRobotLocation();
+        robotDriver.setSpeed(speed);
+        //while(runtime.seconds() < 15.0) {
+        if (vuforia.updateRobotLocation()) {
+
+            turnToPoint(destination_x, destination_y);
+            turnToPoint(destination_x, destination_y);
+            turnToPoint(destination_x, destination_y);
+
             //Turn to desired angle
             //check the angle to see how close it is to to the disired angle
 
 
-            runtime.reset();
-
             double distance_CM = 0.1 * vuforia.getDestinationDistance(destination_x, destination_y); // in CM
-            telemetry.addData("DistanceToTargetCM", distance_CM/2.54);
-            vuforia.telemetryUpdate(telemetry);
-
-            robotDriver.setSpeed(speed);
+            telemetry.addData("DistanceToTargetCM", distance_CM / 2.54);
+            sleep(500);
+            //vuforia.telemetryUpdate(telemetry);
             robotDriver.go(speed, distance_CM);
-            sleep(200);
         }
-        if(runtime.seconds()>=5.0) { // fail to update location by timeout
+
+
+        //if(Math.abs(xDistance) < 250 && Math.abs(yDistance) < 250) break;
+        //}
+        /*if(runtime.seconds()>=5.0) { // fail to update location by timeout
             return false;
-        }
-        //stop();
+        }*/
+
         return true;
+    }
+
+    private double turnToPoint(double destination_x, double destination_y) {
+        double toAngle = vuforia.getRobotNeedToTurnAngle(destination_x, destination_y);
+        robotDriver.turnToAngle(0, toAngle);
+        sleep(75);
+        vuforia.updateRobotLocation();
+        return toAngle;
+    }
+
+    private boolean aPictureIsVisible() {
+        return vuforia.isWheel_visible() || vuforia.isLego_visible() || vuforia.isTools_visible() || vuforia.isGears_visible();
     }
 
     // to move a distance then shoot two particles
@@ -125,20 +134,21 @@ public abstract class BaseNavigation extends LinearOpMode {
 
     protected void pushBeacon(BeaconColor beaconColor) {
         ColorSense colorSense = new ColorSense(hardwareMap);
-        robotDriver.turnToAngle(0,-12);
+        robotDriver.turnToAngle(0, -12);
         /*if (BeaconColor.neither.equals(colorSense.senseColor())) {
             robotDriver.turnToAngle();
         }*/
-        if(!beaconColor.equals(colorSense.senseColor())){
+        if (!beaconColor.equals(colorSense.senseColor())) {
             robotDriver.go(Speed.speed2, 10);
         } else {
-            robotDriver.turnToAngle(0,24);
+            robotDriver.turnToAngle(0, 24);
             robotDriver.go(Speed.speed2, 10);
         }
         sleep(1000);
-        if(!beaconColor.equals(colorSense.senseColor())) {
+        if (!beaconColor.equals(colorSense.senseColor())) {
             robotDriver.go(Speed.speed3, -5);
             robotDriver.go(Speed.speed3, 5);
         }
     }
+
 }

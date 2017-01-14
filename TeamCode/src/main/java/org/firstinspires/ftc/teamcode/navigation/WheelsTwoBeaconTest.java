@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.core.Speed;
 /**
  * Created by Marie on 1/3/2017.
  */
-@Autonomous(name="Wheels Test", group ="Test")
-public class WheelsTest extends BaseNavigation{
+@Autonomous(name="2 Beacon Wheels Test", group ="Test")
+public class WheelsTwoBeaconTest extends BaseNavigation{
 
     @Override
     protected void navigate() {
@@ -27,6 +27,13 @@ public class WheelsTest extends BaseNavigation{
 
 
         pushBeacon(BeaconColor.blue);
+
+        robotDriver.go(speed, -20 * 2.5);
+
+        robotDriver.turnToAngle(0, -95);
+        robotDriver.go(speed, 48 * 2.5);
+        robotDriver.turnToAngle(0,90);
+        moveToPosition(Picture.legos.getX(6)  , Picture.legos.getY(6), speed);
 
         vuforia.telemetryUpdate(telemetry);
 

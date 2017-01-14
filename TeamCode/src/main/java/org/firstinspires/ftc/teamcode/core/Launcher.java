@@ -19,7 +19,6 @@ public class Launcher {
     private Integer oneTurn = 240; //240 is 1440/6
     public Launcher(HardwareMap hardwareMap){
         this.launcherMotor = hardwareMap.dcMotor.get("motor_launcher");
-        launcherMotor.setMaxSpeed(5000);
         launcherMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         launcherMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);  //Set current position to 0
         launcherMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);

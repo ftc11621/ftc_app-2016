@@ -141,6 +141,11 @@ public class VuforiaSensor {
         return currentlocation_flag;       // when no new location found
     }
 
+    public void getLocation()
+    {
+
+    }
+
     public double getDistanceToPicture(Picture picture){
         return getDestinationDistance(picture.getX(), picture.getY());
     }
