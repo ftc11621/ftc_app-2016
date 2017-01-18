@@ -15,22 +15,31 @@ public class RedVuforiaNav extends BaseNavigation{
     @Override
     protected void navigate() {
 
-        Speed speed = Speed.speed7;
+        Speed speed = Speed.speed3;
 
-        moveAndShoot(38);
+        robotDriver.go(speed, -38* 2.54);
         sleep(800);
         robotDriver.turnToAngle(0,180);
 
-
+        robotDriver.turnToAngle(0,45);
+        robotDriver.go(speed, 24 * 2.5 );
+        robotDriver.turnToAngle(0,-90);
+        sleep(2000);
         moveToPosition(Picture.gears.getX(24)  , Picture.gears.getY(24), speed);
 
 
-        sleep(800);
+
         moveToPosition(Picture.gears.getX(6)  , Picture.gears.getY(6), speed);
 
 
         pushBeacon(BeaconColor.red);
+        robotDriver.go(speed, -20 * 2.5);
 
+        robotDriver.turnToAngle(0, 95);
+        robotDriver.go(speed, 48 * 2.5);
+        robotDriver.turnToAngle(0,-90);
+        moveToPosition(Picture.tools.getX(6)  , Picture.tools.getY(6), speed);
+        pushBeacon(BeaconColor.red);
         vuforia.telemetryUpdate(telemetry);
 
         sleep(10000);

@@ -126,6 +126,7 @@ public class VuforiaSensor {
         return ((VuforiaTrackableDefaultListener) gears.getListener()).isVisible();
     }
 
+
     public boolean updateRobotLocation()  {
         OpenGLMatrix robotLocationTransform = null;
         boolean currentlocation_flag = false;

@@ -49,11 +49,15 @@ public abstract class BaseNavigation extends LinearOpMode {
         telemetry.update();
     }
 
+
     protected void findPicture()
     {
+        int totalTurn = 0;
         while(!aPictureIsVisible())
         {
             robotDriver.turnToAngle(15);
+            totalTurn += 15;
+            if(totalTurn >= 360) break;
             sleep(500);
         }
     }
@@ -134,14 +138,18 @@ public abstract class BaseNavigation extends LinearOpMode {
 
     protected void pushBeacon(BeaconColor beaconColor) {
         ColorSense colorSense = new ColorSense(hardwareMap);
-        robotDriver.turnToAngle(0, -12);
+
         /*if (BeaconColor.neither.equals(colorSense.senseColor())) {
             robotDriver.turnToAngle();
         }*/
+        int anglePush = 0;
         if (!beaconColor.equals(colorSense.senseColor())) {
+            robotDriver.turnToAngle(0, -12);
+            anglePush = 12;
             robotDriver.go(Speed.speed2, 10);
         } else {
-            robotDriver.turnToAngle(0, 24);
+            robotDriver.turnToAngle(0, 12);
+            anglePush = - 12;
             robotDriver.go(Speed.speed2, 10);
         }
         sleep(1000);
@@ -149,6 +157,8 @@ public abstract class BaseNavigation extends LinearOpMode {
             robotDriver.go(Speed.speed3, -5);
             robotDriver.go(Speed.speed3, 5);
         }
+        robotDriver.go(Speed.speed3, -10);
+        robotDriver.turnToAngle(0, anglePush);
     }
 
 }
