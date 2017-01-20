@@ -62,7 +62,7 @@ public class Driver_Mode extends OpMode
     Intake intake;
     ButtonPusher buttonPusher;
     ParticleDoor pDoor;
-    LedDriver LD;
+    //LedDriver LD;
     Boolean driver_mode_direction = false;  // forward = true;
 
     /*
@@ -71,13 +71,13 @@ public class Driver_Mode extends OpMode
     @Override
     public void init() {
 
-        robotDriver = new RobotDriver(hardwareMap);
+        robotDriver = new RobotDriver(hardwareMap, this);
         robotDriver.setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         launcher = new Launcher(hardwareMap);
         intake = new Intake (hardwareMap);
         buttonPusher = new ButtonPusher(hardwareMap);
         pDoor = new ParticleDoor(hardwareMap);
-        LD = new LedDriver(hardwareMap);
+        //LD = new LedDriver(hardwareMap);
         telemetry.addData("Door", "CLOSE");
         telemetry.update();
     }
@@ -141,12 +141,12 @@ public class Driver_Mode extends OpMode
 
     private void gamepadGunner(){
        if(gamepad2.dpad_up){
-           LD.LedOn();
+           //LD.LedOn();
            telemetry.addData("LED", "ON");
            telemetry.update();
        }
         else if (gamepad2.dpad_down){
-           LD.LedOff();
+           //LD.LedOff();
            telemetry.addData("LED", "OFF");
            telemetry.update();
        }

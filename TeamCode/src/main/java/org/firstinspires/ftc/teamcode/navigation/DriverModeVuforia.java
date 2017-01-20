@@ -72,7 +72,7 @@ public class DriverModeVuforia extends OpMode {
     @Override
     public void init() {
 
-        robotDriver = new RobotDriver(hardwareMap);
+        robotDriver = new RobotDriver(hardwareMap, this);
         robotDriver.setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         launcher = new Launcher(hardwareMap);
         intake = new Intake(hardwareMap);

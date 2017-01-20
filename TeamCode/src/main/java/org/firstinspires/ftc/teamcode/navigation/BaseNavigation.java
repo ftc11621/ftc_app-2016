@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.core.ButtonPusher;
 import org.firstinspires.ftc.teamcode.core.ColorSense;
 import org.firstinspires.ftc.teamcode.core.Launcher;
 import org.firstinspires.ftc.teamcode.core.ParticleDoor;
-import org.firstinspires.ftc.teamcode.core.Picture;
 import org.firstinspires.ftc.teamcode.core.RobotDriver;
 import org.firstinspires.ftc.teamcode.core.Speed;
 import org.firstinspires.ftc.teamcode.core.VuforiaSensor;
@@ -31,7 +30,7 @@ public abstract class BaseNavigation extends LinearOpMode {
     public void runOpMode() {
 
         vuforia = new VuforiaSensor();
-        robotDriver = new RobotDriver(hardwareMap);
+        robotDriver = new RobotDriver(hardwareMap, this);
         launcher = new Launcher(hardwareMap);
         buttonPusher = new ButtonPusher(hardwareMap);
 

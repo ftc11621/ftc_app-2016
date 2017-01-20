@@ -15,11 +15,11 @@ public class BlueVuforiaNav extends BaseNavigation{
     @Override
     protected void navigate() {
 
-        Speed speed = Speed.speed3;
+        Speed speed = Speed.speed7;
 
-        //moveAndShoot(38);
+        moveAndShoot(27);
 
-        robotDriver.go(speed, 27 * 2.54);
+        //robotDriver.go(speed, 27 * 2.54);
 
         robotDriver.turnToAngle(0,-45);
         robotDriver.go(speed, 24 * 2.5 );

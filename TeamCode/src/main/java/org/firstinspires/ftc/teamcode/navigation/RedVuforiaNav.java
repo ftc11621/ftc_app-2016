@@ -17,7 +17,7 @@ public class RedVuforiaNav extends BaseNavigation{
 
         Speed speed = Speed.speed3;
 
-        robotDriver.go(speed, -38* 2.54);
+        moveAndShoot(-38);
         sleep(800);
         robotDriver.turnToAngle(0,180);
 

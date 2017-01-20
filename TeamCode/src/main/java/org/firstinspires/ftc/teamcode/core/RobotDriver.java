@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.core;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -8,6 +10,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class RobotDriver {
     private DcMotor leftMotor = null;
     private DcMotor rightMotor = null;
+
+    private OpMode opMode;
 
     //private double timeoutS = 30;
 
@@ -21,11 +25,12 @@ public class RobotDriver {
     private static final double     WHEELS_SPACING_CM       = 40.8;     // spacing between wheels for turns
 
     private ElapsedTime runtime = new ElapsedTime();
-    private int MAX_TIMEOUT = 30;
+    private int MAX_TIMEOUT = 2;
 
-    public RobotDriver(HardwareMap hardwareMap) {
+    public RobotDriver(HardwareMap hardwareMap, OpMode opMode) {
         this.leftMotor  = hardwareMap.dcMotor.get("motor_2");
         this.rightMotor = hardwareMap.dcMotor.get("motor_1");
+        this.opMode = opMode;
         forward();
     }
 
@@ -117,20 +122,18 @@ public class RobotDriver {
 
     public void go( Speed speed, double distance){
         MAX_TIMEOUT = 30;
-        moveMotors(speed, distance, distance, MAX_TIMEOUT);
+        moveMotors(speed, distance, distance, 5);
     }
 
 
-    private void moveMotors(Speed speed, double leftDistance, double rightDistance, double timeout) {
+    private void moveMotors2(Speed speed, double leftDistance, double rightDistance, double timeout) {
         int newLeftTarget = leftMotor.getCurrentPosition() + (int)(leftDistance * COUNTS_PER_CM);
         int newRightTarget = rightMotor.getCurrentPosition() + (int)(rightDistance * COUNTS_PER_CM);
         leftMotor.setTargetPosition(newLeftTarget);
         rightMotor.setTargetPosition(newRightTarget);
 
         // Turn On RUN_TO_POSITION
-        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
+        setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
         // reset the timeout time and start motion.
         runtime.reset();
         leftMotor.setPower(Math.abs(speed.getSpeed()));
@@ -146,19 +149,61 @@ public class RobotDriver {
         this.stop();
 
         // Turn off RUN_TO_POSITION
-        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public boolean isMoving(){
-        return leftMotor.isBusy() && rightMotor.isBusy();
+        return leftMotor.isBusy() || rightMotor.isBusy();
+
+
     }
 
     public void stop(){
         leftMotor.setPower(0.0);    // stop motors
         rightMotor.setPower(0.0);
     }
+    private void moveMotors(Speed speed, double leftDistance, double rightDistance, double timeout) {
+        int newLeftTarget = leftMotor.getCurrentPosition() + (int)(leftDistance * COUNTS_PER_CM);
+        int newRightTarget = rightMotor.getCurrentPosition() + (int)(rightDistance * COUNTS_PER_CM);
+        leftMotor.setTargetPosition(newLeftTarget);
+        rightMotor.setTargetPosition(newRightTarget);
 
+        // Turn On RUN_TO_POSITION
+        setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // reset the timeout time and start motion.
+        runtime.reset();
+        leftMotor.setPower(Math.abs(speed.getSpeed()));
+        rightMotor.setPower(Math.abs(speed.getSpeed()));
+
+        // keep looping while we are still active, and there is time left, and both motors are running.
+       while ( checkDistance(leftDistance,newLeftTarget, leftMotor) && checkDistance(rightDistance,newRightTarget, rightMotor)) {
+           try {
+               ((LinearOpMode)opMode).waitOneFullHardwareCycle();
+           } catch (InterruptedException e) {
+               //do nothing
+           }
+       }
+
+        // Stop all motion;
+        this.stop();
+
+        // Turn off RUN_TO_POSITION
+        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+    }
+
+    private boolean checkDistance(double distance, int target, DcMotor motor) {
+
+        if (distance >0) {
+            return motor.getCurrentPosition() < target;
+        }
+
+            return motor.getCurrentPosition() > target;
+
+
+    }
 
 
 }
