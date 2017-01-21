@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 
 public class RobotDriver {
     private DcMotor leftMotor = null;
@@ -143,6 +145,7 @@ public class RobotDriver {
         while ((runtime.seconds() < timeout) &&
                 (isMoving())) {
 
+
         }
 
         // Stop all motion;
@@ -169,41 +172,46 @@ public class RobotDriver {
         rightMotor.setTargetPosition(newRightTarget);
 
         // Turn On RUN_TO_POSITION
-        setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
+        setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // reset the timeout time and start motion.
+        leftMotor.setPower(Math.signum(leftDistance)*Math.abs(speed.getSpeed()));
+        rightMotor.setPower(Math.signum(rightDistance)*Math.abs(speed.getSpeed()));
         runtime.reset();
-        leftMotor.setPower(Math.abs(speed.getSpeed()));
-        rightMotor.setPower(Math.abs(speed.getSpeed()));
 
         // keep looping while we are still active, and there is time left, and both motors are running.
-       while ( checkDistance(leftDistance,newLeftTarget, leftMotor) && checkDistance(rightDistance,newRightTarget, rightMotor)) {
+       while ( runtime.seconds() < 10 && ( checkDistance(leftDistance,newLeftTarget, leftMotor) || checkDistance(rightDistance,newRightTarget, rightMotor))) {
+
+           /*
            try {
                ((LinearOpMode)opMode).waitOneFullHardwareCycle();
            } catch (InterruptedException e) {
                //do nothing
            }
+           */
        }
 
         // Stop all motion;
         this.stop();
 
         // Turn off RUN_TO_POSITION
-        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
 
     private boolean checkDistance(double distance, int target, DcMotor motor) {
 
         if (distance >0) {
+            if (motor.getCurrentPosition() >= target) {
+                motor.setPower(0.0);
+            }
             return motor.getCurrentPosition() < target;
         }
 
-            return motor.getCurrentPosition() > target;
-
-
+        if (motor.getCurrentPosition() <= target) {
+            motor.setPower(0.0);
+        }
+        return motor.getCurrentPosition() > target;
     }
-
-
 }

@@ -15,25 +15,38 @@ public class BlueVuforiaNav extends BaseNavigation{
     @Override
     protected void navigate() {
 
-        Speed speed = Speed.speed7;
+        Speed speed = Speed.speed6;
 
-        moveAndShoot(27);
+       // moveAndShoot(27);
 
-        //robotDriver.go(speed, 27 * 2.54);
+        robotDriver.go(speed, 13 * 2.54);
 
-        robotDriver.turnToAngle(0,-45);
-        robotDriver.go(speed, 24 * 2.5 );
+        robotDriver.turnToAngle(0,55);
+
+        robotDriver.go(speed, 23 * 2.5 );
+
+        sleep(200);
+
+        moveAndShoot(1);
+
+        robotDriver.turnToAngle(0, -55);
+
+        robotDriver.go(speed,13 * 2.54 );
+
         robotDriver.turnToAngle(0,90);
+
         sleep(2000);
+        speed = Speed.speed4;
 
         moveToPosition(Picture.wheels.getX(24)  , Picture.wheels.getY(24), speed);
+        moveToPosition(Picture.wheels.getX(15), Picture.wheels.getY(15), speed);
 
         //findPicture();
         moveToPosition(Picture.wheels.getX(6)  , Picture.wheels.getY(6), speed);
 
         pushBeacon(BeaconColor.blue);
 
-        robotDriver.go(speed, -20 * 2.5);
+       /* robotDriver.go(speed, -20 * 2.5);
 
         robotDriver.turnToAngle(0, -95);
         robotDriver.go(speed, 48 * 2.5);
@@ -44,7 +57,7 @@ public class BlueVuforiaNav extends BaseNavigation{
         vuforia.telemetryUpdate(telemetry);
 
         sleep(10000);
-
+*/
     }
 
 }

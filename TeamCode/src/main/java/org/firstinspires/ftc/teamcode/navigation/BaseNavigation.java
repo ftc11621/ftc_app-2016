@@ -143,21 +143,23 @@ public abstract class BaseNavigation extends LinearOpMode {
         }*/
         int anglePush = 0;
         if (!beaconColor.equals(colorSense.senseColor())) {
-            robotDriver.turnToAngle(0, -12);
-            anglePush = 12;
+            robotDriver.turnToAngle(0, -6);
+            anglePush = 6;
             robotDriver.go(Speed.speed2, 10);
         } else {
-            robotDriver.turnToAngle(0, 12);
-            anglePush = - 12;
+            robotDriver.turnToAngle(0, 6);
+            anglePush = - 6;
             robotDriver.go(Speed.speed2, 10);
         }
         sleep(1000);
         if (!beaconColor.equals(colorSense.senseColor())) {
             robotDriver.go(Speed.speed3, -5);
             robotDriver.go(Speed.speed3, 5);
+            robotDriver.go(Speed.speed3, -5);
+            robotDriver.go(Speed.speed3, 5);
         }
         robotDriver.go(Speed.speed3, -10);
-        robotDriver.turnToAngle(0, anglePush);
+        //robotDriver.turnToAngle(0, anglePush);
     }
 
 }

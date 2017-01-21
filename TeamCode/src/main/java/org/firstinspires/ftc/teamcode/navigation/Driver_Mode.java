@@ -196,9 +196,9 @@ public class Driver_Mode extends OpMode
 
 
         if (gamepad2.y) {     // run launcher if the robot is not driven
-            if( (Math.abs(gamepad1.left_stick_y) + Math.abs(gamepad1.right_stick_y)) < 0.2) {
-                launcher.shoot();
-            }
+            //if( (Math.abs(gamepad1.left_stick_y) + Math.abs(gamepad1.right_stick_y)) < 0.2) {
+               launcher.shoot();
+            //}
         } //else if(gamepad2.b) {             // semi-autonomous beacon claiming
             //buttonPusher.pushButton(ButtonPusher.Button.left);
             // add code that works with autonomous beacon claiming here.

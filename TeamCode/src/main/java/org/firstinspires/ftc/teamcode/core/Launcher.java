@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 public class Launcher {
-    private double power = 1.0;
+    private double power = .65;
     private DcMotor launcherMotor = null;
     private ElapsedTime runtime = new ElapsedTime();
     private Integer initialLauncherPosition = null;
@@ -19,7 +19,7 @@ public class Launcher {
     private Integer oneTurn = 240; //240 is 1440/6
     public Launcher(HardwareMap hardwareMap){
         this.launcherMotor = hardwareMap.dcMotor.get("motor_launcher");
-        launcherMotor.setMaxSpeed(7000);
+        launcherMotor.setMaxSpeed(7200);
         launcherMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         launcherMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);  //Set current position to 0
         launcherMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -42,11 +42,11 @@ public class Launcher {
         // resume to the initial launcher position, ready to launch again
         launcherMotor.setTargetPosition(initialLauncherPosition);
         launcherMotor.setPower(0.3);
-        while (runtime.seconds() < 3.0 && launcherMotor.isBusy()) {
+        while (runtime.seconds() < 3 && launcherMotor.isBusy()) {
             // while still spinning
         }
         runtime.reset();    // below to self-adjust after overshooting
-        while(runtime.seconds()<2.0) {
+        while(runtime.seconds()<1.0) {
             // self-adjusting until it is within 10 encorder counts of initial position or time out
         }
 
