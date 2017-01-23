@@ -13,16 +13,9 @@ import org.firstinspires.ftc.teamcode.core.Turn;
 public class BlueAndBlindBallRamp extends BaseNavigation{
     @Override
     protected void navigate() {
-        moveAndShoot(28);      // move and shoot
-
-        robotDriver.turnToAngle(0,70); // turn toward the ball
-        robotDriver.go(Speed.speed4,-24 * InchesToCentimeters);     // move close to the ball
-        robotDriver.turnToAngle(0,40);      // turn toward the left side of the cap ball
-        robotDriver.turnToAngle(0,-30);      // turn toward the left side of the cap ball
-        //robotDriver.go(Speed.speed4,40 * InchesToCentimeters);  // hit the cap ball
-        //robotDriver.turnToAngle(0,-70);     // turn left
-        robotDriver.go(Speed.speed4,50 * InchesToCentimeters); // go toward the ramp
-
+        moveAndShoot(30);
+        robotDriver.turn(Turn.right90);
+        robotDriver.go(Speed.speed4,25 * InchesToCentimeters);
 
         while(opModeIsActive()) {       // to prevent stuck in a loop
             // to avoid crashes

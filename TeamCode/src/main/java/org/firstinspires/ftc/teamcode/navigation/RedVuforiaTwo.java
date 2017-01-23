@@ -9,64 +9,22 @@ import org.firstinspires.ftc.teamcode.core.Speed;
 /**
  * Created by Marie on 1/3/2017.
  */
-@Autonomous(name="RedVuforia", group ="Competition")
-public class RedVuforiaNav extends BaseNavigation{
+@Autonomous(name="RedVuforia Two", group ="Competition")
+public class RedVuforiaTwo extends BaseNavigation{
 
     @Override
     protected void navigate() {
 
-        Speed speed = Speed.speed7;
-
-        // moveAndShoot(27);
-
-        robotDriver.go(speed, -18 * 2.54);
-
-
-
-        robotDriver.turnToAngle(0,-45);
-
-        robotDriver.go(speed, -18 * 2.5 );
-        launcher.setPower(0.85);
-
-        sleep(200);
-
-        moveAndShoot(1);
-
-
-
-        robotDriver.turnToAngle(0, -135);
-
-        robotDriver.go(speed,22 * 2.54 );
-
-        robotDriver.turnToAngle(0,-80);
-
-        sleep(2000);
-        //speed = Speed.speed5;
-
-       // moveToPosition(Picture.gears.getX(24)  , Picture.gears.getY(24), speed);
-        speed = Speed.speed4;
-        moveToPosition(Picture.gears.getX(20), Picture.gears.getY(20), speed);
-
-        //findPicture();
-        moveToPosition(Picture.gears.getX(6)  , Picture.gears.getY(6), speed);
-
-        pushBeacon(BeaconColor.red);
-
-
-        /*
         Speed speed = Speed.speed3;
 
         moveAndShoot(-38);
-        sleep(800);
         robotDriver.turnToAngle(0,180);
 
         robotDriver.turnToAngle(0,45);
         robotDriver.go(speed, 24 * 2.5 );
-        robotDriver.turnToAngle(0,-90); */
-
-        /*sleep(2000);
+        robotDriver.turnToAngle(0,-90);
+        sleep(1000);
         moveToPosition(Picture.gears.getX(24)  , Picture.gears.getY(24), speed);
-
 
 
 
@@ -84,7 +42,6 @@ public class RedVuforiaNav extends BaseNavigation{
         vuforia.telemetryUpdate(telemetry);
 
         sleep(10000);
-        */
     }
 
 }

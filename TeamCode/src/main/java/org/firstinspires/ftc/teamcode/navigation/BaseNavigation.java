@@ -83,7 +83,7 @@ public abstract class BaseNavigation extends LinearOpMode {
 
             turnToPoint(destination_x, destination_y);
             turnToPoint(destination_x, destination_y);
-            turnToPoint(destination_x, destination_y);
+            //turnToPoint(destination_x, destination_y);
 
             //Turn to desired angle
             //check the angle to see how close it is to to the disired angle
@@ -143,12 +143,12 @@ public abstract class BaseNavigation extends LinearOpMode {
         }*/
         int anglePush = 0;
         if (!beaconColor.equals(colorSense.senseColor())) {
-            robotDriver.turnToAngle(0, -6);
-            anglePush = 6;
+            robotDriver.turnToAngle(0, -10);
+            anglePush = 8;
             robotDriver.go(Speed.speed2, 10);
         } else {
-            robotDriver.turnToAngle(0, 6);
-            anglePush = - 6;
+            robotDriver.turnToAngle(0, 10);
+            anglePush = -8;
             robotDriver.go(Speed.speed2, 10);
         }
         sleep(1000);

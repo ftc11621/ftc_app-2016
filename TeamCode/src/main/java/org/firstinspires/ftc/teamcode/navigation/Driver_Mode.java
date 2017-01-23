@@ -62,7 +62,7 @@ public class Driver_Mode extends OpMode
     Intake intake;
     ButtonPusher buttonPusher;
     ParticleDoor pDoor;
-    //LedDriver LD;
+    LedDriver LD;
     Boolean driver_mode_direction = false;  // forward = true;
 
     /*
@@ -77,7 +77,7 @@ public class Driver_Mode extends OpMode
         intake = new Intake (hardwareMap);
         buttonPusher = new ButtonPusher(hardwareMap);
         pDoor = new ParticleDoor(hardwareMap);
-        //LD = new LedDriver(hardwareMap);
+        LD = new LedDriver(hardwareMap);
         telemetry.addData("Door", "CLOSE");
         telemetry.update();
     }
@@ -141,14 +141,14 @@ public class Driver_Mode extends OpMode
 
     private void gamepadGunner(){
        if(gamepad2.dpad_up){
-           //LD.LedOn();
-           telemetry.addData("LED", "ON");
-           telemetry.update();
+           LD.LedOn();
+           //telemetry.addData("LED", "ON");
+           //telemetry.update();
        }
         else if (gamepad2.dpad_down){
-           //LD.LedOff();
-           telemetry.addData("LED", "OFF");
-           telemetry.update();
+           LD.LedOff();
+           //telemetry.addData("LED", "OFF");
+           //telemetry.update();
        }
 
         if(gamepad2.x){
